@@ -1,9 +1,11 @@
 import { Request, Response } from "express";
 import prisma from "../prisma";
 import dayjs from "dayjs";
-import { calculateTimeDifferent } from "../utils/calculate-time";
+import { calculateJamShiftDate } from "../utils/calculate-jam-shift-date";
+import { CHECK_IN_MINUTE_OFFSET } from "../constants/absensi";
+import { convertDayDatabaseToDayjs } from "../utils/get-day-from-date";
 
-const NOW = dayjs("2025-12-12 05:30:00");
+const NOW = dayjs("2025-12-15 23:05:00");
 
 export const getAllAbsensi = async (req: Request, res: Response) => {
   try {
@@ -108,134 +110,164 @@ export const scanAbsensi = async (
       return;
     }
 
-    const currentDate = NOW.toDate();
-    const currentDay = NOW.day() === 0 ? 6 : NOW.day() - 1;
-    const currentHour = NOW.format("HH:mm:ss");
+    const result = await prisma.$transaction(async (tx) => {
+      const currentDate = NOW.toDate();
+      const currentDay = NOW.day() === 0 ? 6 : NOW.day() - 1;
 
-    // get all jadwal pegawai
-    const jadwalPegawaiToday = await prisma.jadwal.findMany({
-      where: {
-        pegawaiId: pegawaiId,
-        OR: [
-          { day: currentDay },
-          { day: currentDay === 6 ? 0 : currentDay + 1 },
-        ],
-      },
-      include: {
-        shift: {
-          select: { jamMasuk: true, jamKeluar: true, name: true },
-        },
-      },
-      orderBy: {
-        shift: {
-          jamMasuk: "asc",
-        },
-      },
-    });
-
-    // apakah ada jadwal pegawai yang jam masuk nya 1 jam lagi
-    const jadwalOneHourAwayFromNewCheckIn = jadwalPegawaiToday.filter(
-      (jadwal) => {
-        const currentToJamMasukDiff = calculateTimeDifferent(
-          currentHour,
-          jadwal.shift.jamMasuk,
-          currentDay !== jadwal.day
-        );
-
-        return currentToJamMasukDiff <= 60 && currentToJamMasukDiff >= 0;
-      }
-    );
-
-    if (jadwalOneHourAwayFromNewCheckIn.length > 0) {
-      const newLogJadwal = jadwalOneHourAwayFromNewCheckIn[0];
-
-      const jamShiftDate = getJamShiftDate(
-        newLogJadwal.shift.jamMasuk,
-        newLogJadwal.shift.jamKeluar,
-        currentDay !== newLogJadwal.day
-      );
-
-      // cek apakah jadwal tersebut sudah dibuat atau belum
-      const existingLogAbsensi = await prisma.logAbsensi.findFirst({
+      // get all jadwal pegawai
+      const jadwalPegawaiList = await tx.jadwal.findMany({
         where: {
           pegawaiId: pegawaiId,
-          shiftId: newLogJadwal.shiftId,
-          jamMasukDate: jamShiftDate.jamMasukDate,
+          OR: [
+            { day: currentDay },
+            { day: currentDay === 6 ? 0 : currentDay + 1 },
+            { day: currentDay === 0 ? 6 : currentDay - 1 },
+          ],
         },
         include: {
-          pegawai: {
-            select: {
-              name: true,
-              position: {
-                select: { name: true },
-              },
-            },
+          shift: {
+            select: { jamMasuk: true, jamKeluar: true, name: true },
           },
         },
+        orderBy: [{ day: "asc" }, { shift: { jamMasuk: "asc" } }],
       });
 
-      if (existingLogAbsensi) {
-        res.status(201).json({
-          message: "Anda sudah absensi masuk.",
-          status: "ALREADY_CHECK_IN",
+      // check apakah masuk current date masuk ke salah satu jadwal
+      const jadwalOnCurrentDate = jadwalPegawaiList.find((jadwal) => {
+        const shiftDayDate = NOW.clone()
+          .day(convertDayDatabaseToDayjs(jadwal.day))
+          .toDate();
+        const jamShiftJadwalDate = calculateJamShiftDate(
+          jadwal.shift.jamMasuk,
+          jadwal.shift.jamKeluar,
+          shiftDayDate
+        );
+        const startJamMasukDate = dayjs(jamShiftJadwalDate.jamMasukDate)
+          .subtract(CHECK_IN_MINUTE_OFFSET, "minutes")
+          .toDate();
+
+        return (
+          startJamMasukDate <= currentDate &&
+          currentDate < jamShiftJadwalDate.jamKeluarDate
+        );
+      });
+
+      // kalau berada di dalam jadwal
+      if (jadwalOnCurrentDate) {
+        // check apakah ada log absensi dengan jadwal tersebut
+        const jamShiftDate = calculateJamShiftDate(
+          jadwalOnCurrentDate.shift.jamMasuk,
+          jadwalOnCurrentDate.shift.jamKeluar
+        );
+        const jamMasukDate = dayjs(jamShiftDate.jamMasukDate)
+          .day(convertDayDatabaseToDayjs(jadwalOnCurrentDate.day))
+          .toDate();
+        const existingLogAbsensi = await tx.logAbsensi.findFirst({
+          where: {
+            pegawaiId,
+            shiftId: jadwalOnCurrentDate.shiftId,
+            jamMasukDate,
+          },
         });
-        return;
+
+        // kalau sudah ada log absensi
+        if (existingLogAbsensi) {
+          // kalau tidak ada checkin, maka checkin
+          if (!existingLogAbsensi.checkIn) {
+            const updateCheckIn = await tx.logAbsensi.update({
+              where: {
+                id: existingLogAbsensi.id,
+              },
+              data: {
+                checkIn: currentDate,
+              },
+            });
+
+            return {
+              data: updateCheckIn,
+              status: "CHECK_IN",
+              code: 201,
+            };
+          }
+
+          // kalau tidak ada checkout, maka checkout
+          if (!existingLogAbsensi.checkOut) {
+            // Cek apakah sudah waktu nya pulang
+            if (existingLogAbsensi.jamKeluarDate > currentDate) {
+              return {
+                status: "CHECK_OUT_NOT_YET",
+                data: existingLogAbsensi,
+                code: 201,
+              };
+            }
+
+            const updateCheckOut = await tx.logAbsensi.update({
+              where: {
+                id: existingLogAbsensi.id,
+              },
+              data: {
+                checkOut: currentDate,
+              },
+            });
+
+            return {
+              data: updateCheckOut,
+              status: "CHECK_OUT",
+              code: 201,
+            };
+          }
+
+          return {
+            data: existingLogAbsensi,
+            status: "ALREADY_CHECK_OUT",
+            code: 201,
+          };
+        }
+
+        // kalau tidak ada, create log absensi baru dan check in
+        const newLogAbsensi = await tx.logAbsensi.create({
+          data: {
+            pegawaiId,
+            shiftId: jadwalOnCurrentDate.shiftId,
+            shiftName: jadwalOnCurrentDate.shift.name,
+            jamMasuk: jadwalOnCurrentDate.shift.jamMasuk,
+            jamMasukDate: jamMasukDate,
+            jamKeluar: jadwalOnCurrentDate.shift.jamKeluar,
+            jamKeluarDate: jamShiftDate.jamKeluarDate,
+            day: jadwalOnCurrentDate.day,
+            checkIn: currentDate,
+          },
+        });
+
+        return {
+          data: newLogAbsensi,
+          code: 201,
+          status: "CHECK_IN",
+        };
       }
 
-      // buat log absensi baru untuk jadwal tersebut
-      const newLogAbsensi = await prisma.logAbsensi.create({
-        data: {
-          pegawaiId: pegawaiId,
-          shiftId: newLogJadwal.shiftId,
-          shiftName: newLogJadwal.shift.name,
-          jamMasuk: newLogJadwal.shift.jamMasuk,
-          jamKeluar: newLogJadwal.shift.jamKeluar,
-          jamMasukDate: jamShiftDate.jamMasukDate,
-          jamKeluarDate: jamShiftDate.jamKeluarDate,
-          day: newLogJadwal.day,
-          checkIn: currentDate,
-        },
-        include: {
-          pegawai: {
-            select: {
-              name: true,
-              position: {
-                select: { name: true },
-              },
-            },
+      // kalau tidak, cek apakah ada log absensi dengan jam checkout yang masih berlaku
+      const yesterdayDate = NOW.subtract(1, "day").toDate();
+      const notExpiredLogCheckOut = await prisma.logAbsensi.findFirst({
+        where: {
+          pegawaiId,
+          checkIn: {
+            not: null,
+          },
+          checkOut: null,
+          jamKeluarDate: {
+            lte: currentDate,
+            gte: yesterdayDate,
           },
         },
       });
 
-      res.status(201).json({
-        message: "Sukses Absen Masuk.",
-        status: "CHECK_IN",
-        data: newLogAbsensi,
-      });
+      console.log("NOT", notExpiredLogCheckOut);
 
-      return;
-    }
-
-    // cari apakah ada log absensi dengan check in kosong, dan date sekarang berada diantara jam masuk date sama jam keluar date nya
-    const logAbsensiOngoing = await prisma.logAbsensi.findFirst({
-      where: {
-        pegawaiId,
-        jamMasukDate: {
-          lt: currentDate,
-        },
-        jamKeluarDate: {
-          gte: currentDate,
-        },
-        OR: [{ checkIn: null }, { checkOut: null }],
-      },
-    });
-
-    if (logAbsensiOngoing) {
-      // kalau belum ada data check in
-      if (!logAbsensiOngoing.checkIn) {
-        const result = await prisma.logAbsensi.update({
+      if (notExpiredLogCheckOut) {
+        const checkOutLogAbsensi = await prisma.logAbsensi.update({
           where: {
-            id: logAbsensiOngoing.id,
+            id: notExpiredLogCheckOut.id,
           },
           include: {
             pegawai: {
@@ -248,140 +280,27 @@ export const scanAbsensi = async (
             },
           },
           data: {
-            checkIn: NOW.toDate(),
+            checkOut: currentDate,
           },
         });
 
-        res.status(201).json({
-          message: "Absensi masuk berhasil",
-          status: "CHECK_IN",
-          data: result,
-        });
-        return;
+        return {
+          status: "CHECK_OUT",
+          data: checkOutLogAbsensi,
+          code: 201,
+        };
       }
 
-      // kalau belum ada data check out, maka check out
-      const result = await prisma.logAbsensi.update({
-        where: {
-          id: logAbsensiOngoing.id,
-        },
-        include: {
-          pegawai: {
-            select: {
-              name: true,
-              position: {
-                select: { name: true },
-              },
-            },
-          },
-        },
-        data: {
-          checkOut: NOW.toDate(),
-        },
-      });
-
-      res.status(201).json({
-        message: "Absensi pulang berhasil",
-        status: "CHECK_OUT",
-        data: result,
-      });
-      return;
-    }
-
-    // cek apakah sekarang masuk ke jadwal yang ada
-    const jadwalNow = jadwalPegawaiToday.filter((jadwal) => {
-      return (
-        jadwal.shift.jamMasuk <= currentHour &&
-        jadwal.shift.jamKeluar > currentHour
-      );
+      return {
+        code: 201,
+        status: "NOT_YET",
+      };
     });
 
-    if (jadwalNow.length > 0) {
-      const jadwalNowData = jadwalNow[0];
-      const jamMasukSplit = jadwalNowData.shift.jamMasuk.split(":");
-      const jamMasukShiftDate = dayjs
-        .tz()
-        .hour(+jamMasukSplit[0])
-        .minute(+jamMasukSplit[1])
-        .second(+jamMasukSplit[2]);
-
-      // Jam Keluar
-      const jamKeluarSplit = jadwalNowData.shift.jamKeluar.split(":");
-      const jamKeluarShiftDate = dayjs
-        .tz()
-        .hour(+jamKeluarSplit[0])
-        .minute(+jamKeluarSplit[1])
-        .second(+jamKeluarSplit[2]);
-      const result = await prisma.logAbsensi.create({
-        data: {
-          pegawaiId: pegawaiId,
-          shiftId: jadwalNowData.shiftId,
-          shiftName: jadwalNowData.shift.name,
-          day: jadwalNowData.day,
-          jamMasuk: jadwalNowData.shift.jamMasuk,
-          jamKeluar: jadwalNowData.shift.jamKeluar,
-          jamMasukDate: jamMasukShiftDate.toDate(),
-          jamKeluarDate: jamKeluarShiftDate.toDate(),
-          checkIn: currentDate,
-        },
-      });
-
-      res.status(201).json({
-        message: "Absensi masuk berhasil",
-        status: "CHECK_IN",
-        data: { ...result, pegawai: pegawaiData },
-      });
-      return;
-    }
-
-    const yesterdayDate = NOW.subtract(1, "day").toDate();
-
-    // cari apakah ada log yang belum expired (belum 1 hari)
-    const notExpiredLogCheckOut = await prisma.logAbsensi.findFirst({
-      where: {
-        pegawaiId,
-        checkIn: {
-          not: null,
-        },
-        checkOut: null,
-        jamKeluarDate: {
-          lt: currentDate,
-          gte: yesterdayDate,
-        },
-      },
+    res.status(result?.code || 400).json({
+      ...result,
+      pegawai: pegawaiData,
     });
-
-    if (notExpiredLogCheckOut) {
-      const result = await prisma.logAbsensi.update({
-        where: {
-          id: notExpiredLogCheckOut.id,
-        },
-        include: {
-          pegawai: {
-            select: {
-              name: true,
-              position: {
-                select: { name: true },
-              },
-            },
-          },
-        },
-        data: {
-          checkOut: NOW.toDate(),
-        },
-      });
-
-      res.status(201).json({
-        message: "Absensi pulang berhasil",
-        status: "CHECK_OUT",
-        data: result,
-      });
-      return;
-    }
-
-    res
-      .status(201)
-      .json({ message: "Belum masuk jadwal kerja anda.", status: "NOT_YET" });
   } catch (err) {
     console.log(`ERROR:`, err);
     res.status(500).json({ error: "internal error", err });
@@ -478,29 +397,4 @@ export const generateLogAbsensi = async (
   } catch (err) {
     res.status(500).json({ error: "internal error", err });
   }
-};
-
-const getJamShiftDate = (
-  jamMasuk: string,
-  jamKeluar: string,
-  isTommorow = false
-) => {
-  const baseDay = isTommorow ? NOW.clone().add(1, "day") : NOW.clone();
-  const baseDayFormatted = baseDay.format("YYYY-MM-DD");
-  const jamMasukShiftDate = dayjs(`${baseDayFormatted} ${jamMasuk}`);
-
-  // Jam Keluar
-  let jamKeluarShiftDate = dayjs(`${baseDayFormatted} ${jamKeluar}`);
-
-  if (
-    jamKeluarShiftDate.isBefore(jamMasukShiftDate) ||
-    jamKeluarShiftDate.isSame(jamMasukShiftDate)
-  ) {
-    jamKeluarShiftDate = jamKeluarShiftDate.add(1, "day");
-  }
-
-  return {
-    jamMasukDate: jamMasukShiftDate.toDate(),
-    jamKeluarDate: jamKeluarShiftDate.toDate(),
-  };
 };

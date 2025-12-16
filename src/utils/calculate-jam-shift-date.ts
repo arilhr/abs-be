@@ -15,10 +15,14 @@ export const calculateJamShiftDate = (
   }
 
   const baseDayFormatted = baseDay.format("YYYY-MM-DD");
-  const jamMasukShiftDate = dayjs(`${baseDayFormatted} ${jamMasuk}`);
+  const jamMasukShiftDate = dayjs(
+    `${baseDayFormatted} ${jamMasuk}`
+  ).millisecond(0);
 
   // Jam Keluar
-  let jamKeluarShiftDate = dayjs(`${baseDayFormatted} ${jamKeluar}`);
+  let jamKeluarShiftDate = dayjs(
+    `${baseDayFormatted} ${jamKeluar}`
+  ).millisecond(0);
 
   if (
     jamKeluarShiftDate.isBefore(jamMasukShiftDate) ||

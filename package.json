@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "license": "MIT",
   "scripts": {
+    "build": "tsc",
     "dev": "tsx watch src/index.ts",
     "start": "tsx src/index.ts"
   },
