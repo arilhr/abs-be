@@ -1,6 +1,8 @@
 import { Request, Response } from "express";
 import prisma from "../prisma";
 import { PrismaClientKnownRequestError } from "../../prisma/generated/internal/prismaNamespace";
+import dayjs from "dayjs";
+import { calculateMinutesDifferent } from "../utils/calculate-time";
 
 async function createPegawai(req: Request, res: Response): Promise<void> {
   try {
@@ -193,6 +195,102 @@ async function deletePegawai(req: Request, res: Response): Promise<void> {
     res.status(500).json({ error: "internal error" });
   }
 }
+
+export const getGajiPegawai = async (req: Request, res: Response) => {
+  try {
+    const { pegawaiId, start, end } = req.query;
+
+    if (!pegawaiId || !start || !end) {
+      res.status(400).json({
+        message: "Pegawai ID, start, and end required.",
+      });
+      return;
+    }
+
+    const pegawaiData = await prisma.pegawai.findFirst({
+      where: {
+        id: +pegawaiId,
+      },
+      include: {
+        position: true,
+      },
+    });
+
+    if (!pegawaiData) {
+      res.status(400).json({
+        message: "Pegawai not found.",
+      });
+      return;
+    }
+
+    const startDate = dayjs(start.toString()).startOf("day").toDate();
+    const endDate = dayjs(end.toString()).endOf("day").toDate();
+
+    const logAbsensiDatas = await prisma.logAbsensi.findMany({
+      where: {
+        pegawaiId: pegawaiData.id,
+        jamMasukDate: {
+          gte: startDate,
+          lte: endDate,
+        },
+      },
+    });
+
+    const totalLate = logAbsensiDatas.filter((log) => {
+      if (!log.checkIn) return false;
+      return log.checkIn > log.jamMasukDate;
+    });
+
+    const totalLateMinutes = totalLate.reduce((acc, curr) => {
+      if (!curr.checkIn) return acc;
+      return acc + calculateMinutesDifferent(curr.jamMasukDate, curr.checkIn);
+    }, 0);
+
+    const totalAbsent = logAbsensiDatas.filter((log) => {
+      return log.checkIn === null;
+    }).length;
+
+    const totalMinutes = logAbsensiDatas.reduce((acc, curr) => {
+      if (!curr.checkIn) return acc;
+      const minutesDiff = calculateMinutesDifferent(
+        curr.checkIn,
+        curr.jamKeluarDate
+      );
+      return acc + minutesDiff;
+    }, 0);
+
+    const totalGaji = Math.round((pegawaiData.salary * totalMinutes) / 24);
+
+    const totalLembur = logAbsensiDatas.filter(
+      (log) => log.isLembur && !!log.checkOut
+    );
+
+    const totalLemburMinutes = totalLembur.reduce((acc, curr) => {
+      if (!curr.checkOut) return acc;
+      return acc + calculateMinutesDifferent(curr.jamKeluarDate, curr.checkOut);
+    }, 0);
+
+    const totalGajiLembur = Math.round(
+      (pegawaiData.salary / 24) * totalLemburMinutes
+    );
+
+    res.status(200).json({
+      totalLate: totalLate.length,
+      totalLateTime: Math.round(totalLateMinutes),
+      totalLembur: totalLembur.length,
+      totalLemburTime: Math.round(totalLemburMinutes),
+      totalGajiLembur,
+      totalAbsent,
+      totalWorkTime: Math.round(totalMinutes),
+      totalGaji,
+      totalHari: logAbsensiDatas.length,
+      totalMasuk: logAbsensiDatas.length - totalAbsent,
+      pegawai: pegawaiData,
+    });
+  } catch (err) {
+    res.status(500).json(err);
+  }
+};
 
 export {
   createPegawai,
