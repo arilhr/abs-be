@@ -5,7 +5,7 @@ import { calculateJamShiftDate } from "../utils/calculate-jam-shift-date";
 import { CHECK_IN_MINUTE_OFFSET } from "../constants/absensi";
 import { convertDayDatabaseToDayjs } from "../utils/get-day-from-date";
 
-const NOW = dayjs("2025-12-15 23:05:00");
+const NOW = dayjs();
 
 export const getAllAbsensi = async (req: Request, res: Response) => {
   try {

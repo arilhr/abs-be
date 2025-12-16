@@ -8,11 +8,11 @@
  *
  * 🟢 You can import this file directly.
  */
-export type * from './models/User.js'
-export type * from './models/Position.js'
-export type * from './models/Pegawai.js'
-export type * from './models/Shift.js'
-export type * from './models/Jadwal.js'
-export type * from './models/LogAbsensi.js'
-export type * from './models/RequestLembur.js'
-export type * from './commonInputTypes.js'
+export type * from './models/User'
+export type * from './models/Position'
+export type * from './models/Pegawai'
+export type * from './models/Shift'
+export type * from './models/Jadwal'
+export type * from './models/LogAbsensi'
+export type * from './models/RequestLembur'
+export type * from './commonInputTypes'

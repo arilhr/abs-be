@@ -157,4 +157,28 @@ async function deleteUser(req: Request, res: Response): Promise<void> {
   }
 }
 
+export const getUserData = async (req: Request, res: Response) => {
+  try {
+    if (!req.user?.userId) {
+      res.status(401).json({ message: "Not Authorized" });
+      return;
+    }
+
+    const userData = await prisma.user.findFirst({
+      where: {
+        id: req.user.userId,
+      },
+    });
+
+    if (!userData) {
+      res.status(400).json({ message: "User not found." });
+      return;
+    }
+
+    res.status(200).json(userData);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+};
+
 export { createUser, getUsers, getUserById, updateUser, deleteUser };

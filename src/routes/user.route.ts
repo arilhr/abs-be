@@ -5,6 +5,7 @@ import { authenticate } from "../middlewares/auth.middleware";
 const router = Router();
 router.use(authenticate);
 router.post("/", ctrl.createUser);
+router.get("/profile", ctrl.getUserData);
 router.get("/", ctrl.getUsers);
 router.get("/:id", ctrl.getUserById);
 router.put("/:id", ctrl.updateUser);
