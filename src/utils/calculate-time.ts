@@ -35,3 +35,13 @@ export const calculateTimeDifferent = (
 
   return dur.asMinutes();
 };
+
+export const calculateMinutesDifferent = (startDate: Date, endDate: Date) => {
+  const start = dayjs(startDate);
+  const end = dayjs(endDate);
+
+  const diff = end.diff(start);
+  const duration = dayjs.duration(diff);
+
+  return Math.abs(duration.asMinutes());
+};

@@ -7,6 +7,7 @@ router.use(authenticate);
 
 router.post("/", pegawaiController.createPegawai);
 router.get("/", pegawaiController.getPegawai);
+router.get("/salary", pegawaiController.getGajiPegawai);
 router.get("/:id", pegawaiController.getPegawaiById);
 router.put("/:id", pegawaiController.updatePegawai);
 router.delete("/:id", pegawaiController.deletePegawai);
