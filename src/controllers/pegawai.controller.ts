@@ -1,0 +1,203 @@
+import { Request, Response } from "express";
+import prisma from "../prisma";
+import { PrismaClientKnownRequestError } from "../../prisma/generated/internal/prismaNamespace";
+
+async function createPegawai(req: Request, res: Response): Promise<void> {
+  try {
+    const { name, positionId, status = "active", salary } = req.body;
+    if (!name || positionId === undefined) {
+      res.status(400).json({ error: "name and positionId required" });
+      return;
+    }
+    const pegawai = await prisma.pegawai.create({
+      data: { name, positionId: Number(positionId), status, salary },
+    });
+    res.status(201).json(pegawai);
+  } catch (err) {
+    res.status(500).json({ error: "internal error", err });
+  }
+}
+
+async function getPegawai(req: Request, res: Response): Promise<void> {
+  try {
+    const {
+      id,
+      name,
+      positionId,
+      status,
+      page: pageQ,
+      limit: limitQ,
+      isArchive = false,
+    } = req.query;
+
+    const where: any = {};
+
+    // default behavior: when isArchive is omitted, use false
+    where.isArchive = isArchive === undefined ? false : isArchive === "true";
+
+    if (typeof name === "string" && name.trim() !== "") {
+      where.name = { contains: name.trim(), mode: "insensitive" };
+    }
+    if (id !== undefined) {
+      const idNumber = Number(id);
+      if (!Number.isNaN(idNumber)) where.id = idNumber;
+    }
+    if (positionId !== undefined) {
+      const pid = Number(positionId);
+      if (!Number.isNaN(pid)) where.positionId = pid;
+    }
+    if (typeof status === "string" && status.trim() !== "") {
+      where.status = status.trim();
+    }
+
+    const page = pageQ ? Number(pageQ) : undefined;
+    const limit = limitQ ? Number(limitQ) : undefined;
+    const shouldPaginate =
+      page !== undefined &&
+      limit !== undefined &&
+      Number.isInteger(page) &&
+      page > 0 &&
+      Number.isInteger(limit) &&
+      limit > 0;
+
+    if (shouldPaginate) {
+      const skip = (page - 1) * limit;
+      const [total, data] = await Promise.all([
+        prisma.pegawai.count({ where }),
+        prisma.pegawai.findMany({
+          where,
+          orderBy: { createdAt: "desc" },
+          skip,
+          take: limit,
+          include: {
+            position: {
+              select: { id: true, name: true },
+            },
+          },
+        }),
+      ]);
+      res.json({
+        data,
+        meta: { total, page, limit, totalPages: Math.ceil(total / limit) },
+      });
+      return;
+    }
+
+    const data = await prisma.pegawai.findMany({
+      where,
+      include: {
+        position: {
+          select: { id: true, name: true },
+        },
+      },
+      orderBy: { createdAt: "desc" },
+    });
+    res.json(data);
+  } catch {
+    res.status(500).json({ error: "internal error" });
+  }
+}
+
+async function getPegawaiById(req: Request, res: Response): Promise<void> {
+  try {
+    const id = Number(req.params.id);
+    const pegawai = await prisma.pegawai.findUnique({
+      where: { id },
+      include: {
+        position: true,
+      },
+    });
+    if (!pegawai) {
+      res.status(404).json({ error: "not found" });
+      return;
+    }
+    res.json(pegawai);
+  } catch {
+    res.status(500).json({ error: "internal error" });
+  }
+}
+
+export const getJadwalPegawai = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+
+    const result = await prisma.jadwal.findMany({
+      where: {
+        pegawaiId: +id,
+        isActive: true,
+      },
+      include: {
+        shift: true,
+      },
+      orderBy: [{ day: "asc" }],
+    });
+
+    // Group by day
+    const groupedByDay = result.reduce((acc, jadwal) => {
+      const day = jadwal.day;
+
+      if (!acc[day]) {
+        acc[day] = [];
+      }
+
+      acc[day].push(jadwal);
+
+      return acc;
+    }, {} as Record<number, typeof result>);
+
+    res.status(200).json({
+      data: groupedByDay,
+    });
+  } catch (err) {
+    res.status(500).json(err);
+  }
+};
+
+async function updatePegawai(req: Request, res: Response): Promise<void> {
+  try {
+    const id = Number(req.params.id);
+    const { name, positionId, status, salary } = req.body;
+    const data: any = {};
+    if (name !== undefined) data.name = name;
+    if (positionId !== undefined) data.positionId = Number(positionId);
+    if (status !== undefined) data.status = status;
+    if (salary !== undefined) data.salary = Number(salary);
+
+    const pegawai = await prisma.pegawai.update({ where: { id }, data });
+    res.json(pegawai);
+  } catch (err) {
+    const error = err as PrismaClientKnownRequestError;
+    if (error.code === "P2025") {
+      res.status(404).json({ error: "not found" });
+      return;
+    }
+    res.status(500).json({ error: "internal error", err });
+  }
+}
+
+async function deletePegawai(req: Request, res: Response): Promise<void> {
+  try {
+    const id = Number(req.params.id);
+    // archive data
+    await prisma.pegawai.update({
+      where: { id },
+      data: { status: "archive" },
+    });
+    res.status(204).send();
+  } catch (err) {
+    const error = err as PrismaClientKnownRequestError;
+    if (error.code === "P2025") {
+      res.status(404).json({ error: "not found" });
+      return;
+    }
+    res.status(500).json({ error: "internal error" });
+  }
+}
+
+export {
+  createPegawai,
+  getPegawai,
+  getPegawaiById,
+  updatePegawai,
+  deletePegawai,
+};

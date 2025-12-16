@@ -1,0 +1,126 @@
+generator client {
+  provider = "prisma-client"
+  output   = "./generated"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id             Int             @id @default(autoincrement())
+  username       String          @unique
+  password       String
+  isActive       Boolean         @default(true)
+  isArchive      Boolean         @default(false)
+  lastLogin      DateTime?
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+  requestLemburs RequestLembur[]
+}
+
+model Position {
+  id        Int       @id @default(autoincrement())
+  name      String
+  isArchive Boolean   @default(false)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  pegawais  Pegawai[]
+}
+
+model Pegawai {
+  id         Int     @id @default(autoincrement())
+  name       String
+  positionId Int
+  status     String?
+  salary     Int     @default(0)
+
+  isArchive Boolean      @default(false)
+  jadwals   Jadwal[]
+  logs      LogAbsensi[]
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+
+  position       Position        @relation(fields: [positionId], references: [id])
+  requestLemburs RequestLembur[]
+
+  @@index([positionId])
+}
+
+model Shift {
+  id             Int             @id @default(autoincrement())
+  name           String
+  jamMasuk       String
+  jamKeluar      String
+  isActive       Boolean         @default(true)
+  isArchive      Boolean         @default(false)
+  jadwals        Jadwal[]
+  logs           LogAbsensi[]
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+  requestLemburs RequestLembur[]
+}
+
+model Jadwal {
+  id        Int      @id @default(autoincrement())
+  pegawaiId Int
+  shiftId   Int
+  day       Int
+  isActive  Boolean  @default(true)
+  isArchive Boolean  @default(false)
+  pegawai   Pegawai  @relation(fields: [pegawaiId], references: [id])
+  shift     Shift    @relation(fields: [shiftId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([pegawaiId])
+  @@index([shiftId])
+}
+
+model LogAbsensi {
+  id            Int       @id @default(autoincrement())
+  pegawaiId     Int
+  shiftId       Int?
+  shiftName     String
+  day           Int
+  jamMasuk      String
+  jamMasukDate  DateTime
+  jamKeluar     String
+  jamKeluarDate DateTime
+  checkIn       DateTime?
+  checkOut      DateTime?
+  isLembur      Boolean   @default(false)
+
+  pegawai Pegawai @relation(fields: [pegawaiId], references: [id])
+  shift   Shift?  @relation(fields: [shiftId], references: [id])
+
+  requestLembur RequestLembur?
+
+  createdAt DateTime @default(now())
+
+  @@index([pegawaiId])
+  @@index([shiftId])
+}
+
+model RequestLembur {
+  id           Int      @id @default(autoincrement())
+  userId       Int
+  pegawaiId    Int
+  shiftId      Int
+  logAbsensiId Int?     @unique
+  date         DateTime
+  reason       String?
+  isAccepted   Boolean?
+
+  user       User        @relation(fields: [userId], references: [id])
+  pegawai    Pegawai     @relation(fields: [pegawaiId], references: [id])
+  shift      Shift       @relation(fields: [shiftId], references: [id])
+  logAbsensi LogAbsensi? @relation(fields: [logAbsensiId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+  @@index([pegawaiId])
+  @@index([shiftId])
+}

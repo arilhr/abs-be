@@ -1,0 +1,34 @@
+import dayjs from "dayjs";
+
+export const calculateJamShiftDate = (
+  jamMasuk: string,
+  jamKeluar: string,
+  date: Date | null = null,
+  isTommorow = false
+) => {
+  let baseDay = isTommorow
+    ? dayjs.tz().clone().add(1, "day")
+    : dayjs.tz().clone();
+
+  if (date) {
+    baseDay = dayjs.tz(date);
+  }
+
+  const baseDayFormatted = baseDay.format("YYYY-MM-DD");
+  const jamMasukShiftDate = dayjs(`${baseDayFormatted} ${jamMasuk}`);
+
+  // Jam Keluar
+  let jamKeluarShiftDate = dayjs(`${baseDayFormatted} ${jamKeluar}`);
+
+  if (
+    jamKeluarShiftDate.isBefore(jamMasukShiftDate) ||
+    jamKeluarShiftDate.isSame(jamMasukShiftDate)
+  ) {
+    jamKeluarShiftDate = jamKeluarShiftDate.add(1, "day");
+  }
+
+  return {
+    jamMasukDate: jamMasukShiftDate.toDate(),
+    jamKeluarDate: jamKeluarShiftDate.toDate(),
+  };
+};
