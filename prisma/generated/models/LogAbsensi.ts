@@ -650,14 +650,6 @@ export type LogAbsensiUncheckedUpdateManyWithoutShiftNestedInput = {
   deleteMany?: Prisma.LogAbsensiScalarWhereInput | Prisma.LogAbsensiScalarWhereInput[]
 }
 
-export type NullableIntFieldUpdateOperationsInput = {
-  set?: number | null
-  increment?: number
-  decrement?: number
-  multiply?: number
-  divide?: number
-}
-
 export type LogAbsensiCreateNestedOneWithoutRequestLemburInput = {
   create?: Prisma.XOR<Prisma.LogAbsensiCreateWithoutRequestLemburInput, Prisma.LogAbsensiUncheckedCreateWithoutRequestLemburInput>
   connectOrCreate?: Prisma.LogAbsensiCreateOrConnectWithoutRequestLemburInput

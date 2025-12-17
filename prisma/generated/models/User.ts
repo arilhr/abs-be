@@ -28,14 +28,17 @@ export type AggregateUser = {
 
 export type UserAvgAggregateOutputType = {
   id: number | null
+  pegawaiId: number | null
 }
 
 export type UserSumAggregateOutputType = {
   id: number | null
+  pegawaiId: number | null
 }
 
 export type UserMinAggregateOutputType = {
   id: number | null
+  pegawaiId: number | null
   username: string | null
   password: string | null
   isActive: boolean | null
@@ -47,6 +50,7 @@ export type UserMinAggregateOutputType = {
 
 export type UserMaxAggregateOutputType = {
   id: number | null
+  pegawaiId: number | null
   username: string | null
   password: string | null
   isActive: boolean | null
@@ -58,6 +62,7 @@ export type UserMaxAggregateOutputType = {
 
 export type UserCountAggregateOutputType = {
   id: number
+  pegawaiId: number
   username: number
   password: number
   isActive: number
@@ -71,14 +76,17 @@ export type UserCountAggregateOutputType = {
 
 export type UserAvgAggregateInputType = {
   id?: true
+  pegawaiId?: true
 }
 
 export type UserSumAggregateInputType = {
   id?: true
+  pegawaiId?: true
 }
 
 export type UserMinAggregateInputType = {
   id?: true
+  pegawaiId?: true
   username?: true
   password?: true
   isActive?: true
@@ -90,6 +98,7 @@ export type UserMinAggregateInputType = {
 
 export type UserMaxAggregateInputType = {
   id?: true
+  pegawaiId?: true
   username?: true
   password?: true
   isActive?: true
@@ -101,6 +110,7 @@ export type UserMaxAggregateInputType = {
 
 export type UserCountAggregateInputType = {
   id?: true
+  pegawaiId?: true
   username?: true
   password?: true
   isActive?: true
@@ -199,6 +209,7 @@ export type UserGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalArg
 
 export type UserGroupByOutputType = {
   id: number
+  pegawaiId: number | null
   username: string
   password: string
   isActive: boolean
@@ -233,6 +244,7 @@ export type UserWhereInput = {
   OR?: Prisma.UserWhereInput[]
   NOT?: Prisma.UserWhereInput | Prisma.UserWhereInput[]
   id?: Prisma.IntFilter<"User"> | number
+  pegawaiId?: Prisma.IntNullableFilter<"User"> | number | null
   username?: Prisma.StringFilter<"User"> | string
   password?: Prisma.StringFilter<"User"> | string
   isActive?: Prisma.BoolFilter<"User"> | boolean
@@ -240,11 +252,13 @@ export type UserWhereInput = {
   lastLogin?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
+  pegawai?: Prisma.XOR<Prisma.PegawaiNullableScalarRelationFilter, Prisma.PegawaiWhereInput> | null
   requestLemburs?: Prisma.RequestLemburListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
   id?: Prisma.SortOrder
+  pegawaiId?: Prisma.SortOrderInput | Prisma.SortOrder
   username?: Prisma.SortOrder
   password?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
@@ -252,6 +266,7 @@ export type UserOrderByWithRelationInput = {
   lastLogin?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  pegawai?: Prisma.PegawaiOrderByWithRelationInput
   requestLemburs?: Prisma.RequestLemburOrderByRelationAggregateInput
 }
 
@@ -261,17 +276,20 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   AND?: Prisma.UserWhereInput | Prisma.UserWhereInput[]
   OR?: Prisma.UserWhereInput[]
   NOT?: Prisma.UserWhereInput | Prisma.UserWhereInput[]
+  pegawaiId?: Prisma.IntNullableFilter<"User"> | number | null
   password?: Prisma.StringFilter<"User"> | string
   isActive?: Prisma.BoolFilter<"User"> | boolean
   isArchive?: Prisma.BoolFilter<"User"> | boolean
   lastLogin?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
+  pegawai?: Prisma.XOR<Prisma.PegawaiNullableScalarRelationFilter, Prisma.PegawaiWhereInput> | null
   requestLemburs?: Prisma.RequestLemburListRelationFilter
 }, "id" | "username">
 
 export type UserOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
+  pegawaiId?: Prisma.SortOrderInput | Prisma.SortOrder
   username?: Prisma.SortOrder
   password?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
@@ -291,6 +309,7 @@ export type UserScalarWhereWithAggregatesInput = {
   OR?: Prisma.UserScalarWhereWithAggregatesInput[]
   NOT?: Prisma.UserScalarWhereWithAggregatesInput | Prisma.UserScalarWhereWithAggregatesInput[]
   id?: Prisma.IntWithAggregatesFilter<"User"> | number
+  pegawaiId?: Prisma.IntNullableWithAggregatesFilter<"User"> | number | null
   username?: Prisma.StringWithAggregatesFilter<"User"> | string
   password?: Prisma.StringWithAggregatesFilter<"User"> | string
   isActive?: Prisma.BoolWithAggregatesFilter<"User"> | boolean
@@ -308,11 +327,13 @@ export type UserCreateInput = {
   lastLogin?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  pegawai?: Prisma.PegawaiCreateNestedOneWithoutUsersInput
   requestLemburs?: Prisma.RequestLemburCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateInput = {
   id?: number
+  pegawaiId?: number | null
   username: string
   password: string
   isActive?: boolean
@@ -331,11 +352,13 @@ export type UserUpdateInput = {
   lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  pegawai?: Prisma.PegawaiUpdateOneWithoutUsersNestedInput
   requestLemburs?: Prisma.RequestLemburUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
+  pegawaiId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   username?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -348,6 +371,7 @@ export type UserUncheckedUpdateInput = {
 
 export type UserCreateManyInput = {
   id?: number
+  pegawaiId?: number | null
   username: string
   password: string
   isActive?: boolean
@@ -369,6 +393,7 @@ export type UserUpdateManyMutationInput = {
 
 export type UserUncheckedUpdateManyInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
+  pegawaiId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   username?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -380,6 +405,7 @@ export type UserUncheckedUpdateManyInput = {
 
 export type UserCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  pegawaiId?: Prisma.SortOrder
   username?: Prisma.SortOrder
   password?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
@@ -391,10 +417,12 @@ export type UserCountOrderByAggregateInput = {
 
 export type UserAvgOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  pegawaiId?: Prisma.SortOrder
 }
 
 export type UserMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  pegawaiId?: Prisma.SortOrder
   username?: Prisma.SortOrder
   password?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
@@ -406,6 +434,7 @@ export type UserMaxOrderByAggregateInput = {
 
 export type UserMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  pegawaiId?: Prisma.SortOrder
   username?: Prisma.SortOrder
   password?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
@@ -417,6 +446,17 @@ export type UserMinOrderByAggregateInput = {
 
 export type UserSumOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  pegawaiId?: Prisma.SortOrder
+}
+
+export type UserListRelationFilter = {
+  every?: Prisma.UserWhereInput
+  some?: Prisma.UserWhereInput
+  none?: Prisma.UserWhereInput
+}
+
+export type UserOrderByRelationAggregateInput = {
+  _count?: Prisma.SortOrder
 }
 
 export type UserScalarRelationFilter = {
@@ -448,6 +488,56 @@ export type IntFieldUpdateOperationsInput = {
   divide?: number
 }
 
+export type NullableIntFieldUpdateOperationsInput = {
+  set?: number | null
+  increment?: number
+  decrement?: number
+  multiply?: number
+  divide?: number
+}
+
+export type UserCreateNestedManyWithoutPegawaiInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutPegawaiInput, Prisma.UserUncheckedCreateWithoutPegawaiInput> | Prisma.UserCreateWithoutPegawaiInput[] | Prisma.UserUncheckedCreateWithoutPegawaiInput[]
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutPegawaiInput | Prisma.UserCreateOrConnectWithoutPegawaiInput[]
+  createMany?: Prisma.UserCreateManyPegawaiInputEnvelope
+  connect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+}
+
+export type UserUncheckedCreateNestedManyWithoutPegawaiInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutPegawaiInput, Prisma.UserUncheckedCreateWithoutPegawaiInput> | Prisma.UserCreateWithoutPegawaiInput[] | Prisma.UserUncheckedCreateWithoutPegawaiInput[]
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutPegawaiInput | Prisma.UserCreateOrConnectWithoutPegawaiInput[]
+  createMany?: Prisma.UserCreateManyPegawaiInputEnvelope
+  connect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+}
+
+export type UserUpdateManyWithoutPegawaiNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutPegawaiInput, Prisma.UserUncheckedCreateWithoutPegawaiInput> | Prisma.UserCreateWithoutPegawaiInput[] | Prisma.UserUncheckedCreateWithoutPegawaiInput[]
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutPegawaiInput | Prisma.UserCreateOrConnectWithoutPegawaiInput[]
+  upsert?: Prisma.UserUpsertWithWhereUniqueWithoutPegawaiInput | Prisma.UserUpsertWithWhereUniqueWithoutPegawaiInput[]
+  createMany?: Prisma.UserCreateManyPegawaiInputEnvelope
+  set?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  disconnect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  delete?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  connect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  update?: Prisma.UserUpdateWithWhereUniqueWithoutPegawaiInput | Prisma.UserUpdateWithWhereUniqueWithoutPegawaiInput[]
+  updateMany?: Prisma.UserUpdateManyWithWhereWithoutPegawaiInput | Prisma.UserUpdateManyWithWhereWithoutPegawaiInput[]
+  deleteMany?: Prisma.UserScalarWhereInput | Prisma.UserScalarWhereInput[]
+}
+
+export type UserUncheckedUpdateManyWithoutPegawaiNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutPegawaiInput, Prisma.UserUncheckedCreateWithoutPegawaiInput> | Prisma.UserCreateWithoutPegawaiInput[] | Prisma.UserUncheckedCreateWithoutPegawaiInput[]
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutPegawaiInput | Prisma.UserCreateOrConnectWithoutPegawaiInput[]
+  upsert?: Prisma.UserUpsertWithWhereUniqueWithoutPegawaiInput | Prisma.UserUpsertWithWhereUniqueWithoutPegawaiInput[]
+  createMany?: Prisma.UserCreateManyPegawaiInputEnvelope
+  set?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  disconnect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  delete?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  connect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  update?: Prisma.UserUpdateWithWhereUniqueWithoutPegawaiInput | Prisma.UserUpdateWithWhereUniqueWithoutPegawaiInput[]
+  updateMany?: Prisma.UserUpdateManyWithWhereWithoutPegawaiInput | Prisma.UserUpdateManyWithWhereWithoutPegawaiInput[]
+  deleteMany?: Prisma.UserScalarWhereInput | Prisma.UserScalarWhereInput[]
+}
+
 export type UserCreateNestedOneWithoutRequestLembursInput = {
   create?: Prisma.XOR<Prisma.UserCreateWithoutRequestLembursInput, Prisma.UserUncheckedCreateWithoutRequestLembursInput>
   connectOrCreate?: Prisma.UserCreateOrConnectWithoutRequestLembursInput
@@ -462,6 +552,70 @@ export type UserUpdateOneRequiredWithoutRequestLembursNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutRequestLembursInput, Prisma.UserUpdateWithoutRequestLembursInput>, Prisma.UserUncheckedUpdateWithoutRequestLembursInput>
 }
 
+export type UserCreateWithoutPegawaiInput = {
+  username: string
+  password: string
+  isActive?: boolean
+  isArchive?: boolean
+  lastLogin?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  requestLemburs?: Prisma.RequestLemburCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutPegawaiInput = {
+  id?: number
+  username: string
+  password: string
+  isActive?: boolean
+  isArchive?: boolean
+  lastLogin?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  requestLemburs?: Prisma.RequestLemburUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutPegawaiInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutPegawaiInput, Prisma.UserUncheckedCreateWithoutPegawaiInput>
+}
+
+export type UserCreateManyPegawaiInputEnvelope = {
+  data: Prisma.UserCreateManyPegawaiInput | Prisma.UserCreateManyPegawaiInput[]
+  skipDuplicates?: boolean
+}
+
+export type UserUpsertWithWhereUniqueWithoutPegawaiInput = {
+  where: Prisma.UserWhereUniqueInput
+  update: Prisma.XOR<Prisma.UserUpdateWithoutPegawaiInput, Prisma.UserUncheckedUpdateWithoutPegawaiInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutPegawaiInput, Prisma.UserUncheckedCreateWithoutPegawaiInput>
+}
+
+export type UserUpdateWithWhereUniqueWithoutPegawaiInput = {
+  where: Prisma.UserWhereUniqueInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutPegawaiInput, Prisma.UserUncheckedUpdateWithoutPegawaiInput>
+}
+
+export type UserUpdateManyWithWhereWithoutPegawaiInput = {
+  where: Prisma.UserScalarWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateManyMutationInput, Prisma.UserUncheckedUpdateManyWithoutPegawaiInput>
+}
+
+export type UserScalarWhereInput = {
+  AND?: Prisma.UserScalarWhereInput | Prisma.UserScalarWhereInput[]
+  OR?: Prisma.UserScalarWhereInput[]
+  NOT?: Prisma.UserScalarWhereInput | Prisma.UserScalarWhereInput[]
+  id?: Prisma.IntFilter<"User"> | number
+  pegawaiId?: Prisma.IntNullableFilter<"User"> | number | null
+  username?: Prisma.StringFilter<"User"> | string
+  password?: Prisma.StringFilter<"User"> | string
+  isActive?: Prisma.BoolFilter<"User"> | boolean
+  isArchive?: Prisma.BoolFilter<"User"> | boolean
+  lastLogin?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
+  createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
+}
+
 export type UserCreateWithoutRequestLembursInput = {
   username: string
   password: string
@@ -470,10 +624,12 @@ export type UserCreateWithoutRequestLembursInput = {
   lastLogin?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  pegawai?: Prisma.PegawaiCreateNestedOneWithoutUsersInput
 }
 
 export type UserUncheckedCreateWithoutRequestLembursInput = {
   id?: number
+  pegawaiId?: number | null
   username: string
   password: string
   isActive?: boolean
@@ -507,9 +663,56 @@ export type UserUpdateWithoutRequestLembursInput = {
   lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  pegawai?: Prisma.PegawaiUpdateOneWithoutUsersNestedInput
 }
 
 export type UserUncheckedUpdateWithoutRequestLembursInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  pegawaiId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isArchive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type UserCreateManyPegawaiInput = {
+  id?: number
+  username: string
+  password: string
+  isActive?: boolean
+  isArchive?: boolean
+  lastLogin?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type UserUpdateWithoutPegawaiInput = {
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isArchive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  requestLemburs?: Prisma.RequestLemburUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutPegawaiInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isArchive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  requestLemburs?: Prisma.RequestLemburUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateManyWithoutPegawaiInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   username?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
@@ -553,6 +756,7 @@ export type UserCountOutputTypeCountRequestLembursArgs<ExtArgs extends runtime.T
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  pegawaiId?: boolean
   username?: boolean
   password?: boolean
   isActive?: boolean
@@ -560,12 +764,14 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   lastLogin?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  pegawai?: boolean | Prisma.User$pegawaiArgs<ExtArgs>
   requestLemburs?: boolean | Prisma.User$requestLembursArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
 export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  pegawaiId?: boolean
   username?: boolean
   password?: boolean
   isActive?: boolean
@@ -573,10 +779,12 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   lastLogin?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  pegawai?: boolean | Prisma.User$pegawaiArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
 export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  pegawaiId?: boolean
   username?: boolean
   password?: boolean
   isActive?: boolean
@@ -584,10 +792,12 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   lastLogin?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  pegawai?: boolean | Prisma.User$pegawaiArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
 export type UserSelectScalar = {
   id?: boolean
+  pegawaiId?: boolean
   username?: boolean
   password?: boolean
   isActive?: boolean
@@ -597,21 +807,28 @@ export type UserSelectScalar = {
   updatedAt?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "username" | "password" | "isActive" | "isArchive" | "lastLogin" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "pegawaiId" | "username" | "password" | "isActive" | "isArchive" | "lastLogin" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  pegawai?: boolean | Prisma.User$pegawaiArgs<ExtArgs>
   requestLemburs?: boolean | Prisma.User$requestLembursArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
-export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
-export type UserIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
+export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  pegawai?: boolean | Prisma.User$pegawaiArgs<ExtArgs>
+}
+export type UserIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  pegawai?: boolean | Prisma.User$pegawaiArgs<ExtArgs>
+}
 
 export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "User"
   objects: {
+    pegawai: Prisma.$PegawaiPayload<ExtArgs> | null
     requestLemburs: Prisma.$RequestLemburPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
+    pegawaiId: number | null
     username: string
     password: string
     isActive: boolean
@@ -1013,6 +1230,7 @@ readonly fields: UserFieldRefs;
  */
 export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  pegawai<T extends Prisma.User$pegawaiArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$pegawaiArgs<ExtArgs>>): Prisma.Prisma__PegawaiClient<runtime.Types.Result.GetResult<Prisma.$PegawaiPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   requestLemburs<T extends Prisma.User$requestLembursArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$requestLembursArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RequestLemburPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -1044,6 +1262,7 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
  */
 export interface UserFieldRefs {
   readonly id: Prisma.FieldRef<"User", 'Int'>
+  readonly pegawaiId: Prisma.FieldRef<"User", 'Int'>
   readonly username: Prisma.FieldRef<"User", 'String'>
   readonly password: Prisma.FieldRef<"User", 'String'>
   readonly isActive: Prisma.FieldRef<"User", 'Boolean'>
@@ -1300,6 +1519,10 @@ export type UserCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions
    */
   data: Prisma.UserCreateManyInput | Prisma.UserCreateManyInput[]
   skipDuplicates?: boolean
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserIncludeCreateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -1370,6 +1593,10 @@ export type UserUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions
    * Limit how many Users to update.
    */
   limit?: number
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserIncludeUpdateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -1436,6 +1663,25 @@ export type UserDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Internal
    * Limit how many Users to delete.
    */
   limit?: number
+}
+
+/**
+ * User.pegawai
+ */
+export type User$pegawaiArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Pegawai
+   */
+  select?: Prisma.PegawaiSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Pegawai
+   */
+  omit?: Prisma.PegawaiOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PegawaiInclude<ExtArgs> | null
+  where?: Prisma.PegawaiWhereInput
 }
 
 /**

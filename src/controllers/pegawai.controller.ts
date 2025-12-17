@@ -6,13 +6,15 @@ import { calculateMinutesDifferent } from "../utils/calculate-time";
 
 async function createPegawai(req: Request, res: Response): Promise<void> {
   try {
-    const { name, positionId, status = "active", salary } = req.body;
-    if (!name || positionId === undefined) {
-      res.status(400).json({ error: "name and positionId required" });
+    const { name, positionId, status = "active", salary, pegawaiId } = req.body;
+    if (!name || positionId === undefined || pegawaiId === undefined) {
+      res
+        .status(400)
+        .json({ error: "Name, Position, and Pegawai ID required" });
       return;
     }
     const pegawai = await prisma.pegawai.create({
-      data: { name, positionId: Number(positionId), status, salary },
+      data: { name, pegawaiId, positionId: Number(positionId), status, salary },
     });
     res.status(201).json(pegawai);
   } catch (err) {
@@ -158,12 +160,13 @@ export const getJadwalPegawai = async (req: Request, res: Response) => {
 async function updatePegawai(req: Request, res: Response): Promise<void> {
   try {
     const id = Number(req.params.id);
-    const { name, positionId, status, salary } = req.body;
+    const { name, positionId, status, salary, pegawaiId } = req.body;
     const data: any = {};
     if (name !== undefined) data.name = name;
     if (positionId !== undefined) data.positionId = Number(positionId);
     if (status !== undefined) data.status = status;
     if (salary !== undefined) data.salary = Number(salary);
+    if (pegawaiId !== undefined) data.pegawaiId = pegawaiId;
 
     const pegawai = await prisma.pegawai.update({ where: { id }, data });
     res.json(pegawai);

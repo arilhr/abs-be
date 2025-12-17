@@ -1,18 +1,33 @@
 import { Request, Response } from "express";
 import prisma from "../prisma";
 import { PrismaClientKnownRequestError } from "../../prisma/generated/internal/prismaNamespace";
+import { hashPassword } from "../utils/hash";
 
 // Create a user
-async function createUser(req: Request, res: Response): Promise<void> {
+export const createUser = async (req: Request, res: Response) => {
   try {
-    const { username, password, isActive = true, isArchive = false } = req.body;
+    const {
+      username,
+      password,
+      isActive = true,
+      isArchive = false,
+      pegawaiId,
+    } = req.body;
     if (!username || !password) {
       res.status(400).json({ error: "username and password required" });
       return;
     }
 
+    const passwordHashed = await hashPassword(password);
+
     const user = await prisma.user.create({
-      data: { username, password, isActive, isArchive },
+      data: {
+        username,
+        password: passwordHashed,
+        isActive,
+        isArchive,
+        pegawaiId,
+      },
     });
     res.status(201).json(user);
   } catch (err) {
@@ -23,12 +38,12 @@ async function createUser(req: Request, res: Response): Promise<void> {
     }
     res.status(500).json({ error: "internal error" });
   }
-}
+};
 
 // Get all users
-async function getUsers(req: Request, res: Response): Promise<void> {
+export const getUsers = async (req: Request, res: Response) => {
   try {
-    const { username, lastLogin, page: pageQ, limit: limitQ } = req.query;
+    const { username, lastLogin, page, limit } = req.query;
 
     const where: any = {};
 
@@ -43,64 +58,53 @@ async function getUsers(req: Request, res: Response): Promise<void> {
       }
     }
 
-    const page = pageQ ? Number(pageQ) : undefined;
-    const limit = limitQ ? Number(limitQ) : undefined;
-    const shouldPaginate =
-      page !== undefined &&
-      limit !== undefined &&
-      Number.isInteger(page) &&
-      page > 0 &&
-      Number.isInteger(limit) &&
-      limit > 0;
+    const withPagination = !isNaN(Number(page)) || !isNaN(Number(limit));
 
-    if (shouldPaginate) {
-      const skip = (page - 1) * limit;
-      const [total, data] = await Promise.all([
-        prisma.user.count({ where }),
-        prisma.user.findMany({
-          where,
-          orderBy: { createdAt: "desc" },
-          skip,
-          take: limit,
-          select: {
-            id: true,
-            username: true,
-            lastLogin: true,
-          },
+    const [total, data] = await Promise.all([
+      prisma.user.count({ where }),
+      prisma.user.findMany({
+        where,
+        orderBy: { createdAt: "desc" },
+        ...(withPagination && {
+          skip: Number(page) - 1,
+          take: Number(limit),
         }),
-      ]);
+        select: {
+          id: true,
+          username: true,
+          lastLogin: true,
+          pegawai: true,
+        },
+      }),
+    ]);
 
-      res.json({
-        data,
-        total,
+    res.json({
+      data,
+      total,
+      ...(withPagination && {
         page,
         limit,
-        totalPages: Math.ceil(total / limit),
-      });
-      return;
-    }
+        totalPages: Math.ceil(total / Number(limit)),
+      }),
+    });
+  } catch {
+    res.status(500).json({ error: "internal error" });
+  }
+};
 
-    const data = await prisma.user.findMany({
-      where,
-      orderBy: { createdAt: "desc" },
+// Get single user
+export const getUserById = async (req: Request, res: Response) => {
+  try {
+    const id = Number(req.params.id);
+    const user = await prisma.user.findUnique({
+      where: { id },
       select: {
         id: true,
         username: true,
         lastLogin: true,
+        pegawai: true,
       },
     });
-
-    res.json(data);
-  } catch {
-    res.status(500).json({ error: "internal error" });
-  }
-}
-
-// Get single user
-async function getUserById(req: Request, res: Response): Promise<void> {
-  try {
-    const id = Number(req.params.id);
-    const user = await prisma.user.findUnique({ where: { id } });
     if (!user) {
       res.status(404).json({ error: "not found" });
       return;
@@ -109,18 +113,18 @@ async function getUserById(req: Request, res: Response): Promise<void> {
   } catch {
     res.status(500).json({ error: "internal error" });
   }
-}
+};
 
 // Update user
-async function updateUser(req: Request, res: Response): Promise<void> {
+export const updateUser = async (req: Request, res: Response) => {
   try {
     const id = Number(req.params.id);
-    const { username, password, isActive, isArchive } = req.body;
+    const { username, isActive, isArchive, pegawaiId } = req.body;
     const data: any = {};
     if (username !== undefined) data.username = username;
-    if (password !== undefined) data.password = password;
     if (isActive !== undefined) data.isActive = isActive;
     if (isArchive !== undefined) data.isArchive = isArchive;
+    if (pegawaiId !== undefined) data.pegawaiId = pegawaiId;
 
     const user = await prisma.user.update({
       where: { id },
@@ -139,10 +143,10 @@ async function updateUser(req: Request, res: Response): Promise<void> {
     }
     res.status(500).json({ error: "internal error" });
   }
-}
+};
 
 // Delete user
-async function deleteUser(req: Request, res: Response): Promise<void> {
+export const deleteUser = async (req: Request, res: Response) => {
   try {
     const id = Number(req.params.id);
     await prisma.user.delete({ where: { id } });
@@ -155,7 +159,7 @@ async function deleteUser(req: Request, res: Response): Promise<void> {
     }
     res.status(500).json({ error: "internal error" });
   }
-}
+};
 
 export const getUserData = async (req: Request, res: Response) => {
   try {
@@ -181,4 +185,28 @@ export const getUserData = async (req: Request, res: Response) => {
   }
 };
 
-export { createUser, getUsers, getUserById, updateUser, deleteUser };
+export const changePasswordUserByID = async (req: Request, res: Response) => {
+  try {
+    const { userId, password } = req.query;
+
+    if (!userId || !password) {
+      res
+        .status(400)
+        .json({ message: "User ID and new password are required." });
+      return;
+    }
+
+    const hashedPassword = await hashPassword(password as string);
+
+    const updatedUser = await prisma.user.update({
+      where: { id: Number(userId) },
+      data: { password: hashedPassword },
+    });
+
+    res
+      .status(200)
+      .json({ message: "Password updated successfully.", user: updatedUser });
+  } catch (err) {
+    res.status(500).json(err);
+  }
+};

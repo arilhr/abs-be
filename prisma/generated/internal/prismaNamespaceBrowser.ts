@@ -78,6 +78,7 @@ export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof
 
 export const UserScalarFieldEnum = {
   id: 'id',
+  pegawaiId: 'pegawaiId',
   username: 'username',
   password: 'password',
   isActive: 'isActive',
@@ -103,6 +104,7 @@ export type PositionScalarFieldEnum = (typeof PositionScalarFieldEnum)[keyof typ
 
 export const PegawaiScalarFieldEnum = {
   id: 'id',
+  pegawaiId: 'pegawaiId',
   name: 'name',
   positionId: 'positionId',
   status: 'status',

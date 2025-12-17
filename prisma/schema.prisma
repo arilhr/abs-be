@@ -8,14 +8,17 @@ datasource db {
 }
 
 model User {
-  id             Int             @id @default(autoincrement())
-  username       String          @unique
-  password       String
-  isActive       Boolean         @default(true)
-  isArchive      Boolean         @default(false)
-  lastLogin      DateTime?
-  createdAt      DateTime        @default(now())
-  updatedAt      DateTime        @updatedAt
+  id        Int       @id @default(autoincrement())
+  pegawaiId Int?
+  username  String    @unique
+  password  String
+  isActive  Boolean   @default(true)
+  isArchive Boolean   @default(false)
+  lastLogin DateTime?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  pegawai        Pegawai?        @relation(fields: [pegawaiId], references: [id])
   requestLemburs RequestLembur[]
 }
 
@@ -30,6 +33,7 @@ model Position {
 
 model Pegawai {
   id         Int     @id @default(autoincrement())
+  pegawaiId  String  @unique
   name       String
   positionId Int
   status     String?
@@ -43,6 +47,7 @@ model Pegawai {
 
   position       Position        @relation(fields: [positionId], references: [id])
   requestLemburs RequestLembur[]
+  users          User[]
 
   @@index([positionId])
 }
