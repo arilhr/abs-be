@@ -43,12 +43,36 @@ export const createUser = async (req: Request, res: Response) => {
 // Get all users
 export const getUsers = async (req: Request, res: Response) => {
   try {
-    const { username, lastLogin, page, limit } = req.query;
+    const {
+      username,
+      lastLogin,
+      pegawaiName,
+      pegawaiId,
+      isActive,
+      page,
+      limit,
+    } = req.query;
 
     const where: any = {};
 
     if (typeof username === "string" && username.trim() !== "") {
       where.username = { contains: username.trim(), mode: "insensitive" };
+    }
+
+    if (typeof isActive === "string" && isActive.trim() !== "") {
+      where.isActive = isActive === "t";
+    }
+
+    if (typeof pegawaiId === "string" && pegawaiId.trim() !== "") {
+      where.pegawai = {
+        pegawaiId: pegawaiId,
+      };
+    }
+
+    if (typeof pegawaiName === "string" && pegawaiName.trim() !== "") {
+      where.pegawai = {
+        name: { contains: pegawaiName.trim(), mode: "insensitive" },
+      };
     }
 
     if (typeof lastLogin === "string" && lastLogin.trim() !== "") {
@@ -74,6 +98,7 @@ export const getUsers = async (req: Request, res: Response) => {
           username: true,
           lastLogin: true,
           pegawai: true,
+          isActive: true,
         },
       }),
     ]);
@@ -103,6 +128,7 @@ export const getUserById = async (req: Request, res: Response) => {
         username: true,
         lastLogin: true,
         pegawai: true,
+        isActive: true,
       },
     });
     if (!user) {
