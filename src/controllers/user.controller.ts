@@ -187,7 +187,7 @@ export const getUserData = async (req: Request, res: Response) => {
 
 export const changePasswordUserByID = async (req: Request, res: Response) => {
   try {
-    const { userId, password } = req.query;
+    const { userId, password } = req.body;
 
     if (!userId || !password) {
       res
