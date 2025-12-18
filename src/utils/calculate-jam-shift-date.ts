@@ -6,9 +6,7 @@ export const calculateJamShiftDate = (
   date: Date | null = null,
   isTommorow = false
 ) => {
-  let baseDay = isTommorow
-    ? dayjs.tz().clone().add(1, "day")
-    : dayjs.tz().clone();
+  let baseDay = isTommorow ? dayjs().add(1, "day") : dayjs();
 
   if (date) {
     baseDay = dayjs.tz(date);

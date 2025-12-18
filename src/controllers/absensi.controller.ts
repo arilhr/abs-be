@@ -5,8 +5,6 @@ import { calculateJamShiftDate } from "../utils/calculate-jam-shift-date";
 import { CHECK_IN_MINUTE_OFFSET } from "../constants/absensi";
 import { convertDayDatabaseToDayjs } from "../utils/get-day-from-date";
 
-const NOW = dayjs();
-
 export const getAllAbsensi = async (req: Request, res: Response) => {
   try {
     const {
@@ -93,6 +91,8 @@ export const scanAbsensi = async (
   res: Response
 ): Promise<void> => {
   try {
+    const NOW = dayjs();
+
     const { pegawaiId } = req.body;
 
     // check pegawai data
@@ -261,8 +261,6 @@ export const scanAbsensi = async (
           },
         },
       });
-
-      console.log("NOT", notExpiredLogCheckOut);
 
       if (notExpiredLogCheckOut) {
         const checkOutLogAbsensi = await prisma.logAbsensi.update({
