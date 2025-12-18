@@ -86,10 +86,7 @@ export const getAllAbsensi = async (req: Request, res: Response) => {
   }
 };
 
-export const scanAbsensi = async (
-  req: Request,
-  res: Response
-): Promise<void> => {
+export const scanAbsensi = async (req: Request, res: Response) => {
   try {
     const NOW = dayjs();
 
@@ -302,6 +299,66 @@ export const scanAbsensi = async (
   } catch (err) {
     console.log(`ERROR:`, err);
     res.status(500).json({ error: "internal error", err });
+  }
+};
+
+export const updateAbsensi = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const { checkIn, checkOut, jamMasukDate, jamKeluarDate, isLembur } =
+      req.body;
+
+    const result = await prisma.$transaction(async (tx) => {
+      const logAbsensiData = await tx.logAbsensi.findFirst({
+        where: {
+          id: Number(id),
+        },
+      });
+
+      if (!logAbsensiData)
+        return {
+          code: 404,
+          message: "Log absensi data tidak ditemukan",
+        };
+
+      const data: any = {};
+
+      if (jamMasukDate) {
+        data.jamMasukDate = dayjs(jamMasukDate).toDate();
+        data.jamMasuk = dayjs(jamMasukDate).format("HH:mm:ss");
+      }
+
+      if (jamKeluarDate) {
+        data.jamKeluarDate = dayjs(jamKeluarDate).toDate();
+        data.jamKeluar = dayjs(jamKeluarDate).format("HH:mm:ss");
+      }
+
+      if (checkIn !== undefined) {
+        data.checkIn = checkIn ? dayjs(checkIn).toDate() : null;
+      }
+
+      if (checkOut !== undefined) {
+        data.checkOut = checkOut ? dayjs(checkOut).toDate() : null;
+      }
+
+      if (isLembur !== undefined) data.isLembur = isLembur;
+
+      const updated = await tx.logAbsensi.update({
+        where: {
+          id: logAbsensiData.id,
+        },
+        data: data,
+      });
+
+      return {
+        code: 200,
+        data: updated,
+      };
+    });
+
+    res.status(result.code).json(result);
+  } catch (err) {
+    res.status(500).json(err);
   }
 };
 

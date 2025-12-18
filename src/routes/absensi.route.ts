@@ -3,8 +3,10 @@ import {
   generateLogAbsensi,
   getAllAbsensi,
   scanAbsensi,
+  updateAbsensi,
 } from "../controllers/absensi.controller";
 import rateLimit from "express-rate-limit";
+import { authenticate } from "../middlewares/auth.middleware";
 
 export const scanAbsensiRateLimiter = rateLimit({
   windowMs: 3 * 1000,
@@ -24,5 +26,8 @@ const router = Router();
 router.get("/", getAllAbsensi);
 router.get("/generate", generateLogAbsensi);
 router.post("/scan", scanAbsensiRateLimiter, scanAbsensi);
+
+router.use(authenticate);
+router.put("/:id", updateAbsensi);
 
 export default router;
