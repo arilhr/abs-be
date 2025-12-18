@@ -28,7 +28,7 @@ async function createPosition(req: Request, res: Response): Promise<void> {
 /**
  Get Positions
  */
-async function getPositions(req: Request, res: Response): Promise<void> {
+export const getPositions = async (req: Request, res: Response) => {
   try {
     const { name } = req.query;
     const isArchiveQuery = req.query.isArchive as string | undefined;
@@ -67,11 +67,25 @@ async function getPositions(req: Request, res: Response): Promise<void> {
           orderBy: { createdAt: "desc" },
           skip,
           take: limit,
+          include: {
+            _count: {
+              select: {
+                pegawais: true,
+              },
+            },
+          },
         }),
       ]);
 
+      // Transform data to include totalPegawai
+      const dataWithTotal = data.map((position) => ({
+        ...position,
+        totalPegawai: position._count.pegawais,
+        _count: undefined, // Remove _count from response
+      }));
+
       res.json({
-        data,
+        data: dataWithTotal,
         meta: {
           total,
           page,
@@ -86,13 +100,27 @@ async function getPositions(req: Request, res: Response): Promise<void> {
     const data = await prisma.position.findMany({
       where,
       orderBy: { createdAt: "desc" },
+      include: {
+        _count: {
+          select: {
+            pegawais: true,
+          },
+        },
+      },
     });
 
-    res.json(data);
-  } catch {
-    res.status(500).json({ error: "internal error" });
+    // Transform data to include totalPegawai
+    const dataWithTotal = data.map((position) => ({
+      ...position,
+      totalPegawai: position._count.pegawais,
+      _count: undefined,
+    }));
+
+    res.json(dataWithTotal);
+  } catch (err) {
+    res.status(500).json(err);
   }
-}
+};
 
 /**
  * Get single position by id
@@ -163,10 +191,4 @@ async function deletePosition(req: Request, res: Response): Promise<void> {
   }
 }
 
-export {
-  createPosition,
-  getPositions,
-  getPositionById,
-  updatePosition,
-  deletePosition,
-};
+export { createPosition, getPositionById, updatePosition, deletePosition };
