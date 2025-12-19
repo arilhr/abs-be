@@ -57,7 +57,8 @@ export const ModelName = {
   Shift: 'Shift',
   Jadwal: 'Jadwal',
   LogAbsensi: 'LogAbsensi',
-  RequestLembur: 'RequestLembur'
+  RequestLembur: 'RequestLembur',
+  PengajuanIzin: 'PengajuanIzin'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -178,6 +179,19 @@ export const RequestLemburScalarFieldEnum = {
 } as const
 
 export type RequestLemburScalarFieldEnum = (typeof RequestLemburScalarFieldEnum)[keyof typeof RequestLemburScalarFieldEnum]
+
+
+export const PengajuanIzinScalarFieldEnum = {
+  id: 'id',
+  pegawaiId: 'pegawaiId',
+  date: 'date',
+  reason: 'reason',
+  isAccepted: 'isAccepted',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type PengajuanIzinScalarFieldEnum = (typeof PengajuanIzinScalarFieldEnum)[keyof typeof PengajuanIzinScalarFieldEnum]
 
 
 export const SortOrder = {

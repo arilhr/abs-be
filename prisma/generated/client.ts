@@ -72,3 +72,8 @@ export type LogAbsensi = Prisma.LogAbsensiModel
  * 
  */
 export type RequestLembur = Prisma.RequestLemburModel
+/**
+ * Model PengajuanIzin
+ * 
+ */
+export type PengajuanIzin = Prisma.PengajuanIzinModel

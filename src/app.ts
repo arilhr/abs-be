@@ -9,7 +9,8 @@ import positionRoutes from "./routes/position.route";
 import absensiRoutes from "./routes/absensi.route";
 import dashboardRoutes from "./routes/dashboard.route";
 import requestLemburRoutes from "./routes/request-lembur.routes";
-import configRoutes from "./routes/config.controller";
+import requestIzinRoutes from "./routes/request-izin.routes";
+import configRoutes from "./routes/config.routes";
 
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
@@ -37,6 +38,7 @@ apiRouter.use("/jadwal", jadwalRoutes);
 apiRouter.use("/absensi", absensiRoutes);
 apiRouter.use("/dashboard", dashboardRoutes);
 apiRouter.use("/request-lembur", requestLemburRoutes);
+apiRouter.use("/request-izin", requestIzinRoutes);
 apiRouter.use("/config", configRoutes);
 
 app.use("/api", apiRouter);

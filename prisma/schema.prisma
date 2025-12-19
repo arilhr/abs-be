@@ -48,6 +48,7 @@ model Pegawai {
   position       Position        @relation(fields: [positionId], references: [id])
   requestLemburs RequestLembur[]
   users          User[]
+  pengajuanIzins PengajuanIzin[]
 
   @@index([positionId])
 }
@@ -128,4 +129,18 @@ model RequestLembur {
   @@index([userId])
   @@index([pegawaiId])
   @@index([shiftId])
+}
+
+model PengajuanIzin {
+  id Int @id @default(autoincrement())
+
+  pegawaiId  Int
+  date       DateTime
+  reason     String?
+  isAccepted Boolean?
+
+  pegawai Pegawai @relation(fields: [pegawaiId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }

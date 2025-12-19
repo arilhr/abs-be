@@ -390,7 +390,8 @@ export const ModelName = {
   Shift: 'Shift',
   Jadwal: 'Jadwal',
   LogAbsensi: 'LogAbsensi',
-  RequestLembur: 'RequestLembur'
+  RequestLembur: 'RequestLembur',
+  PengajuanIzin: 'PengajuanIzin'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -406,7 +407,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "position" | "pegawai" | "shift" | "jadwal" | "logAbsensi" | "requestLembur"
+    modelProps: "user" | "position" | "pegawai" | "shift" | "jadwal" | "logAbsensi" | "requestLembur" | "pengajuanIzin"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -928,6 +929,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    PengajuanIzin: {
+      payload: Prisma.$PengajuanIzinPayload<ExtArgs>
+      fields: Prisma.PengajuanIzinFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.PengajuanIzinFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PengajuanIzinPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.PengajuanIzinFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PengajuanIzinPayload>
+        }
+        findFirst: {
+          args: Prisma.PengajuanIzinFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PengajuanIzinPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.PengajuanIzinFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PengajuanIzinPayload>
+        }
+        findMany: {
+          args: Prisma.PengajuanIzinFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PengajuanIzinPayload>[]
+        }
+        create: {
+          args: Prisma.PengajuanIzinCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PengajuanIzinPayload>
+        }
+        createMany: {
+          args: Prisma.PengajuanIzinCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.PengajuanIzinCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PengajuanIzinPayload>[]
+        }
+        delete: {
+          args: Prisma.PengajuanIzinDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PengajuanIzinPayload>
+        }
+        update: {
+          args: Prisma.PengajuanIzinUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PengajuanIzinPayload>
+        }
+        deleteMany: {
+          args: Prisma.PengajuanIzinDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.PengajuanIzinUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.PengajuanIzinUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PengajuanIzinPayload>[]
+        }
+        upsert: {
+          args: Prisma.PengajuanIzinUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PengajuanIzinPayload>
+        }
+        aggregate: {
+          args: Prisma.PengajuanIzinAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregatePengajuanIzin>
+        }
+        groupBy: {
+          args: Prisma.PengajuanIzinGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PengajuanIzinGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.PengajuanIzinCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PengajuanIzinCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -1069,6 +1144,19 @@ export const RequestLemburScalarFieldEnum = {
 } as const
 
 export type RequestLemburScalarFieldEnum = (typeof RequestLemburScalarFieldEnum)[keyof typeof RequestLemburScalarFieldEnum]
+
+
+export const PengajuanIzinScalarFieldEnum = {
+  id: 'id',
+  pegawaiId: 'pegawaiId',
+  date: 'date',
+  reason: 'reason',
+  isAccepted: 'isAccepted',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type PengajuanIzinScalarFieldEnum = (typeof PengajuanIzinScalarFieldEnum)[keyof typeof PengajuanIzinScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -1249,6 +1337,7 @@ export type GlobalOmitConfig = {
   jadwal?: Prisma.JadwalOmit
   logAbsensi?: Prisma.LogAbsensiOmit
   requestLembur?: Prisma.RequestLemburOmit
+  pengajuanIzin?: Prisma.PengajuanIzinOmit
 }
 
 /* Types for Logging */
