@@ -82,6 +82,7 @@ export const UserScalarFieldEnum = {
   pegawaiId: 'pegawaiId',
   username: 'username',
   password: 'password',
+  role: 'role',
   isActive: 'isActive',
   isArchive: 'isArchive',
   lastLogin: 'lastLogin',

@@ -7,11 +7,18 @@ datasource db {
   provider = "postgresql"
 }
 
+enum UserRole {
+  SUPERADMIN
+  ADMIN
+  STAFF
+}
+
 model User {
   id        Int       @id @default(autoincrement())
   pegawaiId Int?
   username  String    @unique
   password  String
+  role      UserRole  @default(STAFF)
   isActive  Boolean   @default(true)
   isArchive Boolean   @default(false)
   lastLogin DateTime?
