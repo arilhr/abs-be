@@ -30,12 +30,23 @@ model User {
 }
 
 model Position {
-  id        Int       @id @default(autoincrement())
+  id           Int        @id @default(autoincrement())
+  name         String
+  departmentId Int
+  isArchive    Boolean    @default(false)
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  pegawais     Pegawai[]
+  department   Department @relation(fields: [departmentId], references: [id])
+}
+
+model Department {
+  id        Int        @id @default(autoincrement())
   name      String
-  isArchive Boolean   @default(false)
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  pegawais  Pegawai[]
+  isArchive Boolean    @default(false)
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  positions Position[]
 }
 
 model Pegawai {
