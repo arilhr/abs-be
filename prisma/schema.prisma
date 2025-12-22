@@ -52,10 +52,11 @@ model Pegawai {
   createdAt DateTime     @default(now())
   updatedAt DateTime     @updatedAt
 
-  position       Position        @relation(fields: [positionId], references: [id])
-  requestLemburs RequestLembur[]
-  users          User[]
-  pengajuanIzins PengajuanIzin[]
+  position                 Position        @relation(fields: [positionId], references: [id])
+  requestLemburs           RequestLembur[] @relation("PegawaiRequestLembur")
+  supervisedRequestLemburs RequestLembur[] @relation("SupervisorRequestLembur")
+  users                    User[]
+  pengajuanIzins           PengajuanIzin[]
 
   @@index([positionId])
 }
@@ -118,6 +119,7 @@ model LogAbsensi {
 model RequestLembur {
   id           Int      @id @default(autoincrement())
   userId       Int
+  supervisorId Int?
   pegawaiId    Int
   shiftId      Int
   logAbsensiId Int?     @unique
@@ -126,7 +128,8 @@ model RequestLembur {
   isAccepted   Boolean?
 
   user       User        @relation(fields: [userId], references: [id])
-  pegawai    Pegawai     @relation(fields: [pegawaiId], references: [id])
+  supervisor Pegawai?    @relation("SupervisorRequestLembur", fields: [supervisorId], references: [id])
+  pegawai    Pegawai     @relation("PegawaiRequestLembur", fields: [pegawaiId], references: [id])
   shift      Shift       @relation(fields: [shiftId], references: [id])
   logAbsensi LogAbsensi? @relation(fields: [logAbsensiId], references: [id])
 
@@ -134,6 +137,7 @@ model RequestLembur {
   updatedAt DateTime @updatedAt
 
   @@index([userId])
+  @@index([supervisorId])
   @@index([pegawaiId])
   @@index([shiftId])
 }

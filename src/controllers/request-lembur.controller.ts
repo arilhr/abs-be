@@ -4,7 +4,7 @@ import { calculateJamShiftDate } from "../utils/calculate-jam-shift-date";
 
 export const createRequestLembur = async (req: Request, res: Response) => {
   try {
-    const { pegawaiId, shiftId, date, reason } = req.body;
+    const { supervisorId, pegawaiId, shiftId, date, reason } = req.body;
 
     if (!req.user?.userId) {
       res.status(400).json({ error: "User ID not found from the token" });

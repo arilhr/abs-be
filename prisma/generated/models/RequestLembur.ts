@@ -29,6 +29,7 @@ export type AggregateRequestLembur = {
 export type RequestLemburAvgAggregateOutputType = {
   id: number | null
   userId: number | null
+  supervisorId: number | null
   pegawaiId: number | null
   shiftId: number | null
   logAbsensiId: number | null
@@ -37,6 +38,7 @@ export type RequestLemburAvgAggregateOutputType = {
 export type RequestLemburSumAggregateOutputType = {
   id: number | null
   userId: number | null
+  supervisorId: number | null
   pegawaiId: number | null
   shiftId: number | null
   logAbsensiId: number | null
@@ -45,6 +47,7 @@ export type RequestLemburSumAggregateOutputType = {
 export type RequestLemburMinAggregateOutputType = {
   id: number | null
   userId: number | null
+  supervisorId: number | null
   pegawaiId: number | null
   shiftId: number | null
   logAbsensiId: number | null
@@ -58,6 +61,7 @@ export type RequestLemburMinAggregateOutputType = {
 export type RequestLemburMaxAggregateOutputType = {
   id: number | null
   userId: number | null
+  supervisorId: number | null
   pegawaiId: number | null
   shiftId: number | null
   logAbsensiId: number | null
@@ -71,6 +75,7 @@ export type RequestLemburMaxAggregateOutputType = {
 export type RequestLemburCountAggregateOutputType = {
   id: number
   userId: number
+  supervisorId: number
   pegawaiId: number
   shiftId: number
   logAbsensiId: number
@@ -86,6 +91,7 @@ export type RequestLemburCountAggregateOutputType = {
 export type RequestLemburAvgAggregateInputType = {
   id?: true
   userId?: true
+  supervisorId?: true
   pegawaiId?: true
   shiftId?: true
   logAbsensiId?: true
@@ -94,6 +100,7 @@ export type RequestLemburAvgAggregateInputType = {
 export type RequestLemburSumAggregateInputType = {
   id?: true
   userId?: true
+  supervisorId?: true
   pegawaiId?: true
   shiftId?: true
   logAbsensiId?: true
@@ -102,6 +109,7 @@ export type RequestLemburSumAggregateInputType = {
 export type RequestLemburMinAggregateInputType = {
   id?: true
   userId?: true
+  supervisorId?: true
   pegawaiId?: true
   shiftId?: true
   logAbsensiId?: true
@@ -115,6 +123,7 @@ export type RequestLemburMinAggregateInputType = {
 export type RequestLemburMaxAggregateInputType = {
   id?: true
   userId?: true
+  supervisorId?: true
   pegawaiId?: true
   shiftId?: true
   logAbsensiId?: true
@@ -128,6 +137,7 @@ export type RequestLemburMaxAggregateInputType = {
 export type RequestLemburCountAggregateInputType = {
   id?: true
   userId?: true
+  supervisorId?: true
   pegawaiId?: true
   shiftId?: true
   logAbsensiId?: true
@@ -228,6 +238,7 @@ export type RequestLemburGroupByArgs<ExtArgs extends runtime.Types.Extensions.In
 export type RequestLemburGroupByOutputType = {
   id: number
   userId: number
+  supervisorId: number | null
   pegawaiId: number
   shiftId: number
   logAbsensiId: number | null
@@ -264,6 +275,7 @@ export type RequestLemburWhereInput = {
   NOT?: Prisma.RequestLemburWhereInput | Prisma.RequestLemburWhereInput[]
   id?: Prisma.IntFilter<"RequestLembur"> | number
   userId?: Prisma.IntFilter<"RequestLembur"> | number
+  supervisorId?: Prisma.IntNullableFilter<"RequestLembur"> | number | null
   pegawaiId?: Prisma.IntFilter<"RequestLembur"> | number
   shiftId?: Prisma.IntFilter<"RequestLembur"> | number
   logAbsensiId?: Prisma.IntNullableFilter<"RequestLembur"> | number | null
@@ -273,6 +285,7 @@ export type RequestLemburWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"RequestLembur"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"RequestLembur"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  supervisor?: Prisma.XOR<Prisma.PegawaiNullableScalarRelationFilter, Prisma.PegawaiWhereInput> | null
   pegawai?: Prisma.XOR<Prisma.PegawaiScalarRelationFilter, Prisma.PegawaiWhereInput>
   shift?: Prisma.XOR<Prisma.ShiftScalarRelationFilter, Prisma.ShiftWhereInput>
   logAbsensi?: Prisma.XOR<Prisma.LogAbsensiNullableScalarRelationFilter, Prisma.LogAbsensiWhereInput> | null
@@ -281,6 +294,7 @@ export type RequestLemburWhereInput = {
 export type RequestLemburOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+  supervisorId?: Prisma.SortOrderInput | Prisma.SortOrder
   pegawaiId?: Prisma.SortOrder
   shiftId?: Prisma.SortOrder
   logAbsensiId?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -290,6 +304,7 @@ export type RequestLemburOrderByWithRelationInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   user?: Prisma.UserOrderByWithRelationInput
+  supervisor?: Prisma.PegawaiOrderByWithRelationInput
   pegawai?: Prisma.PegawaiOrderByWithRelationInput
   shift?: Prisma.ShiftOrderByWithRelationInput
   logAbsensi?: Prisma.LogAbsensiOrderByWithRelationInput
@@ -302,6 +317,7 @@ export type RequestLemburWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.RequestLemburWhereInput[]
   NOT?: Prisma.RequestLemburWhereInput | Prisma.RequestLemburWhereInput[]
   userId?: Prisma.IntFilter<"RequestLembur"> | number
+  supervisorId?: Prisma.IntNullableFilter<"RequestLembur"> | number | null
   pegawaiId?: Prisma.IntFilter<"RequestLembur"> | number
   shiftId?: Prisma.IntFilter<"RequestLembur"> | number
   date?: Prisma.DateTimeFilter<"RequestLembur"> | Date | string
@@ -310,6 +326,7 @@ export type RequestLemburWhereUniqueInput = Prisma.AtLeast<{
   createdAt?: Prisma.DateTimeFilter<"RequestLembur"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"RequestLembur"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  supervisor?: Prisma.XOR<Prisma.PegawaiNullableScalarRelationFilter, Prisma.PegawaiWhereInput> | null
   pegawai?: Prisma.XOR<Prisma.PegawaiScalarRelationFilter, Prisma.PegawaiWhereInput>
   shift?: Prisma.XOR<Prisma.ShiftScalarRelationFilter, Prisma.ShiftWhereInput>
   logAbsensi?: Prisma.XOR<Prisma.LogAbsensiNullableScalarRelationFilter, Prisma.LogAbsensiWhereInput> | null
@@ -318,6 +335,7 @@ export type RequestLemburWhereUniqueInput = Prisma.AtLeast<{
 export type RequestLemburOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+  supervisorId?: Prisma.SortOrderInput | Prisma.SortOrder
   pegawaiId?: Prisma.SortOrder
   shiftId?: Prisma.SortOrder
   logAbsensiId?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -339,6 +357,7 @@ export type RequestLemburScalarWhereWithAggregatesInput = {
   NOT?: Prisma.RequestLemburScalarWhereWithAggregatesInput | Prisma.RequestLemburScalarWhereWithAggregatesInput[]
   id?: Prisma.IntWithAggregatesFilter<"RequestLembur"> | number
   userId?: Prisma.IntWithAggregatesFilter<"RequestLembur"> | number
+  supervisorId?: Prisma.IntNullableWithAggregatesFilter<"RequestLembur"> | number | null
   pegawaiId?: Prisma.IntWithAggregatesFilter<"RequestLembur"> | number
   shiftId?: Prisma.IntWithAggregatesFilter<"RequestLembur"> | number
   logAbsensiId?: Prisma.IntNullableWithAggregatesFilter<"RequestLembur"> | number | null
@@ -356,6 +375,7 @@ export type RequestLemburCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutRequestLembursInput
+  supervisor?: Prisma.PegawaiCreateNestedOneWithoutSupervisedRequestLembursInput
   pegawai: Prisma.PegawaiCreateNestedOneWithoutRequestLembursInput
   shift: Prisma.ShiftCreateNestedOneWithoutRequestLembursInput
   logAbsensi?: Prisma.LogAbsensiCreateNestedOneWithoutRequestLemburInput
@@ -364,6 +384,7 @@ export type RequestLemburCreateInput = {
 export type RequestLemburUncheckedCreateInput = {
   id?: number
   userId: number
+  supervisorId?: number | null
   pegawaiId: number
   shiftId: number
   logAbsensiId?: number | null
@@ -381,6 +402,7 @@ export type RequestLemburUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutRequestLembursNestedInput
+  supervisor?: Prisma.PegawaiUpdateOneWithoutSupervisedRequestLembursNestedInput
   pegawai?: Prisma.PegawaiUpdateOneRequiredWithoutRequestLembursNestedInput
   shift?: Prisma.ShiftUpdateOneRequiredWithoutRequestLembursNestedInput
   logAbsensi?: Prisma.LogAbsensiUpdateOneWithoutRequestLemburNestedInput
@@ -389,6 +411,7 @@ export type RequestLemburUpdateInput = {
 export type RequestLemburUncheckedUpdateInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   userId?: Prisma.IntFieldUpdateOperationsInput | number
+  supervisorId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   pegawaiId?: Prisma.IntFieldUpdateOperationsInput | number
   shiftId?: Prisma.IntFieldUpdateOperationsInput | number
   logAbsensiId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -402,6 +425,7 @@ export type RequestLemburUncheckedUpdateInput = {
 export type RequestLemburCreateManyInput = {
   id?: number
   userId: number
+  supervisorId?: number | null
   pegawaiId: number
   shiftId: number
   logAbsensiId?: number | null
@@ -423,6 +447,7 @@ export type RequestLemburUpdateManyMutationInput = {
 export type RequestLemburUncheckedUpdateManyInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   userId?: Prisma.IntFieldUpdateOperationsInput | number
+  supervisorId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   pegawaiId?: Prisma.IntFieldUpdateOperationsInput | number
   shiftId?: Prisma.IntFieldUpdateOperationsInput | number
   logAbsensiId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -451,6 +476,7 @@ export type RequestLemburNullableScalarRelationFilter = {
 export type RequestLemburCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+  supervisorId?: Prisma.SortOrder
   pegawaiId?: Prisma.SortOrder
   shiftId?: Prisma.SortOrder
   logAbsensiId?: Prisma.SortOrder
@@ -464,6 +490,7 @@ export type RequestLemburCountOrderByAggregateInput = {
 export type RequestLemburAvgOrderByAggregateInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+  supervisorId?: Prisma.SortOrder
   pegawaiId?: Prisma.SortOrder
   shiftId?: Prisma.SortOrder
   logAbsensiId?: Prisma.SortOrder
@@ -472,6 +499,7 @@ export type RequestLemburAvgOrderByAggregateInput = {
 export type RequestLemburMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+  supervisorId?: Prisma.SortOrder
   pegawaiId?: Prisma.SortOrder
   shiftId?: Prisma.SortOrder
   logAbsensiId?: Prisma.SortOrder
@@ -485,6 +513,7 @@ export type RequestLemburMaxOrderByAggregateInput = {
 export type RequestLemburMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+  supervisorId?: Prisma.SortOrder
   pegawaiId?: Prisma.SortOrder
   shiftId?: Prisma.SortOrder
   logAbsensiId?: Prisma.SortOrder
@@ -498,6 +527,7 @@ export type RequestLemburMinOrderByAggregateInput = {
 export type RequestLemburSumOrderByAggregateInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+  supervisorId?: Prisma.SortOrder
   pegawaiId?: Prisma.SortOrder
   shiftId?: Prisma.SortOrder
   logAbsensiId?: Prisma.SortOrder
@@ -552,10 +582,24 @@ export type RequestLemburCreateNestedManyWithoutPegawaiInput = {
   connect?: Prisma.RequestLemburWhereUniqueInput | Prisma.RequestLemburWhereUniqueInput[]
 }
 
+export type RequestLemburCreateNestedManyWithoutSupervisorInput = {
+  create?: Prisma.XOR<Prisma.RequestLemburCreateWithoutSupervisorInput, Prisma.RequestLemburUncheckedCreateWithoutSupervisorInput> | Prisma.RequestLemburCreateWithoutSupervisorInput[] | Prisma.RequestLemburUncheckedCreateWithoutSupervisorInput[]
+  connectOrCreate?: Prisma.RequestLemburCreateOrConnectWithoutSupervisorInput | Prisma.RequestLemburCreateOrConnectWithoutSupervisorInput[]
+  createMany?: Prisma.RequestLemburCreateManySupervisorInputEnvelope
+  connect?: Prisma.RequestLemburWhereUniqueInput | Prisma.RequestLemburWhereUniqueInput[]
+}
+
 export type RequestLemburUncheckedCreateNestedManyWithoutPegawaiInput = {
   create?: Prisma.XOR<Prisma.RequestLemburCreateWithoutPegawaiInput, Prisma.RequestLemburUncheckedCreateWithoutPegawaiInput> | Prisma.RequestLemburCreateWithoutPegawaiInput[] | Prisma.RequestLemburUncheckedCreateWithoutPegawaiInput[]
   connectOrCreate?: Prisma.RequestLemburCreateOrConnectWithoutPegawaiInput | Prisma.RequestLemburCreateOrConnectWithoutPegawaiInput[]
   createMany?: Prisma.RequestLemburCreateManyPegawaiInputEnvelope
+  connect?: Prisma.RequestLemburWhereUniqueInput | Prisma.RequestLemburWhereUniqueInput[]
+}
+
+export type RequestLemburUncheckedCreateNestedManyWithoutSupervisorInput = {
+  create?: Prisma.XOR<Prisma.RequestLemburCreateWithoutSupervisorInput, Prisma.RequestLemburUncheckedCreateWithoutSupervisorInput> | Prisma.RequestLemburCreateWithoutSupervisorInput[] | Prisma.RequestLemburUncheckedCreateWithoutSupervisorInput[]
+  connectOrCreate?: Prisma.RequestLemburCreateOrConnectWithoutSupervisorInput | Prisma.RequestLemburCreateOrConnectWithoutSupervisorInput[]
+  createMany?: Prisma.RequestLemburCreateManySupervisorInputEnvelope
   connect?: Prisma.RequestLemburWhereUniqueInput | Prisma.RequestLemburWhereUniqueInput[]
 }
 
@@ -573,6 +617,20 @@ export type RequestLemburUpdateManyWithoutPegawaiNestedInput = {
   deleteMany?: Prisma.RequestLemburScalarWhereInput | Prisma.RequestLemburScalarWhereInput[]
 }
 
+export type RequestLemburUpdateManyWithoutSupervisorNestedInput = {
+  create?: Prisma.XOR<Prisma.RequestLemburCreateWithoutSupervisorInput, Prisma.RequestLemburUncheckedCreateWithoutSupervisorInput> | Prisma.RequestLemburCreateWithoutSupervisorInput[] | Prisma.RequestLemburUncheckedCreateWithoutSupervisorInput[]
+  connectOrCreate?: Prisma.RequestLemburCreateOrConnectWithoutSupervisorInput | Prisma.RequestLemburCreateOrConnectWithoutSupervisorInput[]
+  upsert?: Prisma.RequestLemburUpsertWithWhereUniqueWithoutSupervisorInput | Prisma.RequestLemburUpsertWithWhereUniqueWithoutSupervisorInput[]
+  createMany?: Prisma.RequestLemburCreateManySupervisorInputEnvelope
+  set?: Prisma.RequestLemburWhereUniqueInput | Prisma.RequestLemburWhereUniqueInput[]
+  disconnect?: Prisma.RequestLemburWhereUniqueInput | Prisma.RequestLemburWhereUniqueInput[]
+  delete?: Prisma.RequestLemburWhereUniqueInput | Prisma.RequestLemburWhereUniqueInput[]
+  connect?: Prisma.RequestLemburWhereUniqueInput | Prisma.RequestLemburWhereUniqueInput[]
+  update?: Prisma.RequestLemburUpdateWithWhereUniqueWithoutSupervisorInput | Prisma.RequestLemburUpdateWithWhereUniqueWithoutSupervisorInput[]
+  updateMany?: Prisma.RequestLemburUpdateManyWithWhereWithoutSupervisorInput | Prisma.RequestLemburUpdateManyWithWhereWithoutSupervisorInput[]
+  deleteMany?: Prisma.RequestLemburScalarWhereInput | Prisma.RequestLemburScalarWhereInput[]
+}
+
 export type RequestLemburUncheckedUpdateManyWithoutPegawaiNestedInput = {
   create?: Prisma.XOR<Prisma.RequestLemburCreateWithoutPegawaiInput, Prisma.RequestLemburUncheckedCreateWithoutPegawaiInput> | Prisma.RequestLemburCreateWithoutPegawaiInput[] | Prisma.RequestLemburUncheckedCreateWithoutPegawaiInput[]
   connectOrCreate?: Prisma.RequestLemburCreateOrConnectWithoutPegawaiInput | Prisma.RequestLemburCreateOrConnectWithoutPegawaiInput[]
@@ -584,6 +642,20 @@ export type RequestLemburUncheckedUpdateManyWithoutPegawaiNestedInput = {
   connect?: Prisma.RequestLemburWhereUniqueInput | Prisma.RequestLemburWhereUniqueInput[]
   update?: Prisma.RequestLemburUpdateWithWhereUniqueWithoutPegawaiInput | Prisma.RequestLemburUpdateWithWhereUniqueWithoutPegawaiInput[]
   updateMany?: Prisma.RequestLemburUpdateManyWithWhereWithoutPegawaiInput | Prisma.RequestLemburUpdateManyWithWhereWithoutPegawaiInput[]
+  deleteMany?: Prisma.RequestLemburScalarWhereInput | Prisma.RequestLemburScalarWhereInput[]
+}
+
+export type RequestLemburUncheckedUpdateManyWithoutSupervisorNestedInput = {
+  create?: Prisma.XOR<Prisma.RequestLemburCreateWithoutSupervisorInput, Prisma.RequestLemburUncheckedCreateWithoutSupervisorInput> | Prisma.RequestLemburCreateWithoutSupervisorInput[] | Prisma.RequestLemburUncheckedCreateWithoutSupervisorInput[]
+  connectOrCreate?: Prisma.RequestLemburCreateOrConnectWithoutSupervisorInput | Prisma.RequestLemburCreateOrConnectWithoutSupervisorInput[]
+  upsert?: Prisma.RequestLemburUpsertWithWhereUniqueWithoutSupervisorInput | Prisma.RequestLemburUpsertWithWhereUniqueWithoutSupervisorInput[]
+  createMany?: Prisma.RequestLemburCreateManySupervisorInputEnvelope
+  set?: Prisma.RequestLemburWhereUniqueInput | Prisma.RequestLemburWhereUniqueInput[]
+  disconnect?: Prisma.RequestLemburWhereUniqueInput | Prisma.RequestLemburWhereUniqueInput[]
+  delete?: Prisma.RequestLemburWhereUniqueInput | Prisma.RequestLemburWhereUniqueInput[]
+  connect?: Prisma.RequestLemburWhereUniqueInput | Prisma.RequestLemburWhereUniqueInput[]
+  update?: Prisma.RequestLemburUpdateWithWhereUniqueWithoutSupervisorInput | Prisma.RequestLemburUpdateWithWhereUniqueWithoutSupervisorInput[]
+  updateMany?: Prisma.RequestLemburUpdateManyWithWhereWithoutSupervisorInput | Prisma.RequestLemburUpdateManyWithWhereWithoutSupervisorInput[]
   deleteMany?: Prisma.RequestLemburScalarWhereInput | Prisma.RequestLemburScalarWhereInput[]
 }
 
@@ -671,6 +743,7 @@ export type RequestLemburCreateWithoutUserInput = {
   isAccepted?: boolean | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  supervisor?: Prisma.PegawaiCreateNestedOneWithoutSupervisedRequestLembursInput
   pegawai: Prisma.PegawaiCreateNestedOneWithoutRequestLembursInput
   shift: Prisma.ShiftCreateNestedOneWithoutRequestLembursInput
   logAbsensi?: Prisma.LogAbsensiCreateNestedOneWithoutRequestLemburInput
@@ -678,6 +751,7 @@ export type RequestLemburCreateWithoutUserInput = {
 
 export type RequestLemburUncheckedCreateWithoutUserInput = {
   id?: number
+  supervisorId?: number | null
   pegawaiId: number
   shiftId: number
   logAbsensiId?: number | null
@@ -720,6 +794,7 @@ export type RequestLemburScalarWhereInput = {
   NOT?: Prisma.RequestLemburScalarWhereInput | Prisma.RequestLemburScalarWhereInput[]
   id?: Prisma.IntFilter<"RequestLembur"> | number
   userId?: Prisma.IntFilter<"RequestLembur"> | number
+  supervisorId?: Prisma.IntNullableFilter<"RequestLembur"> | number | null
   pegawaiId?: Prisma.IntFilter<"RequestLembur"> | number
   shiftId?: Prisma.IntFilter<"RequestLembur"> | number
   logAbsensiId?: Prisma.IntNullableFilter<"RequestLembur"> | number | null
@@ -737,6 +812,7 @@ export type RequestLemburCreateWithoutPegawaiInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutRequestLembursInput
+  supervisor?: Prisma.PegawaiCreateNestedOneWithoutSupervisedRequestLembursInput
   shift: Prisma.ShiftCreateNestedOneWithoutRequestLembursInput
   logAbsensi?: Prisma.LogAbsensiCreateNestedOneWithoutRequestLemburInput
 }
@@ -744,6 +820,7 @@ export type RequestLemburCreateWithoutPegawaiInput = {
 export type RequestLemburUncheckedCreateWithoutPegawaiInput = {
   id?: number
   userId: number
+  supervisorId?: number | null
   shiftId: number
   logAbsensiId?: number | null
   date: Date | string
@@ -763,6 +840,41 @@ export type RequestLemburCreateManyPegawaiInputEnvelope = {
   skipDuplicates?: boolean
 }
 
+export type RequestLemburCreateWithoutSupervisorInput = {
+  date: Date | string
+  reason?: string | null
+  isAccepted?: boolean | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  user: Prisma.UserCreateNestedOneWithoutRequestLembursInput
+  pegawai: Prisma.PegawaiCreateNestedOneWithoutRequestLembursInput
+  shift: Prisma.ShiftCreateNestedOneWithoutRequestLembursInput
+  logAbsensi?: Prisma.LogAbsensiCreateNestedOneWithoutRequestLemburInput
+}
+
+export type RequestLemburUncheckedCreateWithoutSupervisorInput = {
+  id?: number
+  userId: number
+  pegawaiId: number
+  shiftId: number
+  logAbsensiId?: number | null
+  date: Date | string
+  reason?: string | null
+  isAccepted?: boolean | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type RequestLemburCreateOrConnectWithoutSupervisorInput = {
+  where: Prisma.RequestLemburWhereUniqueInput
+  create: Prisma.XOR<Prisma.RequestLemburCreateWithoutSupervisorInput, Prisma.RequestLemburUncheckedCreateWithoutSupervisorInput>
+}
+
+export type RequestLemburCreateManySupervisorInputEnvelope = {
+  data: Prisma.RequestLemburCreateManySupervisorInput | Prisma.RequestLemburCreateManySupervisorInput[]
+  skipDuplicates?: boolean
+}
+
 export type RequestLemburUpsertWithWhereUniqueWithoutPegawaiInput = {
   where: Prisma.RequestLemburWhereUniqueInput
   update: Prisma.XOR<Prisma.RequestLemburUpdateWithoutPegawaiInput, Prisma.RequestLemburUncheckedUpdateWithoutPegawaiInput>
@@ -779,6 +891,22 @@ export type RequestLemburUpdateManyWithWhereWithoutPegawaiInput = {
   data: Prisma.XOR<Prisma.RequestLemburUpdateManyMutationInput, Prisma.RequestLemburUncheckedUpdateManyWithoutPegawaiInput>
 }
 
+export type RequestLemburUpsertWithWhereUniqueWithoutSupervisorInput = {
+  where: Prisma.RequestLemburWhereUniqueInput
+  update: Prisma.XOR<Prisma.RequestLemburUpdateWithoutSupervisorInput, Prisma.RequestLemburUncheckedUpdateWithoutSupervisorInput>
+  create: Prisma.XOR<Prisma.RequestLemburCreateWithoutSupervisorInput, Prisma.RequestLemburUncheckedCreateWithoutSupervisorInput>
+}
+
+export type RequestLemburUpdateWithWhereUniqueWithoutSupervisorInput = {
+  where: Prisma.RequestLemburWhereUniqueInput
+  data: Prisma.XOR<Prisma.RequestLemburUpdateWithoutSupervisorInput, Prisma.RequestLemburUncheckedUpdateWithoutSupervisorInput>
+}
+
+export type RequestLemburUpdateManyWithWhereWithoutSupervisorInput = {
+  where: Prisma.RequestLemburScalarWhereInput
+  data: Prisma.XOR<Prisma.RequestLemburUpdateManyMutationInput, Prisma.RequestLemburUncheckedUpdateManyWithoutSupervisorInput>
+}
+
 export type RequestLemburCreateWithoutShiftInput = {
   date: Date | string
   reason?: string | null
@@ -786,6 +914,7 @@ export type RequestLemburCreateWithoutShiftInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutRequestLembursInput
+  supervisor?: Prisma.PegawaiCreateNestedOneWithoutSupervisedRequestLembursInput
   pegawai: Prisma.PegawaiCreateNestedOneWithoutRequestLembursInput
   logAbsensi?: Prisma.LogAbsensiCreateNestedOneWithoutRequestLemburInput
 }
@@ -793,6 +922,7 @@ export type RequestLemburCreateWithoutShiftInput = {
 export type RequestLemburUncheckedCreateWithoutShiftInput = {
   id?: number
   userId: number
+  supervisorId?: number | null
   pegawaiId: number
   logAbsensiId?: number | null
   date: Date | string
@@ -835,6 +965,7 @@ export type RequestLemburCreateWithoutLogAbsensiInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutRequestLembursInput
+  supervisor?: Prisma.PegawaiCreateNestedOneWithoutSupervisedRequestLembursInput
   pegawai: Prisma.PegawaiCreateNestedOneWithoutRequestLembursInput
   shift: Prisma.ShiftCreateNestedOneWithoutRequestLembursInput
 }
@@ -842,6 +973,7 @@ export type RequestLemburCreateWithoutLogAbsensiInput = {
 export type RequestLemburUncheckedCreateWithoutLogAbsensiInput = {
   id?: number
   userId: number
+  supervisorId?: number | null
   pegawaiId: number
   shiftId: number
   date: Date | string
@@ -874,6 +1006,7 @@ export type RequestLemburUpdateWithoutLogAbsensiInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutRequestLembursNestedInput
+  supervisor?: Prisma.PegawaiUpdateOneWithoutSupervisedRequestLembursNestedInput
   pegawai?: Prisma.PegawaiUpdateOneRequiredWithoutRequestLembursNestedInput
   shift?: Prisma.ShiftUpdateOneRequiredWithoutRequestLembursNestedInput
 }
@@ -881,6 +1014,7 @@ export type RequestLemburUpdateWithoutLogAbsensiInput = {
 export type RequestLemburUncheckedUpdateWithoutLogAbsensiInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   userId?: Prisma.IntFieldUpdateOperationsInput | number
+  supervisorId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   pegawaiId?: Prisma.IntFieldUpdateOperationsInput | number
   shiftId?: Prisma.IntFieldUpdateOperationsInput | number
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -892,6 +1026,7 @@ export type RequestLemburUncheckedUpdateWithoutLogAbsensiInput = {
 
 export type RequestLemburCreateManyUserInput = {
   id?: number
+  supervisorId?: number | null
   pegawaiId: number
   shiftId: number
   logAbsensiId?: number | null
@@ -908,6 +1043,7 @@ export type RequestLemburUpdateWithoutUserInput = {
   isAccepted?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  supervisor?: Prisma.PegawaiUpdateOneWithoutSupervisedRequestLembursNestedInput
   pegawai?: Prisma.PegawaiUpdateOneRequiredWithoutRequestLembursNestedInput
   shift?: Prisma.ShiftUpdateOneRequiredWithoutRequestLembursNestedInput
   logAbsensi?: Prisma.LogAbsensiUpdateOneWithoutRequestLemburNestedInput
@@ -915,6 +1051,7 @@ export type RequestLemburUpdateWithoutUserInput = {
 
 export type RequestLemburUncheckedUpdateWithoutUserInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
+  supervisorId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   pegawaiId?: Prisma.IntFieldUpdateOperationsInput | number
   shiftId?: Prisma.IntFieldUpdateOperationsInput | number
   logAbsensiId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -927,6 +1064,7 @@ export type RequestLemburUncheckedUpdateWithoutUserInput = {
 
 export type RequestLemburUncheckedUpdateManyWithoutUserInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
+  supervisorId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   pegawaiId?: Prisma.IntFieldUpdateOperationsInput | number
   shiftId?: Prisma.IntFieldUpdateOperationsInput | number
   logAbsensiId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -940,6 +1078,20 @@ export type RequestLemburUncheckedUpdateManyWithoutUserInput = {
 export type RequestLemburCreateManyPegawaiInput = {
   id?: number
   userId: number
+  supervisorId?: number | null
+  shiftId: number
+  logAbsensiId?: number | null
+  date: Date | string
+  reason?: string | null
+  isAccepted?: boolean | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type RequestLemburCreateManySupervisorInput = {
+  id?: number
+  userId: number
+  pegawaiId: number
   shiftId: number
   logAbsensiId?: number | null
   date: Date | string
@@ -956,6 +1108,7 @@ export type RequestLemburUpdateWithoutPegawaiInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutRequestLembursNestedInput
+  supervisor?: Prisma.PegawaiUpdateOneWithoutSupervisedRequestLembursNestedInput
   shift?: Prisma.ShiftUpdateOneRequiredWithoutRequestLembursNestedInput
   logAbsensi?: Prisma.LogAbsensiUpdateOneWithoutRequestLemburNestedInput
 }
@@ -963,6 +1116,7 @@ export type RequestLemburUpdateWithoutPegawaiInput = {
 export type RequestLemburUncheckedUpdateWithoutPegawaiInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   userId?: Prisma.IntFieldUpdateOperationsInput | number
+  supervisorId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   shiftId?: Prisma.IntFieldUpdateOperationsInput | number
   logAbsensiId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -975,6 +1129,45 @@ export type RequestLemburUncheckedUpdateWithoutPegawaiInput = {
 export type RequestLemburUncheckedUpdateManyWithoutPegawaiInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   userId?: Prisma.IntFieldUpdateOperationsInput | number
+  supervisorId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  shiftId?: Prisma.IntFieldUpdateOperationsInput | number
+  logAbsensiId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isAccepted?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type RequestLemburUpdateWithoutSupervisorInput = {
+  date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isAccepted?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  user?: Prisma.UserUpdateOneRequiredWithoutRequestLembursNestedInput
+  pegawai?: Prisma.PegawaiUpdateOneRequiredWithoutRequestLembursNestedInput
+  shift?: Prisma.ShiftUpdateOneRequiredWithoutRequestLembursNestedInput
+  logAbsensi?: Prisma.LogAbsensiUpdateOneWithoutRequestLemburNestedInput
+}
+
+export type RequestLemburUncheckedUpdateWithoutSupervisorInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  userId?: Prisma.IntFieldUpdateOperationsInput | number
+  pegawaiId?: Prisma.IntFieldUpdateOperationsInput | number
+  shiftId?: Prisma.IntFieldUpdateOperationsInput | number
+  logAbsensiId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isAccepted?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type RequestLemburUncheckedUpdateManyWithoutSupervisorInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  userId?: Prisma.IntFieldUpdateOperationsInput | number
+  pegawaiId?: Prisma.IntFieldUpdateOperationsInput | number
   shiftId?: Prisma.IntFieldUpdateOperationsInput | number
   logAbsensiId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -987,6 +1180,7 @@ export type RequestLemburUncheckedUpdateManyWithoutPegawaiInput = {
 export type RequestLemburCreateManyShiftInput = {
   id?: number
   userId: number
+  supervisorId?: number | null
   pegawaiId: number
   logAbsensiId?: number | null
   date: Date | string
@@ -1003,6 +1197,7 @@ export type RequestLemburUpdateWithoutShiftInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutRequestLembursNestedInput
+  supervisor?: Prisma.PegawaiUpdateOneWithoutSupervisedRequestLembursNestedInput
   pegawai?: Prisma.PegawaiUpdateOneRequiredWithoutRequestLembursNestedInput
   logAbsensi?: Prisma.LogAbsensiUpdateOneWithoutRequestLemburNestedInput
 }
@@ -1010,6 +1205,7 @@ export type RequestLemburUpdateWithoutShiftInput = {
 export type RequestLemburUncheckedUpdateWithoutShiftInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   userId?: Prisma.IntFieldUpdateOperationsInput | number
+  supervisorId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   pegawaiId?: Prisma.IntFieldUpdateOperationsInput | number
   logAbsensiId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1022,6 +1218,7 @@ export type RequestLemburUncheckedUpdateWithoutShiftInput = {
 export type RequestLemburUncheckedUpdateManyWithoutShiftInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   userId?: Prisma.IntFieldUpdateOperationsInput | number
+  supervisorId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   pegawaiId?: Prisma.IntFieldUpdateOperationsInput | number
   logAbsensiId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1036,6 +1233,7 @@ export type RequestLemburUncheckedUpdateManyWithoutShiftInput = {
 export type RequestLemburSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   userId?: boolean
+  supervisorId?: boolean
   pegawaiId?: boolean
   shiftId?: boolean
   logAbsensiId?: boolean
@@ -1045,6 +1243,7 @@ export type RequestLemburSelect<ExtArgs extends runtime.Types.Extensions.Interna
   createdAt?: boolean
   updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  supervisor?: boolean | Prisma.RequestLembur$supervisorArgs<ExtArgs>
   pegawai?: boolean | Prisma.PegawaiDefaultArgs<ExtArgs>
   shift?: boolean | Prisma.ShiftDefaultArgs<ExtArgs>
   logAbsensi?: boolean | Prisma.RequestLembur$logAbsensiArgs<ExtArgs>
@@ -1053,6 +1252,7 @@ export type RequestLemburSelect<ExtArgs extends runtime.Types.Extensions.Interna
 export type RequestLemburSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   userId?: boolean
+  supervisorId?: boolean
   pegawaiId?: boolean
   shiftId?: boolean
   logAbsensiId?: boolean
@@ -1062,6 +1262,7 @@ export type RequestLemburSelectCreateManyAndReturn<ExtArgs extends runtime.Types
   createdAt?: boolean
   updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  supervisor?: boolean | Prisma.RequestLembur$supervisorArgs<ExtArgs>
   pegawai?: boolean | Prisma.PegawaiDefaultArgs<ExtArgs>
   shift?: boolean | Prisma.ShiftDefaultArgs<ExtArgs>
   logAbsensi?: boolean | Prisma.RequestLembur$logAbsensiArgs<ExtArgs>
@@ -1070,6 +1271,7 @@ export type RequestLemburSelectCreateManyAndReturn<ExtArgs extends runtime.Types
 export type RequestLemburSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   userId?: boolean
+  supervisorId?: boolean
   pegawaiId?: boolean
   shiftId?: boolean
   logAbsensiId?: boolean
@@ -1079,6 +1281,7 @@ export type RequestLemburSelectUpdateManyAndReturn<ExtArgs extends runtime.Types
   createdAt?: boolean
   updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  supervisor?: boolean | Prisma.RequestLembur$supervisorArgs<ExtArgs>
   pegawai?: boolean | Prisma.PegawaiDefaultArgs<ExtArgs>
   shift?: boolean | Prisma.ShiftDefaultArgs<ExtArgs>
   logAbsensi?: boolean | Prisma.RequestLembur$logAbsensiArgs<ExtArgs>
@@ -1087,6 +1290,7 @@ export type RequestLemburSelectUpdateManyAndReturn<ExtArgs extends runtime.Types
 export type RequestLemburSelectScalar = {
   id?: boolean
   userId?: boolean
+  supervisorId?: boolean
   pegawaiId?: boolean
   shiftId?: boolean
   logAbsensiId?: boolean
@@ -1097,21 +1301,24 @@ export type RequestLemburSelectScalar = {
   updatedAt?: boolean
 }
 
-export type RequestLemburOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "pegawaiId" | "shiftId" | "logAbsensiId" | "date" | "reason" | "isAccepted" | "createdAt" | "updatedAt", ExtArgs["result"]["requestLembur"]>
+export type RequestLemburOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "supervisorId" | "pegawaiId" | "shiftId" | "logAbsensiId" | "date" | "reason" | "isAccepted" | "createdAt" | "updatedAt", ExtArgs["result"]["requestLembur"]>
 export type RequestLemburInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  supervisor?: boolean | Prisma.RequestLembur$supervisorArgs<ExtArgs>
   pegawai?: boolean | Prisma.PegawaiDefaultArgs<ExtArgs>
   shift?: boolean | Prisma.ShiftDefaultArgs<ExtArgs>
   logAbsensi?: boolean | Prisma.RequestLembur$logAbsensiArgs<ExtArgs>
 }
 export type RequestLemburIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  supervisor?: boolean | Prisma.RequestLembur$supervisorArgs<ExtArgs>
   pegawai?: boolean | Prisma.PegawaiDefaultArgs<ExtArgs>
   shift?: boolean | Prisma.ShiftDefaultArgs<ExtArgs>
   logAbsensi?: boolean | Prisma.RequestLembur$logAbsensiArgs<ExtArgs>
 }
 export type RequestLemburIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  supervisor?: boolean | Prisma.RequestLembur$supervisorArgs<ExtArgs>
   pegawai?: boolean | Prisma.PegawaiDefaultArgs<ExtArgs>
   shift?: boolean | Prisma.ShiftDefaultArgs<ExtArgs>
   logAbsensi?: boolean | Prisma.RequestLembur$logAbsensiArgs<ExtArgs>
@@ -1121,6 +1328,7 @@ export type $RequestLemburPayload<ExtArgs extends runtime.Types.Extensions.Inter
   name: "RequestLembur"
   objects: {
     user: Prisma.$UserPayload<ExtArgs>
+    supervisor: Prisma.$PegawaiPayload<ExtArgs> | null
     pegawai: Prisma.$PegawaiPayload<ExtArgs>
     shift: Prisma.$ShiftPayload<ExtArgs>
     logAbsensi: Prisma.$LogAbsensiPayload<ExtArgs> | null
@@ -1128,6 +1336,7 @@ export type $RequestLemburPayload<ExtArgs extends runtime.Types.Extensions.Inter
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
     userId: number
+    supervisorId: number | null
     pegawaiId: number
     shiftId: number
     logAbsensiId: number | null
@@ -1531,6 +1740,7 @@ readonly fields: RequestLemburFieldRefs;
 export interface Prisma__RequestLemburClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   user<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  supervisor<T extends Prisma.RequestLembur$supervisorArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.RequestLembur$supervisorArgs<ExtArgs>>): Prisma.Prisma__PegawaiClient<runtime.Types.Result.GetResult<Prisma.$PegawaiPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   pegawai<T extends Prisma.PegawaiDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.PegawaiDefaultArgs<ExtArgs>>): Prisma.Prisma__PegawaiClient<runtime.Types.Result.GetResult<Prisma.$PegawaiPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   shift<T extends Prisma.ShiftDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ShiftDefaultArgs<ExtArgs>>): Prisma.Prisma__ShiftClient<runtime.Types.Result.GetResult<Prisma.$ShiftPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   logAbsensi<T extends Prisma.RequestLembur$logAbsensiArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.RequestLembur$logAbsensiArgs<ExtArgs>>): Prisma.Prisma__LogAbsensiClient<runtime.Types.Result.GetResult<Prisma.$LogAbsensiPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
@@ -1565,6 +1775,7 @@ export interface Prisma__RequestLemburClient<T, Null = never, ExtArgs extends ru
 export interface RequestLemburFieldRefs {
   readonly id: Prisma.FieldRef<"RequestLembur", 'Int'>
   readonly userId: Prisma.FieldRef<"RequestLembur", 'Int'>
+  readonly supervisorId: Prisma.FieldRef<"RequestLembur", 'Int'>
   readonly pegawaiId: Prisma.FieldRef<"RequestLembur", 'Int'>
   readonly shiftId: Prisma.FieldRef<"RequestLembur", 'Int'>
   readonly logAbsensiId: Prisma.FieldRef<"RequestLembur", 'Int'>
@@ -1966,6 +2177,25 @@ export type RequestLemburDeleteManyArgs<ExtArgs extends runtime.Types.Extensions
    * Limit how many RequestLemburs to delete.
    */
   limit?: number
+}
+
+/**
+ * RequestLembur.supervisor
+ */
+export type RequestLembur$supervisorArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Pegawai
+   */
+  select?: Prisma.PegawaiSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Pegawai
+   */
+  omit?: Prisma.PegawaiOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PegawaiInclude<ExtArgs> | null
+  where?: Prisma.PegawaiWhereInput
 }
 
 /**

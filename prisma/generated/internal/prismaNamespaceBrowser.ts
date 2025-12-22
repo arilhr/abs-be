@@ -169,6 +169,7 @@ export type LogAbsensiScalarFieldEnum = (typeof LogAbsensiScalarFieldEnum)[keyof
 export const RequestLemburScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
+  supervisorId: 'supervisorId',
   pegawaiId: 'pegawaiId',
   shiftId: 'shiftId',
   logAbsensiId: 'logAbsensiId',
