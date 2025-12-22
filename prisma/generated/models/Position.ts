@@ -28,15 +28,18 @@ export type AggregatePosition = {
 
 export type PositionAvgAggregateOutputType = {
   id: number | null
+  departmentId: number | null
 }
 
 export type PositionSumAggregateOutputType = {
   id: number | null
+  departmentId: number | null
 }
 
 export type PositionMinAggregateOutputType = {
   id: number | null
   name: string | null
+  departmentId: number | null
   isArchive: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -45,6 +48,7 @@ export type PositionMinAggregateOutputType = {
 export type PositionMaxAggregateOutputType = {
   id: number | null
   name: string | null
+  departmentId: number | null
   isArchive: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -53,6 +57,7 @@ export type PositionMaxAggregateOutputType = {
 export type PositionCountAggregateOutputType = {
   id: number
   name: number
+  departmentId: number
   isArchive: number
   createdAt: number
   updatedAt: number
@@ -62,15 +67,18 @@ export type PositionCountAggregateOutputType = {
 
 export type PositionAvgAggregateInputType = {
   id?: true
+  departmentId?: true
 }
 
 export type PositionSumAggregateInputType = {
   id?: true
+  departmentId?: true
 }
 
 export type PositionMinAggregateInputType = {
   id?: true
   name?: true
+  departmentId?: true
   isArchive?: true
   createdAt?: true
   updatedAt?: true
@@ -79,6 +87,7 @@ export type PositionMinAggregateInputType = {
 export type PositionMaxAggregateInputType = {
   id?: true
   name?: true
+  departmentId?: true
   isArchive?: true
   createdAt?: true
   updatedAt?: true
@@ -87,6 +96,7 @@ export type PositionMaxAggregateInputType = {
 export type PositionCountAggregateInputType = {
   id?: true
   name?: true
+  departmentId?: true
   isArchive?: true
   createdAt?: true
   updatedAt?: true
@@ -182,6 +192,7 @@ export type PositionGroupByArgs<ExtArgs extends runtime.Types.Extensions.Interna
 export type PositionGroupByOutputType = {
   id: number
   name: string
+  departmentId: number
   isArchive: boolean
   createdAt: Date
   updatedAt: Date
@@ -213,19 +224,23 @@ export type PositionWhereInput = {
   NOT?: Prisma.PositionWhereInput | Prisma.PositionWhereInput[]
   id?: Prisma.IntFilter<"Position"> | number
   name?: Prisma.StringFilter<"Position"> | string
+  departmentId?: Prisma.IntFilter<"Position"> | number
   isArchive?: Prisma.BoolFilter<"Position"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Position"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Position"> | Date | string
   pegawais?: Prisma.PegawaiListRelationFilter
+  department?: Prisma.XOR<Prisma.DepartmentScalarRelationFilter, Prisma.DepartmentWhereInput>
 }
 
 export type PositionOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  departmentId?: Prisma.SortOrder
   isArchive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   pegawais?: Prisma.PegawaiOrderByRelationAggregateInput
+  department?: Prisma.DepartmentOrderByWithRelationInput
 }
 
 export type PositionWhereUniqueInput = Prisma.AtLeast<{
@@ -234,15 +249,18 @@ export type PositionWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.PositionWhereInput[]
   NOT?: Prisma.PositionWhereInput | Prisma.PositionWhereInput[]
   name?: Prisma.StringFilter<"Position"> | string
+  departmentId?: Prisma.IntFilter<"Position"> | number
   isArchive?: Prisma.BoolFilter<"Position"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Position"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Position"> | Date | string
   pegawais?: Prisma.PegawaiListRelationFilter
+  department?: Prisma.XOR<Prisma.DepartmentScalarRelationFilter, Prisma.DepartmentWhereInput>
 }, "id">
 
 export type PositionOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  departmentId?: Prisma.SortOrder
   isArchive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -259,6 +277,7 @@ export type PositionScalarWhereWithAggregatesInput = {
   NOT?: Prisma.PositionScalarWhereWithAggregatesInput | Prisma.PositionScalarWhereWithAggregatesInput[]
   id?: Prisma.IntWithAggregatesFilter<"Position"> | number
   name?: Prisma.StringWithAggregatesFilter<"Position"> | string
+  departmentId?: Prisma.IntWithAggregatesFilter<"Position"> | number
   isArchive?: Prisma.BoolWithAggregatesFilter<"Position"> | boolean
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Position"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Position"> | Date | string
@@ -270,11 +289,13 @@ export type PositionCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   pegawais?: Prisma.PegawaiCreateNestedManyWithoutPositionInput
+  department: Prisma.DepartmentCreateNestedOneWithoutPositionsInput
 }
 
 export type PositionUncheckedCreateInput = {
   id?: number
   name: string
+  departmentId: number
   isArchive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -287,11 +308,13 @@ export type PositionUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   pegawais?: Prisma.PegawaiUpdateManyWithoutPositionNestedInput
+  department?: Prisma.DepartmentUpdateOneRequiredWithoutPositionsNestedInput
 }
 
 export type PositionUncheckedUpdateInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  departmentId?: Prisma.IntFieldUpdateOperationsInput | number
   isArchive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -301,6 +324,7 @@ export type PositionUncheckedUpdateInput = {
 export type PositionCreateManyInput = {
   id?: number
   name: string
+  departmentId: number
   isArchive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -316,6 +340,7 @@ export type PositionUpdateManyMutationInput = {
 export type PositionUncheckedUpdateManyInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  departmentId?: Prisma.IntFieldUpdateOperationsInput | number
   isArchive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -324,6 +349,7 @@ export type PositionUncheckedUpdateManyInput = {
 export type PositionCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  departmentId?: Prisma.SortOrder
   isArchive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -331,11 +357,13 @@ export type PositionCountOrderByAggregateInput = {
 
 export type PositionAvgOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  departmentId?: Prisma.SortOrder
 }
 
 export type PositionMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  departmentId?: Prisma.SortOrder
   isArchive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -344,6 +372,7 @@ export type PositionMaxOrderByAggregateInput = {
 export type PositionMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  departmentId?: Prisma.SortOrder
   isArchive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -351,11 +380,64 @@ export type PositionMinOrderByAggregateInput = {
 
 export type PositionSumOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  departmentId?: Prisma.SortOrder
+}
+
+export type PositionListRelationFilter = {
+  every?: Prisma.PositionWhereInput
+  some?: Prisma.PositionWhereInput
+  none?: Prisma.PositionWhereInput
+}
+
+export type PositionOrderByRelationAggregateInput = {
+  _count?: Prisma.SortOrder
 }
 
 export type PositionScalarRelationFilter = {
   is?: Prisma.PositionWhereInput
   isNot?: Prisma.PositionWhereInput
+}
+
+export type PositionCreateNestedManyWithoutDepartmentInput = {
+  create?: Prisma.XOR<Prisma.PositionCreateWithoutDepartmentInput, Prisma.PositionUncheckedCreateWithoutDepartmentInput> | Prisma.PositionCreateWithoutDepartmentInput[] | Prisma.PositionUncheckedCreateWithoutDepartmentInput[]
+  connectOrCreate?: Prisma.PositionCreateOrConnectWithoutDepartmentInput | Prisma.PositionCreateOrConnectWithoutDepartmentInput[]
+  createMany?: Prisma.PositionCreateManyDepartmentInputEnvelope
+  connect?: Prisma.PositionWhereUniqueInput | Prisma.PositionWhereUniqueInput[]
+}
+
+export type PositionUncheckedCreateNestedManyWithoutDepartmentInput = {
+  create?: Prisma.XOR<Prisma.PositionCreateWithoutDepartmentInput, Prisma.PositionUncheckedCreateWithoutDepartmentInput> | Prisma.PositionCreateWithoutDepartmentInput[] | Prisma.PositionUncheckedCreateWithoutDepartmentInput[]
+  connectOrCreate?: Prisma.PositionCreateOrConnectWithoutDepartmentInput | Prisma.PositionCreateOrConnectWithoutDepartmentInput[]
+  createMany?: Prisma.PositionCreateManyDepartmentInputEnvelope
+  connect?: Prisma.PositionWhereUniqueInput | Prisma.PositionWhereUniqueInput[]
+}
+
+export type PositionUpdateManyWithoutDepartmentNestedInput = {
+  create?: Prisma.XOR<Prisma.PositionCreateWithoutDepartmentInput, Prisma.PositionUncheckedCreateWithoutDepartmentInput> | Prisma.PositionCreateWithoutDepartmentInput[] | Prisma.PositionUncheckedCreateWithoutDepartmentInput[]
+  connectOrCreate?: Prisma.PositionCreateOrConnectWithoutDepartmentInput | Prisma.PositionCreateOrConnectWithoutDepartmentInput[]
+  upsert?: Prisma.PositionUpsertWithWhereUniqueWithoutDepartmentInput | Prisma.PositionUpsertWithWhereUniqueWithoutDepartmentInput[]
+  createMany?: Prisma.PositionCreateManyDepartmentInputEnvelope
+  set?: Prisma.PositionWhereUniqueInput | Prisma.PositionWhereUniqueInput[]
+  disconnect?: Prisma.PositionWhereUniqueInput | Prisma.PositionWhereUniqueInput[]
+  delete?: Prisma.PositionWhereUniqueInput | Prisma.PositionWhereUniqueInput[]
+  connect?: Prisma.PositionWhereUniqueInput | Prisma.PositionWhereUniqueInput[]
+  update?: Prisma.PositionUpdateWithWhereUniqueWithoutDepartmentInput | Prisma.PositionUpdateWithWhereUniqueWithoutDepartmentInput[]
+  updateMany?: Prisma.PositionUpdateManyWithWhereWithoutDepartmentInput | Prisma.PositionUpdateManyWithWhereWithoutDepartmentInput[]
+  deleteMany?: Prisma.PositionScalarWhereInput | Prisma.PositionScalarWhereInput[]
+}
+
+export type PositionUncheckedUpdateManyWithoutDepartmentNestedInput = {
+  create?: Prisma.XOR<Prisma.PositionCreateWithoutDepartmentInput, Prisma.PositionUncheckedCreateWithoutDepartmentInput> | Prisma.PositionCreateWithoutDepartmentInput[] | Prisma.PositionUncheckedCreateWithoutDepartmentInput[]
+  connectOrCreate?: Prisma.PositionCreateOrConnectWithoutDepartmentInput | Prisma.PositionCreateOrConnectWithoutDepartmentInput[]
+  upsert?: Prisma.PositionUpsertWithWhereUniqueWithoutDepartmentInput | Prisma.PositionUpsertWithWhereUniqueWithoutDepartmentInput[]
+  createMany?: Prisma.PositionCreateManyDepartmentInputEnvelope
+  set?: Prisma.PositionWhereUniqueInput | Prisma.PositionWhereUniqueInput[]
+  disconnect?: Prisma.PositionWhereUniqueInput | Prisma.PositionWhereUniqueInput[]
+  delete?: Prisma.PositionWhereUniqueInput | Prisma.PositionWhereUniqueInput[]
+  connect?: Prisma.PositionWhereUniqueInput | Prisma.PositionWhereUniqueInput[]
+  update?: Prisma.PositionUpdateWithWhereUniqueWithoutDepartmentInput | Prisma.PositionUpdateWithWhereUniqueWithoutDepartmentInput[]
+  updateMany?: Prisma.PositionUpdateManyWithWhereWithoutDepartmentInput | Prisma.PositionUpdateManyWithWhereWithoutDepartmentInput[]
+  deleteMany?: Prisma.PositionScalarWhereInput | Prisma.PositionScalarWhereInput[]
 }
 
 export type PositionCreateNestedOneWithoutPegawaisInput = {
@@ -372,16 +454,73 @@ export type PositionUpdateOneRequiredWithoutPegawaisNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.PositionUpdateToOneWithWhereWithoutPegawaisInput, Prisma.PositionUpdateWithoutPegawaisInput>, Prisma.PositionUncheckedUpdateWithoutPegawaisInput>
 }
 
+export type PositionCreateWithoutDepartmentInput = {
+  name: string
+  isArchive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  pegawais?: Prisma.PegawaiCreateNestedManyWithoutPositionInput
+}
+
+export type PositionUncheckedCreateWithoutDepartmentInput = {
+  id?: number
+  name: string
+  isArchive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  pegawais?: Prisma.PegawaiUncheckedCreateNestedManyWithoutPositionInput
+}
+
+export type PositionCreateOrConnectWithoutDepartmentInput = {
+  where: Prisma.PositionWhereUniqueInput
+  create: Prisma.XOR<Prisma.PositionCreateWithoutDepartmentInput, Prisma.PositionUncheckedCreateWithoutDepartmentInput>
+}
+
+export type PositionCreateManyDepartmentInputEnvelope = {
+  data: Prisma.PositionCreateManyDepartmentInput | Prisma.PositionCreateManyDepartmentInput[]
+  skipDuplicates?: boolean
+}
+
+export type PositionUpsertWithWhereUniqueWithoutDepartmentInput = {
+  where: Prisma.PositionWhereUniqueInput
+  update: Prisma.XOR<Prisma.PositionUpdateWithoutDepartmentInput, Prisma.PositionUncheckedUpdateWithoutDepartmentInput>
+  create: Prisma.XOR<Prisma.PositionCreateWithoutDepartmentInput, Prisma.PositionUncheckedCreateWithoutDepartmentInput>
+}
+
+export type PositionUpdateWithWhereUniqueWithoutDepartmentInput = {
+  where: Prisma.PositionWhereUniqueInput
+  data: Prisma.XOR<Prisma.PositionUpdateWithoutDepartmentInput, Prisma.PositionUncheckedUpdateWithoutDepartmentInput>
+}
+
+export type PositionUpdateManyWithWhereWithoutDepartmentInput = {
+  where: Prisma.PositionScalarWhereInput
+  data: Prisma.XOR<Prisma.PositionUpdateManyMutationInput, Prisma.PositionUncheckedUpdateManyWithoutDepartmentInput>
+}
+
+export type PositionScalarWhereInput = {
+  AND?: Prisma.PositionScalarWhereInput | Prisma.PositionScalarWhereInput[]
+  OR?: Prisma.PositionScalarWhereInput[]
+  NOT?: Prisma.PositionScalarWhereInput | Prisma.PositionScalarWhereInput[]
+  id?: Prisma.IntFilter<"Position"> | number
+  name?: Prisma.StringFilter<"Position"> | string
+  departmentId?: Prisma.IntFilter<"Position"> | number
+  isArchive?: Prisma.BoolFilter<"Position"> | boolean
+  createdAt?: Prisma.DateTimeFilter<"Position"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"Position"> | Date | string
+}
+
 export type PositionCreateWithoutPegawaisInput = {
   name: string
   isArchive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  department: Prisma.DepartmentCreateNestedOneWithoutPositionsInput
 }
 
 export type PositionUncheckedCreateWithoutPegawaisInput = {
   id?: number
   name: string
+  departmentId: number
   isArchive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -408,9 +547,44 @@ export type PositionUpdateWithoutPegawaisInput = {
   isArchive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  department?: Prisma.DepartmentUpdateOneRequiredWithoutPositionsNestedInput
 }
 
 export type PositionUncheckedUpdateWithoutPegawaisInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  departmentId?: Prisma.IntFieldUpdateOperationsInput | number
+  isArchive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type PositionCreateManyDepartmentInput = {
+  id?: number
+  name: string
+  isArchive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type PositionUpdateWithoutDepartmentInput = {
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  isArchive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  pegawais?: Prisma.PegawaiUpdateManyWithoutPositionNestedInput
+}
+
+export type PositionUncheckedUpdateWithoutDepartmentInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  isArchive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  pegawais?: Prisma.PegawaiUncheckedUpdateManyWithoutPositionNestedInput
+}
+
+export type PositionUncheckedUpdateManyWithoutDepartmentInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   name?: Prisma.StringFieldUpdateOperationsInput | string
   isArchive?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -452,53 +626,67 @@ export type PositionCountOutputTypeCountPegawaisArgs<ExtArgs extends runtime.Typ
 export type PositionSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   name?: boolean
+  departmentId?: boolean
   isArchive?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   pegawais?: boolean | Prisma.Position$pegawaisArgs<ExtArgs>
+  department?: boolean | Prisma.DepartmentDefaultArgs<ExtArgs>
   _count?: boolean | Prisma.PositionCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["position"]>
 
 export type PositionSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   name?: boolean
+  departmentId?: boolean
   isArchive?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  department?: boolean | Prisma.DepartmentDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["position"]>
 
 export type PositionSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   name?: boolean
+  departmentId?: boolean
   isArchive?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  department?: boolean | Prisma.DepartmentDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["position"]>
 
 export type PositionSelectScalar = {
   id?: boolean
   name?: boolean
+  departmentId?: boolean
   isArchive?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type PositionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "isArchive" | "createdAt" | "updatedAt", ExtArgs["result"]["position"]>
+export type PositionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "departmentId" | "isArchive" | "createdAt" | "updatedAt", ExtArgs["result"]["position"]>
 export type PositionInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   pegawais?: boolean | Prisma.Position$pegawaisArgs<ExtArgs>
+  department?: boolean | Prisma.DepartmentDefaultArgs<ExtArgs>
   _count?: boolean | Prisma.PositionCountOutputTypeDefaultArgs<ExtArgs>
 }
-export type PositionIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
-export type PositionIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
+export type PositionIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  department?: boolean | Prisma.DepartmentDefaultArgs<ExtArgs>
+}
+export type PositionIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  department?: boolean | Prisma.DepartmentDefaultArgs<ExtArgs>
+}
 
 export type $PositionPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Position"
   objects: {
     pegawais: Prisma.$PegawaiPayload<ExtArgs>[]
+    department: Prisma.$DepartmentPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
     name: string
+    departmentId: number
     isArchive: boolean
     createdAt: Date
     updatedAt: Date
@@ -897,6 +1085,7 @@ readonly fields: PositionFieldRefs;
 export interface Prisma__PositionClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   pegawais<T extends Prisma.Position$pegawaisArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Position$pegawaisArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PegawaiPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  department<T extends Prisma.DepartmentDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.DepartmentDefaultArgs<ExtArgs>>): Prisma.Prisma__DepartmentClient<runtime.Types.Result.GetResult<Prisma.$DepartmentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -928,6 +1117,7 @@ export interface Prisma__PositionClient<T, Null = never, ExtArgs extends runtime
 export interface PositionFieldRefs {
   readonly id: Prisma.FieldRef<"Position", 'Int'>
   readonly name: Prisma.FieldRef<"Position", 'String'>
+  readonly departmentId: Prisma.FieldRef<"Position", 'Int'>
   readonly isArchive: Prisma.FieldRef<"Position", 'Boolean'>
   readonly createdAt: Prisma.FieldRef<"Position", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Position", 'DateTime'>
@@ -1180,6 +1370,10 @@ export type PositionCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extens
    */
   data: Prisma.PositionCreateManyInput | Prisma.PositionCreateManyInput[]
   skipDuplicates?: boolean
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PositionIncludeCreateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -1250,6 +1444,10 @@ export type PositionUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Extens
    * Limit how many Positions to update.
    */
   limit?: number
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PositionIncludeUpdateManyAndReturn<ExtArgs> | null
 }
 
 /**

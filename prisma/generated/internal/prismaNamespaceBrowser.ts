@@ -53,6 +53,7 @@ export const AnyNull = runtime.AnyNull
 export const ModelName = {
   User: 'User',
   Position: 'Position',
+  Department: 'Department',
   Pegawai: 'Pegawai',
   Shift: 'Shift',
   Jadwal: 'Jadwal',
@@ -96,12 +97,24 @@ export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof User
 export const PositionScalarFieldEnum = {
   id: 'id',
   name: 'name',
+  departmentId: 'departmentId',
   isArchive: 'isArchive',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
 
 export type PositionScalarFieldEnum = (typeof PositionScalarFieldEnum)[keyof typeof PositionScalarFieldEnum]
+
+
+export const DepartmentScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  isArchive: 'isArchive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type DepartmentScalarFieldEnum = (typeof DepartmentScalarFieldEnum)[keyof typeof DepartmentScalarFieldEnum]
 
 
 export const PegawaiScalarFieldEnum = {

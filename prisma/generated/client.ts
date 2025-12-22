@@ -48,6 +48,11 @@ export type User = Prisma.UserModel
  */
 export type Position = Prisma.PositionModel
 /**
+ * Model Department
+ * 
+ */
+export type Department = Prisma.DepartmentModel
+/**
  * Model Pegawai
  * 
  */

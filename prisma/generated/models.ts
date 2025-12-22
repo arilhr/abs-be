@@ -10,6 +10,7 @@
  */
 export type * from './models/User'
 export type * from './models/Position'
+export type * from './models/Department'
 export type * from './models/Pegawai'
 export type * from './models/Shift'
 export type * from './models/Jadwal'

@@ -7,15 +7,15 @@ import { PrismaClientKnownRequestError } from "../../prisma/generated/internal/p
  */
 async function createPosition(req: Request, res: Response): Promise<void> {
   try {
-    const { name, isArchive = false } = req.body;
+    const { name, departmentId, isArchive = false } = req.body;
 
-    if (!name) {
-      res.status(400).json({ error: "name is required" });
+    if (!name || !departmentId) {
+      res.status(400).json({ error: "Nama dan ID Departemen diperlukan." });
       return;
     }
 
     const position = await prisma.position.create({
-      data: { name, isArchive },
+      data: { name, departmentId, isArchive },
     });
 
     res.status(201).json(position);
@@ -30,93 +30,67 @@ async function createPosition(req: Request, res: Response): Promise<void> {
  */
 export const getPositions = async (req: Request, res: Response) => {
   try {
-    const { name } = req.query;
-    const isArchiveQuery = req.query.isArchive as string | undefined;
-    const pageQuery = req.query.page as string | undefined;
-    const limitQuery = req.query.limit as string | undefined;
+    const { name, departmentName, page, limit, isArchive } = req.query;
 
-    // default behavior: when isArchive is omitted, use false
-    const isArchive =
-      isArchiveQuery === undefined ? false : isArchiveQuery === "true";
+    const where: any = {};
 
-    const where: any = {
-      isArchive,
-    };
+    where.isArchive = isArchive === undefined ? false : isArchive === "true";
 
     if (typeof name === "string" && name.trim() !== "") {
       where.name = { contains: name.trim(), mode: "insensitive" };
     }
 
-    // If both page and limit are provided and valid numbers -> paginate
-    const page = pageQuery ? Number(pageQuery) : undefined;
-    const limit = limitQuery ? Number(limitQuery) : undefined;
-    const shouldPaginate =
-      page !== undefined &&
-      limit !== undefined &&
-      Number.isInteger(page) &&
-      page > 0 &&
-      Number.isInteger(limit) &&
-      limit > 0;
+    if (typeof departmentName === "string" && departmentName.trim() !== "") {
+      where.department = {
+        name: {
+          contains: departmentName.trim(),
+          mode: "insensitive",
+        },
+      };
+    }
+    const withPagination = !isNaN(Number(page)) || !isNaN(Number(limit));
 
-    if (shouldPaginate) {
-      const skip = (page - 1) * limit;
-      const [total, data] = await Promise.all([
-        prisma.position.count({ where }),
-        prisma.position.findMany({
-          where,
-          orderBy: { createdAt: "desc" },
-          skip,
-          take: limit,
-          include: {
-            _count: {
-              select: {
-                pegawais: true,
-              },
+    let resultsData = [];
+    const [total, data] = await Promise.all([
+      prisma.position.count({ where }),
+      prisma.position.findMany({
+        where,
+        orderBy: { createdAt: "desc" },
+        ...(withPagination && {
+          skip: (Number(page) - 1) * Number(limit),
+          take: Number(limit),
+        }),
+        include: {
+          department: true,
+          _count: {
+            select: {
+              pegawais: true,
             },
           },
-        }),
-      ]);
-
-      // Transform data to include totalPegawai
-      const dataWithTotal = data.map((position) => ({
-        ...position,
-        totalPegawai: position._count.pegawais,
-        _count: undefined, // Remove _count from response
-      }));
-
-      res.json({
-        data: dataWithTotal,
-        meta: {
-          total,
-          page,
-          limit,
-          totalPages: Math.ceil(total / limit),
         },
-      });
-      return;
-    }
+      }),
+    ]);
 
-    // No pagination -> return all matching rows
-    const data = await prisma.position.findMany({
-      where,
-      orderBy: { createdAt: "desc" },
-      include: {
-        _count: {
-          select: {
-            pegawais: true,
-          },
-        },
-      },
-    });
+    resultsData = data;
 
     // Transform data to include totalPegawai
     const dataWithTotal = data.map((position) => ({
       ...position,
       totalPegawai: position._count.pegawais,
-      _count: undefined,
+      _count: undefined, // Remove _count from response
     }));
 
-    res.json(dataWithTotal);
+    resultsData = dataWithTotal;
+
+    res.json({
+      data: resultsData,
+      total,
+      ...(withPagination && {
+        page,
+        limit,
+        totalPages: Math.ceil(total / Number(limit)),
+      }),
+    });
   } catch (err) {
     res.status(500).json(err);
   }
@@ -128,7 +102,10 @@ export const getPositions = async (req: Request, res: Response) => {
 async function getPositionById(req: Request, res: Response): Promise<void> {
   try {
     const id = Number(req.params.id);
-    const position = await prisma.position.findUnique({ where: { id } });
+    const position = await prisma.position.findUnique({
+      where: { id },
+      include: { department: true },
+    });
 
     if (!position) {
       res.status(404).json({ error: "not found" });
@@ -147,11 +124,12 @@ async function getPositionById(req: Request, res: Response): Promise<void> {
 async function updatePosition(req: Request, res: Response): Promise<void> {
   try {
     const id = Number(req.params.id);
-    const { name, isArchive } = req.body;
+    const { name, departmentId, isArchive } = req.body;
     const data: any = {};
 
     if (name !== undefined) data.name = name;
     if (isArchive !== undefined) data.isArchive = isArchive;
+    if (departmentId !== undefined) data.departmentId = departmentId;
 
     const position = await prisma.position.update({
       where: { id },
