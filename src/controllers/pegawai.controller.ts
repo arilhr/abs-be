@@ -26,6 +26,7 @@ async function getPegawai(req: Request, res: Response): Promise<void> {
   try {
     const {
       id,
+      pegawaiId,
       name,
       positionId,
       status,
@@ -42,6 +43,11 @@ async function getPegawai(req: Request, res: Response): Promise<void> {
     if (typeof name === "string" && name.trim() !== "") {
       where.name = { contains: name.trim(), mode: "insensitive" };
     }
+
+    if (typeof pegawaiId === "string" && pegawaiId.trim() !== "") {
+      where.pegawaiId = { contains: pegawaiId.trim(), mode: "insensitive" };
+    }
+
     if (id !== undefined) {
       const idNumber = Number(id);
       if (!Number.isNaN(idNumber)) where.id = idNumber;
