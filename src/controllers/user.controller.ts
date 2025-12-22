@@ -65,7 +65,10 @@ export const getUsers = async (req: Request, res: Response) => {
 
     if (typeof pegawaiId === "string" && pegawaiId.trim() !== "") {
       where.pegawai = {
-        pegawaiId: pegawaiId,
+        pegawaiId: {
+          contains: pegawaiId.trim(),
+          mode: "insensitive",
+        },
       };
     }
 
