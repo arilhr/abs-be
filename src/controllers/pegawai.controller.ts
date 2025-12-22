@@ -67,7 +67,7 @@ async function getPegawai(req: Request, res: Response): Promise<void> {
         }),
         include: {
           position: {
-            select: { id: true, name: true },
+            select: { id: true, name: true, department: true },
           },
         },
       }),
