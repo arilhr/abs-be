@@ -90,7 +90,7 @@ export const getUsers = async (req: Request, res: Response) => {
         where,
         orderBy: { createdAt: "desc" },
         ...(withPagination && {
-          skip: Number(page) - 1,
+          skip: (Number(page) - 1) * Number(limit),
           take: Number(limit),
         }),
         select: {

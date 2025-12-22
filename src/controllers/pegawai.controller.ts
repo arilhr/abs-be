@@ -29,8 +29,8 @@ async function getPegawai(req: Request, res: Response): Promise<void> {
       name,
       positionId,
       status,
-      page: pageQ,
-      limit: limitQ,
+      page,
+      limit,
       isArchive = false,
     } = req.query;
 
@@ -54,49 +54,34 @@ async function getPegawai(req: Request, res: Response): Promise<void> {
       where.status = status.trim();
     }
 
-    const page = pageQ ? Number(pageQ) : undefined;
-    const limit = limitQ ? Number(limitQ) : undefined;
-    const shouldPaginate =
-      page !== undefined &&
-      limit !== undefined &&
-      Number.isInteger(page) &&
-      page > 0 &&
-      Number.isInteger(limit) &&
-      limit > 0;
+    const withPagination = !isNaN(Number(page)) || !isNaN(Number(limit));
 
-    if (shouldPaginate) {
-      const skip = (page - 1) * limit;
-      const [total, data] = await Promise.all([
-        prisma.pegawai.count({ where }),
-        prisma.pegawai.findMany({
-          where,
-          orderBy: { createdAt: "desc" },
-          skip,
-          take: limit,
-          include: {
-            position: {
-              select: { id: true, name: true },
-            },
-          },
+    const [total, data] = await Promise.all([
+      prisma.pegawai.count({ where }),
+      prisma.pegawai.findMany({
+        where,
+        orderBy: { createdAt: "desc" },
+        ...(withPagination && {
+          skip: (Number(page) - 1) * Number(limit),
+          take: Number(limit),
         }),
-      ]);
-      res.json({
-        data,
-        meta: { total, page, limit, totalPages: Math.ceil(total / limit) },
-      });
-      return;
-    }
-
-    const data = await prisma.pegawai.findMany({
-      where,
-      include: {
-        position: {
-          select: { id: true, name: true },
+        include: {
+          position: {
+            select: { id: true, name: true },
+          },
         },
-      },
-      orderBy: { createdAt: "desc" },
+      }),
+    ]);
+
+    res.json({
+      data,
+      total,
+      ...(withPagination && {
+        page: Number(page),
+        limit: Number(limit),
+        totalPages: Math.ceil(total / Number(limit)),
+      }),
     });
-    res.json(data);
   } catch {
     res.status(500).json({ error: "internal error" });
   }
