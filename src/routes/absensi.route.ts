@@ -23,11 +23,11 @@ export const scanAbsensiRateLimiter = rateLimit({
 });
 
 const router = Router();
-router.get("/", getAllAbsensi);
 router.get("/generate", generateLogAbsensi);
 router.post("/scan", scanAbsensiRateLimiter, scanAbsensi);
 
 router.use(authenticate);
+router.get("/", getAllAbsensi);
 router.put("/:id", updateAbsensi);
 
 export default router;

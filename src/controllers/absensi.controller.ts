@@ -88,9 +88,17 @@ export const getAllAbsensi = async (req: Request, res: Response) => {
 
 export const scanAbsensi = async (req: Request, res: Response) => {
   try {
-    const NOW = dayjs();
+    const { pegawaiId, code } = req.body;
 
-    const { pegawaiId } = req.body;
+    // check pass code
+    const SECRET_CODE = process.env.SCAN_SECRET_CODE;
+    if (SECRET_CODE !== code) {
+      return res.status(401).json({
+        message: "Wrong Secret Code",
+      });
+    }
+
+    const NOW = dayjs();
 
     // check pegawai data
     const pegawaiData = await prisma.pegawai.findFirst({
