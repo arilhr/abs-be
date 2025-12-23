@@ -18,6 +18,8 @@ import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
 import duration from "dayjs/plugin/duration";
 
+import { startShiftCron } from "./cron/log-absensi-cron";
+
 dayjs.extend(utc);
 dayjs.extend(timezone);
 dayjs.extend(duration);
@@ -46,5 +48,7 @@ apiRouter.use("/config", configRoutes);
 app.use("/api", apiRouter);
 
 app.get("/", (_, res) => res.json({ ok: true }));
+
+startShiftCron();
 
 export default app;
