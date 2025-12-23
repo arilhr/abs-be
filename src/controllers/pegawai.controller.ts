@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import prisma from "../prisma";
 import { PrismaClientKnownRequestError } from "../../prisma/generated/internal/prismaNamespace";
 import dayjs from "dayjs";
+import * as XLSX from "xlsx";
 import { calculateMinutesDifferent } from "../utils/calculate-time";
 
 async function createPegawai(req: Request, res: Response): Promise<void> {
@@ -283,6 +284,167 @@ export const getGajiPegawai = async (req: Request, res: Response) => {
     });
   } catch (err) {
     res.status(500).json(err);
+  }
+};
+
+const normalizeRowKeys = (row: Record<string, any>) => {
+  const normalized: Record<string, any> = {};
+
+  for (const key in row) {
+    const cleanKey = key
+      .trim()
+      .replace(/\s*\/\s*/g, "/")
+      .replace(/\s+/g, " ")
+      .toUpperCase();
+
+    normalized[cleanKey] = row[key];
+  }
+
+  return normalized;
+};
+
+export const importPegawai = async (req: Request, res: Response) => {
+  try {
+    if (!req.file) {
+      res.status(400).json({ error: "No file uploaded" });
+      return;
+    }
+
+    // Read Excel file
+    const workbook = XLSX.read(req.file.buffer, { type: "buffer" });
+    const sheetName = workbook.SheetNames[0];
+    const worksheet = workbook.Sheets[sheetName];
+
+    // Convert to JSON
+    const rawData: any[] = XLSX.utils.sheet_to_json(worksheet, {
+      defval: null, // cell kosong tetap ada
+    });
+
+    if (rawData.length === 0) {
+      res.status(400).json({ error: "Excel file is empty" });
+      return;
+    }
+
+    const results = {
+      success: 0,
+      failed: 0,
+      errors: [] as any[],
+    };
+
+    // Process each row
+    for (let i = 0; i < rawData.length; i++) {
+      const rawRow = rawData[i];
+      const row = normalizeRowKeys(rawRow);
+
+      try {
+        // Validate required fields
+        if (
+          !row["NO KARYAWAN"] ||
+          !row["NAMA KARYAWAN"] ||
+          !row["JABATAN"] ||
+          !row["DEPARTEMEN/BAGIAN"]
+        ) {
+          results.failed++;
+          results.errors.push({
+            row: i + 2, // +2 karena header + index mulai 0
+            data: rawRow,
+            error:
+              "Missing required fields (NO KARYAWAN, NAMA KARYAWAN, JABATAN, DEPARTEMEN/BAGIAN)",
+          });
+          continue;
+        }
+
+        const pegawaiData = {
+          pegawaiId: String(row["NO KARYAWAN"]).trim(),
+          name: String(row["NAMA KARYAWAN"]).trim(),
+          departmentName: String(row["DEPARTEMEN/BAGIAN"]).trim(),
+          positionName: String(row["JABATAN"]).trim(),
+          status: "active",
+          salary: row["GAJI"] ? Number(row["GAJI"]) : 0,
+        };
+
+        // Process each row in transaction
+        await prisma.$transaction(async (tx) => {
+          // Check if pegawai already exists
+          const existingPegawai = await tx.pegawai.findUnique({
+            where: { pegawaiId: pegawaiData.pegawaiId },
+          });
+
+          if (existingPegawai) {
+            throw new Error(
+              `Pegawai dengan ID ${pegawaiData.pegawaiId} sudah ada`
+            );
+          }
+
+          // Find or create department
+          let department = await tx.department.findFirst({
+            where: {
+              name: {
+                equals: pegawaiData.departmentName,
+                mode: "insensitive",
+              },
+            },
+          });
+
+          if (!department) {
+            department = await tx.department.create({
+              data: { name: pegawaiData.departmentName },
+            });
+          }
+
+          // Find or create position
+          let position = await tx.position.findFirst({
+            where: {
+              name: {
+                equals: pegawaiData.positionName,
+                mode: "insensitive",
+              },
+              departmentId: department.id,
+            },
+          });
+
+          if (!position) {
+            position = await tx.position.create({
+              data: {
+                name: pegawaiData.positionName,
+                departmentId: department.id,
+              },
+            });
+          }
+
+          // Create pegawai
+          await tx.pegawai.create({
+            data: {
+              pegawaiId: pegawaiData.pegawaiId,
+              name: pegawaiData.name,
+              positionId: position.id,
+              status: pegawaiData.status,
+              salary: pegawaiData.salary,
+            },
+          });
+        });
+
+        results.success++;
+      } catch (error: any) {
+        results.failed++;
+        results.errors.push({
+          row: i + 2,
+          data: rawRow,
+          error: error.message,
+        });
+      }
+    }
+
+    res.status(200).json({
+      message: "Import completed",
+      results,
+    });
+  } catch (err: any) {
+    console.error("Error importing pegawai:", err);
+    res.status(500).json({
+      error: "Internal server error",
+      details: err.message,
+    });
   }
 };
 

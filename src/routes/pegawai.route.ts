@@ -1,11 +1,17 @@
 import { Router } from "express";
 import * as pegawaiController from "../controllers/pegawai.controller";
 import { authenticate } from "../middlewares/auth.middleware";
+import { excelUpload } from "../middlewares/multer.middleware";
 
 const router = Router();
 router.use(authenticate);
 
 router.post("/", pegawaiController.createPegawai);
+router.post(
+  "/import",
+  excelUpload.single("file"),
+  pegawaiController.importPegawai
+);
 router.get("/", pegawaiController.getPegawai);
 router.get("/salary", pegawaiController.getGajiPegawai);
 router.get("/:id", pegawaiController.getPegawaiById);
