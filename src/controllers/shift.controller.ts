@@ -14,7 +14,7 @@ async function createShift(req: Request, res: Response): Promise<void> {
     });
     res.status(201).json(shift);
   } catch (err) {
-    res.status(500).json({ error: "internal error" });
+    res.status(500).json({ error: "internal error", err });
   }
 }
 
@@ -26,13 +26,13 @@ async function getShifts(req: Request, res: Response): Promise<void> {
       jamKeluar,
       isActive,
       isArchive = false,
-      page: pageQ,
-      limit: limitQ,
+      page,
+      limit,
     } = req.query;
 
-    const where: any = {};
-
-    where.isArchive = isArchive === undefined ? false : isArchive === "true";
+    const where: any = {
+      isArchive: isArchive === undefined ? false : isArchive === "true",
+    };
 
     if (typeof name === "string" && name.trim() !== "") {
       where.name = { contains: name.trim(), mode: "insensitive" };
@@ -47,41 +47,31 @@ async function getShifts(req: Request, res: Response): Promise<void> {
       where.isActive = isActive === "true";
     }
 
-    const page = pageQ ? Number(pageQ) : undefined;
-    const limit = limitQ ? Number(limitQ) : undefined;
-    const shouldPaginate =
-      page !== undefined &&
-      limit !== undefined &&
-      Number.isInteger(page) &&
-      page > 0 &&
-      Number.isInteger(limit) &&
-      limit > 0;
+    const withPagination = !isNaN(Number(page)) || !isNaN(Number(limit));
 
-    if (shouldPaginate) {
-      const skip = (page - 1) * limit;
-      const [total, data] = await Promise.all([
-        prisma.shift.count({ where }),
-        prisma.shift.findMany({
-          where,
-          orderBy: { createdAt: "desc" },
-          skip,
-          take: limit,
+    const [total, data] = await Promise.all([
+      prisma.shift.count({ where }),
+      prisma.shift.findMany({
+        where,
+        orderBy: { createdAt: "desc" },
+        ...(withPagination && {
+          skip: Number(page) - 1,
+          take: Number(limit),
         }),
-      ]);
-      res.json({
-        data,
-        meta: { total, page, limit, totalPages: Math.ceil(total / limit) },
-      });
-      return;
-    }
+      }),
+    ]);
 
-    const data = await prisma.shift.findMany({
-      where,
-      orderBy: { createdAt: "desc" },
+    res.json({
+      data,
+      total,
+      ...(withPagination && {
+        page,
+        limit,
+        totalPages: Math.ceil(total / Number(limit)),
+      }),
     });
-    res.json(data);
-  } catch {
-    res.status(500).json({ error: "internal error" });
+  } catch (err) {
+    res.status(500).json({ error: "internal error", err });
   }
 }
 
