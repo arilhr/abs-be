@@ -33,6 +33,8 @@ async function getPegawai(req: Request, res: Response): Promise<void> {
       status,
       page,
       limit,
+      salaryMin,
+      salaryMax,
       isArchive = false,
     } = req.query;
 
@@ -47,6 +49,19 @@ async function getPegawai(req: Request, res: Response): Promise<void> {
 
     if (typeof pegawaiId === "string" && pegawaiId.trim() !== "") {
       where.pegawaiId = { contains: pegawaiId.trim(), mode: "insensitive" };
+    }
+
+    if (salaryMin !== undefined && salaryMin !== null && salaryMin !== "") {
+      where.salary = {
+        gte: Number(salaryMin),
+      };
+    }
+
+    if (salaryMax !== undefined && salaryMax !== null && salaryMax !== "") {
+      where.salary = {
+        ...where.salary,
+        lte: Number(salaryMax),
+      };
     }
 
     if (id !== undefined) {
@@ -89,8 +104,9 @@ async function getPegawai(req: Request, res: Response): Promise<void> {
         totalPages: Math.ceil(total / Number(limit)),
       }),
     });
-  } catch {
-    res.status(500).json({ error: "internal error" });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ error: "internal error", err });
   }
 }
 
