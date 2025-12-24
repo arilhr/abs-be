@@ -62,3 +62,8 @@ export type RequestLembur = Prisma.RequestLemburModel
  * 
  */
 export type PengajuanIzin = Prisma.PengajuanIzinModel
+/**
+ * Model AppConfig
+ * 
+ */
+export type AppConfig = Prisma.AppConfigModel

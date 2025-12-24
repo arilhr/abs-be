@@ -392,7 +392,8 @@ export const ModelName = {
   Jadwal: 'Jadwal',
   LogAbsensi: 'LogAbsensi',
   RequestLembur: 'RequestLembur',
-  PengajuanIzin: 'PengajuanIzin'
+  PengajuanIzin: 'PengajuanIzin',
+  AppConfig: 'AppConfig'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -408,7 +409,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "position" | "department" | "pegawai" | "shift" | "jadwal" | "logAbsensi" | "requestLembur" | "pengajuanIzin"
+    modelProps: "user" | "position" | "department" | "pegawai" | "shift" | "jadwal" | "logAbsensi" | "requestLembur" | "pengajuanIzin" | "appConfig"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1078,6 +1079,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    AppConfig: {
+      payload: Prisma.$AppConfigPayload<ExtArgs>
+      fields: Prisma.AppConfigFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.AppConfigFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AppConfigPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.AppConfigFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AppConfigPayload>
+        }
+        findFirst: {
+          args: Prisma.AppConfigFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AppConfigPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.AppConfigFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AppConfigPayload>
+        }
+        findMany: {
+          args: Prisma.AppConfigFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AppConfigPayload>[]
+        }
+        create: {
+          args: Prisma.AppConfigCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AppConfigPayload>
+        }
+        createMany: {
+          args: Prisma.AppConfigCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.AppConfigCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AppConfigPayload>[]
+        }
+        delete: {
+          args: Prisma.AppConfigDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AppConfigPayload>
+        }
+        update: {
+          args: Prisma.AppConfigUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AppConfigPayload>
+        }
+        deleteMany: {
+          args: Prisma.AppConfigDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.AppConfigUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.AppConfigUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AppConfigPayload>[]
+        }
+        upsert: {
+          args: Prisma.AppConfigUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AppConfigPayload>
+        }
+        aggregate: {
+          args: Prisma.AppConfigAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateAppConfig>
+        }
+        groupBy: {
+          args: Prisma.AppConfigGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AppConfigGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.AppConfigCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AppConfigCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -1248,12 +1323,31 @@ export const PengajuanIzinScalarFieldEnum = {
 export type PengajuanIzinScalarFieldEnum = (typeof PengajuanIzinScalarFieldEnum)[keyof typeof PengajuanIzinScalarFieldEnum]
 
 
+export const AppConfigScalarFieldEnum = {
+  id: 'id',
+  key: 'key',
+  value: 'value',
+  description: 'description',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type AppConfigScalarFieldEnum = (typeof AppConfigScalarFieldEnum)[keyof typeof AppConfigScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
 } as const
 
 export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
+
+
+export const JsonNullValueInput = {
+  JsonNull: JsonNull
+} as const
+
+export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
 
 
 export const QueryMode = {
@@ -1270,6 +1364,15 @@ export const NullsOrder = {
 } as const
 
 export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
+
+
+export const JsonNullValueFilter = {
+  DbNull: DbNull,
+  JsonNull: JsonNull,
+  AnyNull: AnyNull
+} as const
+
+export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]
 
 
 
@@ -1338,6 +1441,20 @@ export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel
  * Reference to a field of type 'DateTime[]'
  */
 export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime[]'>
+    
+
+
+/**
+ * Reference to a field of type 'Json'
+ */
+export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Json'>
+    
+
+
+/**
+ * Reference to a field of type 'QueryMode'
+ */
+export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QueryMode'>
     
 
 
@@ -1442,6 +1559,7 @@ export type GlobalOmitConfig = {
   logAbsensi?: Prisma.LogAbsensiOmit
   requestLembur?: Prisma.RequestLemburOmit
   pengajuanIzin?: Prisma.PengajuanIzinOmit
+  appConfig?: Prisma.AppConfigOmit
 }
 
 /* Types for Logging */

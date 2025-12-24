@@ -4,6 +4,10 @@ import { PrismaClientKnownRequestError } from "../../prisma/generated/internal/p
 import dayjs from "dayjs";
 import * as XLSX from "xlsx";
 import { calculateMinutesDifferent } from "../utils/calculate-time";
+import {
+  LATE_DEDUCTION_SALARY_CONFIG_KEY,
+  OVERTIME_SALARY_CONFIG_KEY,
+} from "../constants/config-key";
 
 async function createPegawai(req: Request, res: Response): Promise<void> {
   try {
@@ -209,7 +213,13 @@ async function deletePegawai(req: Request, res: Response): Promise<void> {
 
 export const getGajiPegawai = async (req: Request, res: Response) => {
   try {
-    const { pegawaiId, start, end } = req.query;
+    const {
+      pegawaiId,
+      lateRate: lateRateQ,
+      overtimeRate: overtimeRateQ,
+      start,
+      end,
+    } = req.query;
 
     if (!pegawaiId || !start || !end) {
       res.status(400).json({
@@ -226,6 +236,26 @@ export const getGajiPegawai = async (req: Request, res: Response) => {
         position: true,
       },
     });
+
+    // get salary config
+    let lateRate: number = Number(lateRateQ) || 0;
+    let overtimeRate: number = Number(overtimeRateQ) || 0;
+
+    if (lateRateQ === undefined) {
+      const lateDeductionConfig = await prisma.appConfig.findUnique({
+        where: { key: LATE_DEDUCTION_SALARY_CONFIG_KEY },
+      });
+
+      lateRate = lateDeductionConfig ? Number(lateDeductionConfig.value) : 0;
+    }
+
+    if (overtimeRateQ === undefined) {
+      const overtimeConfig = await prisma.appConfig.findUnique({
+        where: { key: OVERTIME_SALARY_CONFIG_KEY },
+      });
+
+      overtimeRate = overtimeConfig ? Number(overtimeConfig.value) : 0;
+    }
 
     if (!pegawaiData) {
       res.status(400).json({
@@ -257,6 +287,8 @@ export const getGajiPegawai = async (req: Request, res: Response) => {
       return acc + calculateMinutesDifferent(curr.jamMasukDate, curr.checkIn);
     }, 0);
 
+    const totalLateDeduction = Math.round((lateRate * totalLateMinutes) / 60);
+
     const totalAbsent = logAbsensiDatas.filter((log) => {
       return log.checkIn === null;
     }).length;
@@ -282,12 +314,13 @@ export const getGajiPegawai = async (req: Request, res: Response) => {
     }, 0);
 
     const totalGajiLembur = Math.round(
-      (pegawaiData.salary / 24) * totalLemburMinutes
+      (overtimeRate * totalLemburMinutes) / 60
     );
 
     res.status(200).json({
       totalLate: totalLate.length,
       totalLateTime: Math.round(totalLateMinutes),
+      totalLateDeduction,
       totalLembur: totalLembur.length,
       totalLemburTime: Math.round(totalLemburMinutes),
       totalGajiLembur,
