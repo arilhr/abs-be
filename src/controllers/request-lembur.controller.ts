@@ -4,7 +4,13 @@ import { calculateJamShiftDate } from "../utils/calculate-jam-shift-date";
 
 export const createRequestLembur = async (req: Request, res: Response) => {
   try {
-    const { supervisorId, pegawaiId, shiftId, date, reason } = req.body;
+    const {
+      supervisorId: supervisorIdQ,
+      pegawaiId,
+      shiftId,
+      date,
+      reason,
+    } = req.body;
 
     if (!req.user?.userId) {
       res.status(400).json({ error: "User ID not found from the token" });
@@ -19,6 +25,8 @@ export const createRequestLembur = async (req: Request, res: Response) => {
       res.status(400).json({ error: "pegawaiId, shiftId, date required" });
       return;
     }
+
+    let supervisorId = supervisorIdQ ? Number(supervisorIdQ) : req.user.userId;
 
     // check if request already made
     const existing = await prisma.requestLembur.findFirst({
@@ -37,6 +45,7 @@ export const createRequestLembur = async (req: Request, res: Response) => {
     const result = await prisma.requestLembur.create({
       data: {
         userId: req.user.userId,
+        supervisorId,
         pegawaiId,
         shiftId,
         date,
@@ -52,7 +61,7 @@ export const createRequestLembur = async (req: Request, res: Response) => {
 
 export const getRequestLembur = async (req: Request, res: Response) => {
   try {
-    const { pegawaiId, page: pageQ, limit: limitQ } = req.query;
+    const { pegawaiId, page, limit } = req.query;
 
     const where: any = {};
 
@@ -61,53 +70,43 @@ export const getRequestLembur = async (req: Request, res: Response) => {
       if (!Number.isNaN(pid)) where.pegawaiId = pid;
     }
 
-    const page = pageQ ? Number(pageQ) : undefined;
-    const limit = limitQ ? Number(limitQ) : undefined;
+    const withPagination = !isNaN(Number(page)) || !isNaN(Number(limit));
 
-    const shouldPaginate =
-      page !== undefined &&
-      limit !== undefined &&
-      Number.isInteger(page) &&
-      page > 0 &&
-      Number.isInteger(limit) &&
-      limit > 0;
-
-    if (shouldPaginate) {
-      const skip = (page - 1) * limit;
-      const [total, data] = await Promise.all([
-        prisma.requestLembur.count({ where }),
-        prisma.requestLembur.findMany({
-          where,
-          include: {
-            pegawai: {
-              select: { name: true },
-            },
-            shift: true,
-            user: {
-              select: {
-                username: true,
-              },
+    const [total, data] = await Promise.all([
+      prisma.requestLembur.count({ where }),
+      prisma.requestLembur.findMany({
+        where,
+        include: {
+          pegawai: {
+            select: { name: true },
+          },
+          supervisor: {
+            select: { name: true },
+          },
+          shift: true,
+          user: {
+            select: {
+              username: true,
             },
           },
-          orderBy: { createdAt: "desc" },
-          skip,
-          take: limit,
+        },
+        orderBy: { createdAt: "desc" },
+        ...(withPagination && {
+          skip: (Number(page) - 1) * Number(limit),
+          take: Number(limit),
         }),
-      ]);
+      }),
+    ]);
 
-      res.json({
-        data,
-        meta: { total, page, limit, totalPages: Math.ceil(total / limit) },
-      });
-      return;
-    }
-
-    const data = await prisma.requestLembur.findMany({
-      where,
-      orderBy: { createdAt: "desc" },
+    res.json({
+      data,
+      total,
+      ...(withPagination && {
+        page: Number(page),
+        limit: Number(limit),
+        totalPages: Math.ceil(total / Number(limit)),
+      }),
     });
-
-    res.json(data);
   } catch (err) {
     res.status(500).json(err);
   }
@@ -138,36 +137,51 @@ export const acceptRequestLembur = async (req: Request, res: Response) => {
       existing.shift.jamKeluar,
       existing.date
     );
-    const logAbsensi = await prisma.logAbsensi.findFirst({
-      where: {
-        pegawaiId: existing.pegawaiId,
-        jamMasukDate: shiftDate.jamMasukDate,
-      },
-    });
-
-    if (!logAbsensi) {
-      res
-        .status(404)
-        .json({ message: "Log Absensi not found for the given request." });
-      return;
-    }
 
     // create transaction to accept request and update isLembur in logAbsensi
     const result = await prisma.$transaction(async (prisma) => {
-      const acceptedRequest = await prisma.requestLembur.update({
-        where: { id: Number(id) },
-        data: { isAccepted: isAccepted, logAbsensiId: logAbsensi.id },
+      const logAbsensi = await prisma.logAbsensi.findFirst({
+        where: {
+          pegawaiId: existing.pegawaiId,
+          jamMasukDate: shiftDate.jamMasukDate,
+        },
       });
 
-      await prisma.logAbsensi.updateMany({
-        where: { id: logAbsensi.id },
-        data: { isLembur: isAccepted },
-      });
+      if (!isAccepted) {
+        const rejectedRequest = await prisma.requestLembur.update({
+          where: { id: Number(id) },
+          data: { isAccepted: isAccepted },
+        });
 
-      return acceptedRequest;
+        return { status: 200, data: rejectedRequest };
+      }
+
+      if (isAccepted) {
+        if (!logAbsensi) {
+          return {
+            status: 400,
+            message:
+              "Pengajuan lembur tidak bisa diterima karena log absensi tidak ditemukan.",
+          };
+        }
+
+        const acceptedRequest = await prisma.requestLembur.update({
+          where: { id: Number(id) },
+          data: { isAccepted: isAccepted, logAbsensiId: logAbsensi.id },
+        });
+
+        await prisma.logAbsensi.updateMany({
+          where: { id: logAbsensi.id },
+          data: { isLembur: isAccepted },
+        });
+
+        return { status: 200, data: acceptedRequest };
+      }
+
+      return { status: 400, message: "Invalid request." };
     });
 
-    res.status(200).json(result);
+    res.status(result.status).json(result);
   } catch (err) {
     res.status(500).json(err);
   }
