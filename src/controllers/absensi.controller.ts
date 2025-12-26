@@ -4,6 +4,7 @@ import dayjs from "dayjs";
 import { calculateJamShiftDate } from "../utils/calculate-jam-shift-date";
 import { CHECK_IN_MINUTE_OFFSET } from "../constants/absensi";
 import { convertDayDatabaseToDayjs } from "../utils/get-day-from-date";
+import { ScanType } from "../../prisma/generated/enums";
 
 export const getAllAbsensi = async (req: Request, res: Response) => {
   try {
@@ -88,15 +89,7 @@ export const getAllAbsensi = async (req: Request, res: Response) => {
 
 export const scanAbsensi = async (req: Request, res: Response) => {
   try {
-    const { pegawaiId, code } = req.body;
-
-    // check pass code
-    const SECRET_CODE = process.env.SCAN_SECRET_CODE;
-    if (SECRET_CODE !== code) {
-      return res.status(401).json({
-        message: "Wrong Secret Code",
-      });
-    }
+    const { pegawaiId } = req.body;
 
     const NOW = dayjs();
 
@@ -111,7 +104,7 @@ export const scanAbsensi = async (req: Request, res: Response) => {
     });
 
     if (!pegawaiData) {
-      res.status(400).json({ message: "Pegawai not found." });
+      res.status(400).json({ message: "Data pegawai tidak ditemukan." });
       return;
     }
 
@@ -188,6 +181,15 @@ export const scanAbsensi = async (req: Request, res: Response) => {
               },
             });
 
+            await tx.logScan.create({
+              data: {
+                pegawaiId,
+                logAbsensiId: existingLogAbsensi.id,
+                scanTime: currentDate,
+                scanType: ScanType.IN,
+              },
+            });
+
             return {
               data: updateCheckIn,
               status: "CHECK_IN",
@@ -199,6 +201,15 @@ export const scanAbsensi = async (req: Request, res: Response) => {
           if (!existingLogAbsensi.checkOut) {
             // Cek apakah sudah waktu nya pulang
             if (existingLogAbsensi.jamKeluarDate > currentDate) {
+              await tx.logScan.create({
+                data: {
+                  pegawaiId,
+                  logAbsensiId: existingLogAbsensi.id,
+                  scanTime: currentDate,
+                  scanType: ScanType.UNKNOWN,
+                },
+              });
+
               return {
                 status: "CHECK_OUT_NOT_YET",
                 data: existingLogAbsensi,
@@ -215,12 +226,30 @@ export const scanAbsensi = async (req: Request, res: Response) => {
               },
             });
 
+            await tx.logScan.create({
+              data: {
+                pegawaiId,
+                logAbsensiId: existingLogAbsensi.id,
+                scanTime: currentDate,
+                scanType: ScanType.OUT,
+              },
+            });
+
             return {
               data: updateCheckOut,
               status: "CHECK_OUT",
               code: 201,
             };
           }
+
+          await tx.logScan.create({
+            data: {
+              pegawaiId,
+              logAbsensiId: existingLogAbsensi.id,
+              scanTime: currentDate,
+              scanType: ScanType.UNKNOWN,
+            },
+          });
 
           return {
             data: existingLogAbsensi,
@@ -241,6 +270,15 @@ export const scanAbsensi = async (req: Request, res: Response) => {
             jamKeluarDate: jamShiftDate.jamKeluarDate,
             day: jadwalOnCurrentDate.day,
             checkIn: currentDate,
+          },
+        });
+
+        await tx.logScan.create({
+          data: {
+            pegawaiId,
+            logAbsensiId: newLogAbsensi.id,
+            scanTime: currentDate,
+            scanType: ScanType.IN,
           },
         });
 
@@ -287,12 +325,29 @@ export const scanAbsensi = async (req: Request, res: Response) => {
           },
         });
 
+        await tx.logScan.create({
+          data: {
+            pegawaiId,
+            logAbsensiId: notExpiredLogCheckOut.id,
+            scanTime: currentDate,
+            scanType: ScanType.OUT,
+          },
+        });
+
         return {
           status: "CHECK_OUT",
           data: checkOutLogAbsensi,
           code: 201,
         };
       }
+
+      await tx.logScan.create({
+        data: {
+          pegawaiId,
+          scanTime: currentDate,
+          scanType: ScanType.UNKNOWN,
+        },
+      });
 
       return {
         code: 201,

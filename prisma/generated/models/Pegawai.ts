@@ -263,6 +263,7 @@ export type PegawaiWhereInput = {
   supervisedRequestLemburs?: Prisma.RequestLemburListRelationFilter
   users?: Prisma.UserListRelationFilter
   pengajuanIzins?: Prisma.PengajuanIzinListRelationFilter
+  logScans?: Prisma.LogScanListRelationFilter
 }
 
 export type PegawaiOrderByWithRelationInput = {
@@ -282,6 +283,7 @@ export type PegawaiOrderByWithRelationInput = {
   supervisedRequestLemburs?: Prisma.RequestLemburOrderByRelationAggregateInput
   users?: Prisma.UserOrderByRelationAggregateInput
   pengajuanIzins?: Prisma.PengajuanIzinOrderByRelationAggregateInput
+  logScans?: Prisma.LogScanOrderByRelationAggregateInput
 }
 
 export type PegawaiWhereUniqueInput = Prisma.AtLeast<{
@@ -304,6 +306,7 @@ export type PegawaiWhereUniqueInput = Prisma.AtLeast<{
   supervisedRequestLemburs?: Prisma.RequestLemburListRelationFilter
   users?: Prisma.UserListRelationFilter
   pengajuanIzins?: Prisma.PengajuanIzinListRelationFilter
+  logScans?: Prisma.LogScanListRelationFilter
 }, "id" | "pegawaiId">
 
 export type PegawaiOrderByWithAggregationInput = {
@@ -353,6 +356,7 @@ export type PegawaiCreateInput = {
   supervisedRequestLemburs?: Prisma.RequestLemburCreateNestedManyWithoutSupervisorInput
   users?: Prisma.UserCreateNestedManyWithoutPegawaiInput
   pengajuanIzins?: Prisma.PengajuanIzinCreateNestedManyWithoutPegawaiInput
+  logScans?: Prisma.LogScanCreateNestedManyWithoutPegawaiInput
 }
 
 export type PegawaiUncheckedCreateInput = {
@@ -371,6 +375,7 @@ export type PegawaiUncheckedCreateInput = {
   supervisedRequestLemburs?: Prisma.RequestLemburUncheckedCreateNestedManyWithoutSupervisorInput
   users?: Prisma.UserUncheckedCreateNestedManyWithoutPegawaiInput
   pengajuanIzins?: Prisma.PengajuanIzinUncheckedCreateNestedManyWithoutPegawaiInput
+  logScans?: Prisma.LogScanUncheckedCreateNestedManyWithoutPegawaiInput
 }
 
 export type PegawaiUpdateInput = {
@@ -388,6 +393,7 @@ export type PegawaiUpdateInput = {
   supervisedRequestLemburs?: Prisma.RequestLemburUpdateManyWithoutSupervisorNestedInput
   users?: Prisma.UserUpdateManyWithoutPegawaiNestedInput
   pengajuanIzins?: Prisma.PengajuanIzinUpdateManyWithoutPegawaiNestedInput
+  logScans?: Prisma.LogScanUpdateManyWithoutPegawaiNestedInput
 }
 
 export type PegawaiUncheckedUpdateInput = {
@@ -406,6 +412,7 @@ export type PegawaiUncheckedUpdateInput = {
   supervisedRequestLemburs?: Prisma.RequestLemburUncheckedUpdateManyWithoutSupervisorNestedInput
   users?: Prisma.UserUncheckedUpdateManyWithoutPegawaiNestedInput
   pengajuanIzins?: Prisma.PengajuanIzinUncheckedUpdateManyWithoutPegawaiNestedInput
+  logScans?: Prisma.LogScanUncheckedUpdateManyWithoutPegawaiNestedInput
 }
 
 export type PegawaiCreateManyInput = {
@@ -644,6 +651,20 @@ export type PegawaiUpdateOneRequiredWithoutPengajuanIzinsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.PegawaiUpdateToOneWithWhereWithoutPengajuanIzinsInput, Prisma.PegawaiUpdateWithoutPengajuanIzinsInput>, Prisma.PegawaiUncheckedUpdateWithoutPengajuanIzinsInput>
 }
 
+export type PegawaiCreateNestedOneWithoutLogScansInput = {
+  create?: Prisma.XOR<Prisma.PegawaiCreateWithoutLogScansInput, Prisma.PegawaiUncheckedCreateWithoutLogScansInput>
+  connectOrCreate?: Prisma.PegawaiCreateOrConnectWithoutLogScansInput
+  connect?: Prisma.PegawaiWhereUniqueInput
+}
+
+export type PegawaiUpdateOneRequiredWithoutLogScansNestedInput = {
+  create?: Prisma.XOR<Prisma.PegawaiCreateWithoutLogScansInput, Prisma.PegawaiUncheckedCreateWithoutLogScansInput>
+  connectOrCreate?: Prisma.PegawaiCreateOrConnectWithoutLogScansInput
+  upsert?: Prisma.PegawaiUpsertWithoutLogScansInput
+  connect?: Prisma.PegawaiWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.PegawaiUpdateToOneWithWhereWithoutLogScansInput, Prisma.PegawaiUpdateWithoutLogScansInput>, Prisma.PegawaiUncheckedUpdateWithoutLogScansInput>
+}
+
 export type PegawaiCreateWithoutUsersInput = {
   pegawaiId: string
   name: string
@@ -658,6 +679,7 @@ export type PegawaiCreateWithoutUsersInput = {
   requestLemburs?: Prisma.RequestLemburCreateNestedManyWithoutPegawaiInput
   supervisedRequestLemburs?: Prisma.RequestLemburCreateNestedManyWithoutSupervisorInput
   pengajuanIzins?: Prisma.PengajuanIzinCreateNestedManyWithoutPegawaiInput
+  logScans?: Prisma.LogScanCreateNestedManyWithoutPegawaiInput
 }
 
 export type PegawaiUncheckedCreateWithoutUsersInput = {
@@ -675,6 +697,7 @@ export type PegawaiUncheckedCreateWithoutUsersInput = {
   requestLemburs?: Prisma.RequestLemburUncheckedCreateNestedManyWithoutPegawaiInput
   supervisedRequestLemburs?: Prisma.RequestLemburUncheckedCreateNestedManyWithoutSupervisorInput
   pengajuanIzins?: Prisma.PengajuanIzinUncheckedCreateNestedManyWithoutPegawaiInput
+  logScans?: Prisma.LogScanUncheckedCreateNestedManyWithoutPegawaiInput
 }
 
 export type PegawaiCreateOrConnectWithoutUsersInput = {
@@ -707,6 +730,7 @@ export type PegawaiUpdateWithoutUsersInput = {
   requestLemburs?: Prisma.RequestLemburUpdateManyWithoutPegawaiNestedInput
   supervisedRequestLemburs?: Prisma.RequestLemburUpdateManyWithoutSupervisorNestedInput
   pengajuanIzins?: Prisma.PengajuanIzinUpdateManyWithoutPegawaiNestedInput
+  logScans?: Prisma.LogScanUpdateManyWithoutPegawaiNestedInput
 }
 
 export type PegawaiUncheckedUpdateWithoutUsersInput = {
@@ -724,6 +748,7 @@ export type PegawaiUncheckedUpdateWithoutUsersInput = {
   requestLemburs?: Prisma.RequestLemburUncheckedUpdateManyWithoutPegawaiNestedInput
   supervisedRequestLemburs?: Prisma.RequestLemburUncheckedUpdateManyWithoutSupervisorNestedInput
   pengajuanIzins?: Prisma.PengajuanIzinUncheckedUpdateManyWithoutPegawaiNestedInput
+  logScans?: Prisma.LogScanUncheckedUpdateManyWithoutPegawaiNestedInput
 }
 
 export type PegawaiCreateWithoutPositionInput = {
@@ -740,6 +765,7 @@ export type PegawaiCreateWithoutPositionInput = {
   supervisedRequestLemburs?: Prisma.RequestLemburCreateNestedManyWithoutSupervisorInput
   users?: Prisma.UserCreateNestedManyWithoutPegawaiInput
   pengajuanIzins?: Prisma.PengajuanIzinCreateNestedManyWithoutPegawaiInput
+  logScans?: Prisma.LogScanCreateNestedManyWithoutPegawaiInput
 }
 
 export type PegawaiUncheckedCreateWithoutPositionInput = {
@@ -757,6 +783,7 @@ export type PegawaiUncheckedCreateWithoutPositionInput = {
   supervisedRequestLemburs?: Prisma.RequestLemburUncheckedCreateNestedManyWithoutSupervisorInput
   users?: Prisma.UserUncheckedCreateNestedManyWithoutPegawaiInput
   pengajuanIzins?: Prisma.PengajuanIzinUncheckedCreateNestedManyWithoutPegawaiInput
+  logScans?: Prisma.LogScanUncheckedCreateNestedManyWithoutPegawaiInput
 }
 
 export type PegawaiCreateOrConnectWithoutPositionInput = {
@@ -814,6 +841,7 @@ export type PegawaiCreateWithoutJadwalsInput = {
   supervisedRequestLemburs?: Prisma.RequestLemburCreateNestedManyWithoutSupervisorInput
   users?: Prisma.UserCreateNestedManyWithoutPegawaiInput
   pengajuanIzins?: Prisma.PengajuanIzinCreateNestedManyWithoutPegawaiInput
+  logScans?: Prisma.LogScanCreateNestedManyWithoutPegawaiInput
 }
 
 export type PegawaiUncheckedCreateWithoutJadwalsInput = {
@@ -831,6 +859,7 @@ export type PegawaiUncheckedCreateWithoutJadwalsInput = {
   supervisedRequestLemburs?: Prisma.RequestLemburUncheckedCreateNestedManyWithoutSupervisorInput
   users?: Prisma.UserUncheckedCreateNestedManyWithoutPegawaiInput
   pengajuanIzins?: Prisma.PengajuanIzinUncheckedCreateNestedManyWithoutPegawaiInput
+  logScans?: Prisma.LogScanUncheckedCreateNestedManyWithoutPegawaiInput
 }
 
 export type PegawaiCreateOrConnectWithoutJadwalsInput = {
@@ -863,6 +892,7 @@ export type PegawaiUpdateWithoutJadwalsInput = {
   supervisedRequestLemburs?: Prisma.RequestLemburUpdateManyWithoutSupervisorNestedInput
   users?: Prisma.UserUpdateManyWithoutPegawaiNestedInput
   pengajuanIzins?: Prisma.PengajuanIzinUpdateManyWithoutPegawaiNestedInput
+  logScans?: Prisma.LogScanUpdateManyWithoutPegawaiNestedInput
 }
 
 export type PegawaiUncheckedUpdateWithoutJadwalsInput = {
@@ -880,6 +910,7 @@ export type PegawaiUncheckedUpdateWithoutJadwalsInput = {
   supervisedRequestLemburs?: Prisma.RequestLemburUncheckedUpdateManyWithoutSupervisorNestedInput
   users?: Prisma.UserUncheckedUpdateManyWithoutPegawaiNestedInput
   pengajuanIzins?: Prisma.PengajuanIzinUncheckedUpdateManyWithoutPegawaiNestedInput
+  logScans?: Prisma.LogScanUncheckedUpdateManyWithoutPegawaiNestedInput
 }
 
 export type PegawaiCreateWithoutLogsInput = {
@@ -896,6 +927,7 @@ export type PegawaiCreateWithoutLogsInput = {
   supervisedRequestLemburs?: Prisma.RequestLemburCreateNestedManyWithoutSupervisorInput
   users?: Prisma.UserCreateNestedManyWithoutPegawaiInput
   pengajuanIzins?: Prisma.PengajuanIzinCreateNestedManyWithoutPegawaiInput
+  logScans?: Prisma.LogScanCreateNestedManyWithoutPegawaiInput
 }
 
 export type PegawaiUncheckedCreateWithoutLogsInput = {
@@ -913,6 +945,7 @@ export type PegawaiUncheckedCreateWithoutLogsInput = {
   supervisedRequestLemburs?: Prisma.RequestLemburUncheckedCreateNestedManyWithoutSupervisorInput
   users?: Prisma.UserUncheckedCreateNestedManyWithoutPegawaiInput
   pengajuanIzins?: Prisma.PengajuanIzinUncheckedCreateNestedManyWithoutPegawaiInput
+  logScans?: Prisma.LogScanUncheckedCreateNestedManyWithoutPegawaiInput
 }
 
 export type PegawaiCreateOrConnectWithoutLogsInput = {
@@ -945,6 +978,7 @@ export type PegawaiUpdateWithoutLogsInput = {
   supervisedRequestLemburs?: Prisma.RequestLemburUpdateManyWithoutSupervisorNestedInput
   users?: Prisma.UserUpdateManyWithoutPegawaiNestedInput
   pengajuanIzins?: Prisma.PengajuanIzinUpdateManyWithoutPegawaiNestedInput
+  logScans?: Prisma.LogScanUpdateManyWithoutPegawaiNestedInput
 }
 
 export type PegawaiUncheckedUpdateWithoutLogsInput = {
@@ -962,6 +996,7 @@ export type PegawaiUncheckedUpdateWithoutLogsInput = {
   supervisedRequestLemburs?: Prisma.RequestLemburUncheckedUpdateManyWithoutSupervisorNestedInput
   users?: Prisma.UserUncheckedUpdateManyWithoutPegawaiNestedInput
   pengajuanIzins?: Prisma.PengajuanIzinUncheckedUpdateManyWithoutPegawaiNestedInput
+  logScans?: Prisma.LogScanUncheckedUpdateManyWithoutPegawaiNestedInput
 }
 
 export type PegawaiCreateWithoutSupervisedRequestLembursInput = {
@@ -978,6 +1013,7 @@ export type PegawaiCreateWithoutSupervisedRequestLembursInput = {
   requestLemburs?: Prisma.RequestLemburCreateNestedManyWithoutPegawaiInput
   users?: Prisma.UserCreateNestedManyWithoutPegawaiInput
   pengajuanIzins?: Prisma.PengajuanIzinCreateNestedManyWithoutPegawaiInput
+  logScans?: Prisma.LogScanCreateNestedManyWithoutPegawaiInput
 }
 
 export type PegawaiUncheckedCreateWithoutSupervisedRequestLembursInput = {
@@ -995,6 +1031,7 @@ export type PegawaiUncheckedCreateWithoutSupervisedRequestLembursInput = {
   requestLemburs?: Prisma.RequestLemburUncheckedCreateNestedManyWithoutPegawaiInput
   users?: Prisma.UserUncheckedCreateNestedManyWithoutPegawaiInput
   pengajuanIzins?: Prisma.PengajuanIzinUncheckedCreateNestedManyWithoutPegawaiInput
+  logScans?: Prisma.LogScanUncheckedCreateNestedManyWithoutPegawaiInput
 }
 
 export type PegawaiCreateOrConnectWithoutSupervisedRequestLembursInput = {
@@ -1016,6 +1053,7 @@ export type PegawaiCreateWithoutRequestLembursInput = {
   supervisedRequestLemburs?: Prisma.RequestLemburCreateNestedManyWithoutSupervisorInput
   users?: Prisma.UserCreateNestedManyWithoutPegawaiInput
   pengajuanIzins?: Prisma.PengajuanIzinCreateNestedManyWithoutPegawaiInput
+  logScans?: Prisma.LogScanCreateNestedManyWithoutPegawaiInput
 }
 
 export type PegawaiUncheckedCreateWithoutRequestLembursInput = {
@@ -1033,6 +1071,7 @@ export type PegawaiUncheckedCreateWithoutRequestLembursInput = {
   supervisedRequestLemburs?: Prisma.RequestLemburUncheckedCreateNestedManyWithoutSupervisorInput
   users?: Prisma.UserUncheckedCreateNestedManyWithoutPegawaiInput
   pengajuanIzins?: Prisma.PengajuanIzinUncheckedCreateNestedManyWithoutPegawaiInput
+  logScans?: Prisma.LogScanUncheckedCreateNestedManyWithoutPegawaiInput
 }
 
 export type PegawaiCreateOrConnectWithoutRequestLembursInput = {
@@ -1065,6 +1104,7 @@ export type PegawaiUpdateWithoutSupervisedRequestLembursInput = {
   requestLemburs?: Prisma.RequestLemburUpdateManyWithoutPegawaiNestedInput
   users?: Prisma.UserUpdateManyWithoutPegawaiNestedInput
   pengajuanIzins?: Prisma.PengajuanIzinUpdateManyWithoutPegawaiNestedInput
+  logScans?: Prisma.LogScanUpdateManyWithoutPegawaiNestedInput
 }
 
 export type PegawaiUncheckedUpdateWithoutSupervisedRequestLembursInput = {
@@ -1082,6 +1122,7 @@ export type PegawaiUncheckedUpdateWithoutSupervisedRequestLembursInput = {
   requestLemburs?: Prisma.RequestLemburUncheckedUpdateManyWithoutPegawaiNestedInput
   users?: Prisma.UserUncheckedUpdateManyWithoutPegawaiNestedInput
   pengajuanIzins?: Prisma.PengajuanIzinUncheckedUpdateManyWithoutPegawaiNestedInput
+  logScans?: Prisma.LogScanUncheckedUpdateManyWithoutPegawaiNestedInput
 }
 
 export type PegawaiUpsertWithoutRequestLembursInput = {
@@ -1109,6 +1150,7 @@ export type PegawaiUpdateWithoutRequestLembursInput = {
   supervisedRequestLemburs?: Prisma.RequestLemburUpdateManyWithoutSupervisorNestedInput
   users?: Prisma.UserUpdateManyWithoutPegawaiNestedInput
   pengajuanIzins?: Prisma.PengajuanIzinUpdateManyWithoutPegawaiNestedInput
+  logScans?: Prisma.LogScanUpdateManyWithoutPegawaiNestedInput
 }
 
 export type PegawaiUncheckedUpdateWithoutRequestLembursInput = {
@@ -1126,6 +1168,7 @@ export type PegawaiUncheckedUpdateWithoutRequestLembursInput = {
   supervisedRequestLemburs?: Prisma.RequestLemburUncheckedUpdateManyWithoutSupervisorNestedInput
   users?: Prisma.UserUncheckedUpdateManyWithoutPegawaiNestedInput
   pengajuanIzins?: Prisma.PengajuanIzinUncheckedUpdateManyWithoutPegawaiNestedInput
+  logScans?: Prisma.LogScanUncheckedUpdateManyWithoutPegawaiNestedInput
 }
 
 export type PegawaiCreateWithoutPengajuanIzinsInput = {
@@ -1142,6 +1185,7 @@ export type PegawaiCreateWithoutPengajuanIzinsInput = {
   requestLemburs?: Prisma.RequestLemburCreateNestedManyWithoutPegawaiInput
   supervisedRequestLemburs?: Prisma.RequestLemburCreateNestedManyWithoutSupervisorInput
   users?: Prisma.UserCreateNestedManyWithoutPegawaiInput
+  logScans?: Prisma.LogScanCreateNestedManyWithoutPegawaiInput
 }
 
 export type PegawaiUncheckedCreateWithoutPengajuanIzinsInput = {
@@ -1159,6 +1203,7 @@ export type PegawaiUncheckedCreateWithoutPengajuanIzinsInput = {
   requestLemburs?: Prisma.RequestLemburUncheckedCreateNestedManyWithoutPegawaiInput
   supervisedRequestLemburs?: Prisma.RequestLemburUncheckedCreateNestedManyWithoutSupervisorInput
   users?: Prisma.UserUncheckedCreateNestedManyWithoutPegawaiInput
+  logScans?: Prisma.LogScanUncheckedCreateNestedManyWithoutPegawaiInput
 }
 
 export type PegawaiCreateOrConnectWithoutPengajuanIzinsInput = {
@@ -1191,6 +1236,7 @@ export type PegawaiUpdateWithoutPengajuanIzinsInput = {
   requestLemburs?: Prisma.RequestLemburUpdateManyWithoutPegawaiNestedInput
   supervisedRequestLemburs?: Prisma.RequestLemburUpdateManyWithoutSupervisorNestedInput
   users?: Prisma.UserUpdateManyWithoutPegawaiNestedInput
+  logScans?: Prisma.LogScanUpdateManyWithoutPegawaiNestedInput
 }
 
 export type PegawaiUncheckedUpdateWithoutPengajuanIzinsInput = {
@@ -1208,6 +1254,93 @@ export type PegawaiUncheckedUpdateWithoutPengajuanIzinsInput = {
   requestLemburs?: Prisma.RequestLemburUncheckedUpdateManyWithoutPegawaiNestedInput
   supervisedRequestLemburs?: Prisma.RequestLemburUncheckedUpdateManyWithoutSupervisorNestedInput
   users?: Prisma.UserUncheckedUpdateManyWithoutPegawaiNestedInput
+  logScans?: Prisma.LogScanUncheckedUpdateManyWithoutPegawaiNestedInput
+}
+
+export type PegawaiCreateWithoutLogScansInput = {
+  pegawaiId: string
+  name: string
+  status?: string | null
+  salary?: number
+  isArchive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  jadwals?: Prisma.JadwalCreateNestedManyWithoutPegawaiInput
+  logs?: Prisma.LogAbsensiCreateNestedManyWithoutPegawaiInput
+  position: Prisma.PositionCreateNestedOneWithoutPegawaisInput
+  requestLemburs?: Prisma.RequestLemburCreateNestedManyWithoutPegawaiInput
+  supervisedRequestLemburs?: Prisma.RequestLemburCreateNestedManyWithoutSupervisorInput
+  users?: Prisma.UserCreateNestedManyWithoutPegawaiInput
+  pengajuanIzins?: Prisma.PengajuanIzinCreateNestedManyWithoutPegawaiInput
+}
+
+export type PegawaiUncheckedCreateWithoutLogScansInput = {
+  id?: number
+  pegawaiId: string
+  name: string
+  positionId: number
+  status?: string | null
+  salary?: number
+  isArchive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  jadwals?: Prisma.JadwalUncheckedCreateNestedManyWithoutPegawaiInput
+  logs?: Prisma.LogAbsensiUncheckedCreateNestedManyWithoutPegawaiInput
+  requestLemburs?: Prisma.RequestLemburUncheckedCreateNestedManyWithoutPegawaiInput
+  supervisedRequestLemburs?: Prisma.RequestLemburUncheckedCreateNestedManyWithoutSupervisorInput
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutPegawaiInput
+  pengajuanIzins?: Prisma.PengajuanIzinUncheckedCreateNestedManyWithoutPegawaiInput
+}
+
+export type PegawaiCreateOrConnectWithoutLogScansInput = {
+  where: Prisma.PegawaiWhereUniqueInput
+  create: Prisma.XOR<Prisma.PegawaiCreateWithoutLogScansInput, Prisma.PegawaiUncheckedCreateWithoutLogScansInput>
+}
+
+export type PegawaiUpsertWithoutLogScansInput = {
+  update: Prisma.XOR<Prisma.PegawaiUpdateWithoutLogScansInput, Prisma.PegawaiUncheckedUpdateWithoutLogScansInput>
+  create: Prisma.XOR<Prisma.PegawaiCreateWithoutLogScansInput, Prisma.PegawaiUncheckedCreateWithoutLogScansInput>
+  where?: Prisma.PegawaiWhereInput
+}
+
+export type PegawaiUpdateToOneWithWhereWithoutLogScansInput = {
+  where?: Prisma.PegawaiWhereInput
+  data: Prisma.XOR<Prisma.PegawaiUpdateWithoutLogScansInput, Prisma.PegawaiUncheckedUpdateWithoutLogScansInput>
+}
+
+export type PegawaiUpdateWithoutLogScansInput = {
+  pegawaiId?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  salary?: Prisma.IntFieldUpdateOperationsInput | number
+  isArchive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  jadwals?: Prisma.JadwalUpdateManyWithoutPegawaiNestedInput
+  logs?: Prisma.LogAbsensiUpdateManyWithoutPegawaiNestedInput
+  position?: Prisma.PositionUpdateOneRequiredWithoutPegawaisNestedInput
+  requestLemburs?: Prisma.RequestLemburUpdateManyWithoutPegawaiNestedInput
+  supervisedRequestLemburs?: Prisma.RequestLemburUpdateManyWithoutSupervisorNestedInput
+  users?: Prisma.UserUpdateManyWithoutPegawaiNestedInput
+  pengajuanIzins?: Prisma.PengajuanIzinUpdateManyWithoutPegawaiNestedInput
+}
+
+export type PegawaiUncheckedUpdateWithoutLogScansInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  pegawaiId?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  positionId?: Prisma.IntFieldUpdateOperationsInput | number
+  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  salary?: Prisma.IntFieldUpdateOperationsInput | number
+  isArchive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  jadwals?: Prisma.JadwalUncheckedUpdateManyWithoutPegawaiNestedInput
+  logs?: Prisma.LogAbsensiUncheckedUpdateManyWithoutPegawaiNestedInput
+  requestLemburs?: Prisma.RequestLemburUncheckedUpdateManyWithoutPegawaiNestedInput
+  supervisedRequestLemburs?: Prisma.RequestLemburUncheckedUpdateManyWithoutSupervisorNestedInput
+  users?: Prisma.UserUncheckedUpdateManyWithoutPegawaiNestedInput
+  pengajuanIzins?: Prisma.PengajuanIzinUncheckedUpdateManyWithoutPegawaiNestedInput
 }
 
 export type PegawaiCreateManyPositionInput = {
@@ -1235,6 +1368,7 @@ export type PegawaiUpdateWithoutPositionInput = {
   supervisedRequestLemburs?: Prisma.RequestLemburUpdateManyWithoutSupervisorNestedInput
   users?: Prisma.UserUpdateManyWithoutPegawaiNestedInput
   pengajuanIzins?: Prisma.PengajuanIzinUpdateManyWithoutPegawaiNestedInput
+  logScans?: Prisma.LogScanUpdateManyWithoutPegawaiNestedInput
 }
 
 export type PegawaiUncheckedUpdateWithoutPositionInput = {
@@ -1252,6 +1386,7 @@ export type PegawaiUncheckedUpdateWithoutPositionInput = {
   supervisedRequestLemburs?: Prisma.RequestLemburUncheckedUpdateManyWithoutSupervisorNestedInput
   users?: Prisma.UserUncheckedUpdateManyWithoutPegawaiNestedInput
   pengajuanIzins?: Prisma.PengajuanIzinUncheckedUpdateManyWithoutPegawaiNestedInput
+  logScans?: Prisma.LogScanUncheckedUpdateManyWithoutPegawaiNestedInput
 }
 
 export type PegawaiUncheckedUpdateManyWithoutPositionInput = {
@@ -1277,6 +1412,7 @@ export type PegawaiCountOutputType = {
   supervisedRequestLemburs: number
   users: number
   pengajuanIzins: number
+  logScans: number
 }
 
 export type PegawaiCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1286,6 +1422,7 @@ export type PegawaiCountOutputTypeSelect<ExtArgs extends runtime.Types.Extension
   supervisedRequestLemburs?: boolean | PegawaiCountOutputTypeCountSupervisedRequestLembursArgs
   users?: boolean | PegawaiCountOutputTypeCountUsersArgs
   pengajuanIzins?: boolean | PegawaiCountOutputTypeCountPengajuanIzinsArgs
+  logScans?: boolean | PegawaiCountOutputTypeCountLogScansArgs
 }
 
 /**
@@ -1340,6 +1477,13 @@ export type PegawaiCountOutputTypeCountPengajuanIzinsArgs<ExtArgs extends runtim
   where?: Prisma.PengajuanIzinWhereInput
 }
 
+/**
+ * PegawaiCountOutputType without action
+ */
+export type PegawaiCountOutputTypeCountLogScansArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.LogScanWhereInput
+}
+
 
 export type PegawaiSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1358,6 +1502,7 @@ export type PegawaiSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   supervisedRequestLemburs?: boolean | Prisma.Pegawai$supervisedRequestLembursArgs<ExtArgs>
   users?: boolean | Prisma.Pegawai$usersArgs<ExtArgs>
   pengajuanIzins?: boolean | Prisma.Pegawai$pengajuanIzinsArgs<ExtArgs>
+  logScans?: boolean | Prisma.Pegawai$logScansArgs<ExtArgs>
   _count?: boolean | Prisma.PegawaiCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["pegawai"]>
 
@@ -1408,6 +1553,7 @@ export type PegawaiInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs
   supervisedRequestLemburs?: boolean | Prisma.Pegawai$supervisedRequestLembursArgs<ExtArgs>
   users?: boolean | Prisma.Pegawai$usersArgs<ExtArgs>
   pengajuanIzins?: boolean | Prisma.Pegawai$pengajuanIzinsArgs<ExtArgs>
+  logScans?: boolean | Prisma.Pegawai$logScansArgs<ExtArgs>
   _count?: boolean | Prisma.PegawaiCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type PegawaiIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1427,6 +1573,7 @@ export type $PegawaiPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     supervisedRequestLemburs: Prisma.$RequestLemburPayload<ExtArgs>[]
     users: Prisma.$UserPayload<ExtArgs>[]
     pengajuanIzins: Prisma.$PengajuanIzinPayload<ExtArgs>[]
+    logScans: Prisma.$LogScanPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
@@ -1839,6 +1986,7 @@ export interface Prisma__PegawaiClient<T, Null = never, ExtArgs extends runtime.
   supervisedRequestLemburs<T extends Prisma.Pegawai$supervisedRequestLembursArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Pegawai$supervisedRequestLembursArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RequestLemburPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   users<T extends Prisma.Pegawai$usersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Pegawai$usersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   pengajuanIzins<T extends Prisma.Pegawai$pengajuanIzinsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Pegawai$pengajuanIzinsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PengajuanIzinPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  logScans<T extends Prisma.Pegawai$logScansArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Pegawai$logScansArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LogScanPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2414,6 +2562,30 @@ export type Pegawai$pengajuanIzinsArgs<ExtArgs extends runtime.Types.Extensions.
   take?: number
   skip?: number
   distinct?: Prisma.PengajuanIzinScalarFieldEnum | Prisma.PengajuanIzinScalarFieldEnum[]
+}
+
+/**
+ * Pegawai.logScans
+ */
+export type Pegawai$logScansArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the LogScan
+   */
+  select?: Prisma.LogScanSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the LogScan
+   */
+  omit?: Prisma.LogScanOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.LogScanInclude<ExtArgs> | null
+  where?: Prisma.LogScanWhereInput
+  orderBy?: Prisma.LogScanOrderByWithRelationInput | Prisma.LogScanOrderByWithRelationInput[]
+  cursor?: Prisma.LogScanWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.LogScanScalarFieldEnum | Prisma.LogScanScalarFieldEnum[]
 }
 
 /**

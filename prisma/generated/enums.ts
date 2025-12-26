@@ -16,3 +16,12 @@ export const UserRole = {
 } as const
 
 export type UserRole = (typeof UserRole)[keyof typeof UserRole]
+
+
+export const ScanType = {
+  IN: 'IN',
+  OUT: 'OUT',
+  UNKNOWN: 'UNKNOWN'
+} as const
+
+export type ScanType = (typeof ScanType)[keyof typeof ScanType]

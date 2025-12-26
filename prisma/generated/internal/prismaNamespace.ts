@@ -393,7 +393,8 @@ export const ModelName = {
   LogAbsensi: 'LogAbsensi',
   RequestLembur: 'RequestLembur',
   PengajuanIzin: 'PengajuanIzin',
-  AppConfig: 'AppConfig'
+  AppConfig: 'AppConfig',
+  LogScan: 'LogScan'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -409,7 +410,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "position" | "department" | "pegawai" | "shift" | "jadwal" | "logAbsensi" | "requestLembur" | "pengajuanIzin" | "appConfig"
+    modelProps: "user" | "position" | "department" | "pegawai" | "shift" | "jadwal" | "logAbsensi" | "requestLembur" | "pengajuanIzin" | "appConfig" | "logScan"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1153,6 +1154,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    LogScan: {
+      payload: Prisma.$LogScanPayload<ExtArgs>
+      fields: Prisma.LogScanFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.LogScanFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LogScanPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.LogScanFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LogScanPayload>
+        }
+        findFirst: {
+          args: Prisma.LogScanFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LogScanPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.LogScanFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LogScanPayload>
+        }
+        findMany: {
+          args: Prisma.LogScanFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LogScanPayload>[]
+        }
+        create: {
+          args: Prisma.LogScanCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LogScanPayload>
+        }
+        createMany: {
+          args: Prisma.LogScanCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.LogScanCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LogScanPayload>[]
+        }
+        delete: {
+          args: Prisma.LogScanDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LogScanPayload>
+        }
+        update: {
+          args: Prisma.LogScanUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LogScanPayload>
+        }
+        deleteMany: {
+          args: Prisma.LogScanDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.LogScanUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.LogScanUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LogScanPayload>[]
+        }
+        upsert: {
+          args: Prisma.LogScanUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LogScanPayload>
+        }
+        aggregate: {
+          args: Prisma.LogScanAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateLogScan>
+        }
+        groupBy: {
+          args: Prisma.LogScanGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.LogScanGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.LogScanCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.LogScanCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -1335,6 +1410,18 @@ export const AppConfigScalarFieldEnum = {
 export type AppConfigScalarFieldEnum = (typeof AppConfigScalarFieldEnum)[keyof typeof AppConfigScalarFieldEnum]
 
 
+export const LogScanScalarFieldEnum = {
+  id: 'id',
+  pegawaiId: 'pegawaiId',
+  scanTime: 'scanTime',
+  scanType: 'scanType',
+  logAbsensiId: 'logAbsensiId',
+  createdAt: 'createdAt'
+} as const
+
+export type LogScanScalarFieldEnum = (typeof LogScanScalarFieldEnum)[keyof typeof LogScanScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -1459,6 +1546,20 @@ export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$Prisma
 
 
 /**
+ * Reference to a field of type 'ScanType'
+ */
+export type EnumScanTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ScanType'>
+    
+
+
+/**
+ * Reference to a field of type 'ScanType[]'
+ */
+export type ListEnumScanTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ScanType[]'>
+    
+
+
+/**
  * Reference to a field of type 'Float'
  */
 export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
@@ -1560,6 +1661,7 @@ export type GlobalOmitConfig = {
   requestLembur?: Prisma.RequestLemburOmit
   pengajuanIzin?: Prisma.PengajuanIzinOmit
   appConfig?: Prisma.AppConfigOmit
+  logScan?: Prisma.LogScanOmit
 }
 
 /* Types for Logging */

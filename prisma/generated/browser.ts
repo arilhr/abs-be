@@ -67,3 +67,8 @@ export type PengajuanIzin = Prisma.PengajuanIzinModel
  * 
  */
 export type AppConfig = Prisma.AppConfigModel
+/**
+ * Model LogScan
+ * 
+ */
+export type LogScan = Prisma.LogScanModel

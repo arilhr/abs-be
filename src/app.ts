@@ -12,6 +12,7 @@ import dashboardRoutes from "./routes/dashboard.route";
 import requestLemburRoutes from "./routes/request-lembur.routes";
 import requestIzinRoutes from "./routes/request-izin.routes";
 import configRoutes from "./routes/config.routes";
+import logRoutes from "./routes/log.route";
 
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
@@ -44,6 +45,7 @@ apiRouter.use("/dashboard", dashboardRoutes);
 apiRouter.use("/request-lembur", requestLemburRoutes);
 apiRouter.use("/request-izin", requestIzinRoutes);
 apiRouter.use("/config", configRoutes);
+apiRouter.use("/log", logRoutes);
 
 app.use("/api", apiRouter);
 

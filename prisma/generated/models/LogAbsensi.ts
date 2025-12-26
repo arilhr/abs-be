@@ -295,6 +295,7 @@ export type LogAbsensiWhereInput = {
   pegawai?: Prisma.XOR<Prisma.PegawaiScalarRelationFilter, Prisma.PegawaiWhereInput>
   shift?: Prisma.XOR<Prisma.ShiftNullableScalarRelationFilter, Prisma.ShiftWhereInput> | null
   requestLembur?: Prisma.XOR<Prisma.RequestLemburNullableScalarRelationFilter, Prisma.RequestLemburWhereInput> | null
+  logScans?: Prisma.LogScanListRelationFilter
 }
 
 export type LogAbsensiOrderByWithRelationInput = {
@@ -314,6 +315,7 @@ export type LogAbsensiOrderByWithRelationInput = {
   pegawai?: Prisma.PegawaiOrderByWithRelationInput
   shift?: Prisma.ShiftOrderByWithRelationInput
   requestLembur?: Prisma.RequestLemburOrderByWithRelationInput
+  logScans?: Prisma.LogScanOrderByRelationAggregateInput
 }
 
 export type LogAbsensiWhereUniqueInput = Prisma.AtLeast<{
@@ -336,6 +338,7 @@ export type LogAbsensiWhereUniqueInput = Prisma.AtLeast<{
   pegawai?: Prisma.XOR<Prisma.PegawaiScalarRelationFilter, Prisma.PegawaiWhereInput>
   shift?: Prisma.XOR<Prisma.ShiftNullableScalarRelationFilter, Prisma.ShiftWhereInput> | null
   requestLembur?: Prisma.XOR<Prisma.RequestLemburNullableScalarRelationFilter, Prisma.RequestLemburWhereInput> | null
+  logScans?: Prisma.LogScanListRelationFilter
 }, "id">
 
 export type LogAbsensiOrderByWithAggregationInput = {
@@ -392,6 +395,7 @@ export type LogAbsensiCreateInput = {
   pegawai: Prisma.PegawaiCreateNestedOneWithoutLogsInput
   shift?: Prisma.ShiftCreateNestedOneWithoutLogsInput
   requestLembur?: Prisma.RequestLemburCreateNestedOneWithoutLogAbsensiInput
+  logScans?: Prisma.LogScanCreateNestedManyWithoutLogAbsensiInput
 }
 
 export type LogAbsensiUncheckedCreateInput = {
@@ -409,6 +413,7 @@ export type LogAbsensiUncheckedCreateInput = {
   isLembur?: boolean
   createdAt?: Date | string
   requestLembur?: Prisma.RequestLemburUncheckedCreateNestedOneWithoutLogAbsensiInput
+  logScans?: Prisma.LogScanUncheckedCreateNestedManyWithoutLogAbsensiInput
 }
 
 export type LogAbsensiUpdateInput = {
@@ -425,6 +430,7 @@ export type LogAbsensiUpdateInput = {
   pegawai?: Prisma.PegawaiUpdateOneRequiredWithoutLogsNestedInput
   shift?: Prisma.ShiftUpdateOneWithoutLogsNestedInput
   requestLembur?: Prisma.RequestLemburUpdateOneWithoutLogAbsensiNestedInput
+  logScans?: Prisma.LogScanUpdateManyWithoutLogAbsensiNestedInput
 }
 
 export type LogAbsensiUncheckedUpdateInput = {
@@ -442,6 +448,7 @@ export type LogAbsensiUncheckedUpdateInput = {
   isLembur?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   requestLembur?: Prisma.RequestLemburUncheckedUpdateOneWithoutLogAbsensiNestedInput
+  logScans?: Prisma.LogScanUncheckedUpdateManyWithoutLogAbsensiNestedInput
 }
 
 export type LogAbsensiCreateManyInput = {
@@ -666,6 +673,22 @@ export type LogAbsensiUpdateOneWithoutRequestLemburNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.LogAbsensiUpdateToOneWithWhereWithoutRequestLemburInput, Prisma.LogAbsensiUpdateWithoutRequestLemburInput>, Prisma.LogAbsensiUncheckedUpdateWithoutRequestLemburInput>
 }
 
+export type LogAbsensiCreateNestedOneWithoutLogScansInput = {
+  create?: Prisma.XOR<Prisma.LogAbsensiCreateWithoutLogScansInput, Prisma.LogAbsensiUncheckedCreateWithoutLogScansInput>
+  connectOrCreate?: Prisma.LogAbsensiCreateOrConnectWithoutLogScansInput
+  connect?: Prisma.LogAbsensiWhereUniqueInput
+}
+
+export type LogAbsensiUpdateOneWithoutLogScansNestedInput = {
+  create?: Prisma.XOR<Prisma.LogAbsensiCreateWithoutLogScansInput, Prisma.LogAbsensiUncheckedCreateWithoutLogScansInput>
+  connectOrCreate?: Prisma.LogAbsensiCreateOrConnectWithoutLogScansInput
+  upsert?: Prisma.LogAbsensiUpsertWithoutLogScansInput
+  disconnect?: Prisma.LogAbsensiWhereInput | boolean
+  delete?: Prisma.LogAbsensiWhereInput | boolean
+  connect?: Prisma.LogAbsensiWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.LogAbsensiUpdateToOneWithWhereWithoutLogScansInput, Prisma.LogAbsensiUpdateWithoutLogScansInput>, Prisma.LogAbsensiUncheckedUpdateWithoutLogScansInput>
+}
+
 export type LogAbsensiCreateWithoutPegawaiInput = {
   shiftName: string
   day: number
@@ -679,6 +702,7 @@ export type LogAbsensiCreateWithoutPegawaiInput = {
   createdAt?: Date | string
   shift?: Prisma.ShiftCreateNestedOneWithoutLogsInput
   requestLembur?: Prisma.RequestLemburCreateNestedOneWithoutLogAbsensiInput
+  logScans?: Prisma.LogScanCreateNestedManyWithoutLogAbsensiInput
 }
 
 export type LogAbsensiUncheckedCreateWithoutPegawaiInput = {
@@ -695,6 +719,7 @@ export type LogAbsensiUncheckedCreateWithoutPegawaiInput = {
   isLembur?: boolean
   createdAt?: Date | string
   requestLembur?: Prisma.RequestLemburUncheckedCreateNestedOneWithoutLogAbsensiInput
+  logScans?: Prisma.LogScanUncheckedCreateNestedManyWithoutLogAbsensiInput
 }
 
 export type LogAbsensiCreateOrConnectWithoutPegawaiInput = {
@@ -755,6 +780,7 @@ export type LogAbsensiCreateWithoutShiftInput = {
   createdAt?: Date | string
   pegawai: Prisma.PegawaiCreateNestedOneWithoutLogsInput
   requestLembur?: Prisma.RequestLemburCreateNestedOneWithoutLogAbsensiInput
+  logScans?: Prisma.LogScanCreateNestedManyWithoutLogAbsensiInput
 }
 
 export type LogAbsensiUncheckedCreateWithoutShiftInput = {
@@ -771,6 +797,7 @@ export type LogAbsensiUncheckedCreateWithoutShiftInput = {
   isLembur?: boolean
   createdAt?: Date | string
   requestLembur?: Prisma.RequestLemburUncheckedCreateNestedOneWithoutLogAbsensiInput
+  logScans?: Prisma.LogScanUncheckedCreateNestedManyWithoutLogAbsensiInput
 }
 
 export type LogAbsensiCreateOrConnectWithoutShiftInput = {
@@ -812,6 +839,7 @@ export type LogAbsensiCreateWithoutRequestLemburInput = {
   createdAt?: Date | string
   pegawai: Prisma.PegawaiCreateNestedOneWithoutLogsInput
   shift?: Prisma.ShiftCreateNestedOneWithoutLogsInput
+  logScans?: Prisma.LogScanCreateNestedManyWithoutLogAbsensiInput
 }
 
 export type LogAbsensiUncheckedCreateWithoutRequestLemburInput = {
@@ -828,6 +856,7 @@ export type LogAbsensiUncheckedCreateWithoutRequestLemburInput = {
   checkOut?: Date | string | null
   isLembur?: boolean
   createdAt?: Date | string
+  logScans?: Prisma.LogScanUncheckedCreateNestedManyWithoutLogAbsensiInput
 }
 
 export type LogAbsensiCreateOrConnectWithoutRequestLemburInput = {
@@ -859,6 +888,7 @@ export type LogAbsensiUpdateWithoutRequestLemburInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   pegawai?: Prisma.PegawaiUpdateOneRequiredWithoutLogsNestedInput
   shift?: Prisma.ShiftUpdateOneWithoutLogsNestedInput
+  logScans?: Prisma.LogScanUpdateManyWithoutLogAbsensiNestedInput
 }
 
 export type LogAbsensiUncheckedUpdateWithoutRequestLemburInput = {
@@ -875,6 +905,89 @@ export type LogAbsensiUncheckedUpdateWithoutRequestLemburInput = {
   checkOut?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isLembur?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  logScans?: Prisma.LogScanUncheckedUpdateManyWithoutLogAbsensiNestedInput
+}
+
+export type LogAbsensiCreateWithoutLogScansInput = {
+  shiftName: string
+  day: number
+  jamMasuk: string
+  jamMasukDate: Date | string
+  jamKeluar: string
+  jamKeluarDate: Date | string
+  checkIn?: Date | string | null
+  checkOut?: Date | string | null
+  isLembur?: boolean
+  createdAt?: Date | string
+  pegawai: Prisma.PegawaiCreateNestedOneWithoutLogsInput
+  shift?: Prisma.ShiftCreateNestedOneWithoutLogsInput
+  requestLembur?: Prisma.RequestLemburCreateNestedOneWithoutLogAbsensiInput
+}
+
+export type LogAbsensiUncheckedCreateWithoutLogScansInput = {
+  id?: number
+  pegawaiId: number
+  shiftId?: number | null
+  shiftName: string
+  day: number
+  jamMasuk: string
+  jamMasukDate: Date | string
+  jamKeluar: string
+  jamKeluarDate: Date | string
+  checkIn?: Date | string | null
+  checkOut?: Date | string | null
+  isLembur?: boolean
+  createdAt?: Date | string
+  requestLembur?: Prisma.RequestLemburUncheckedCreateNestedOneWithoutLogAbsensiInput
+}
+
+export type LogAbsensiCreateOrConnectWithoutLogScansInput = {
+  where: Prisma.LogAbsensiWhereUniqueInput
+  create: Prisma.XOR<Prisma.LogAbsensiCreateWithoutLogScansInput, Prisma.LogAbsensiUncheckedCreateWithoutLogScansInput>
+}
+
+export type LogAbsensiUpsertWithoutLogScansInput = {
+  update: Prisma.XOR<Prisma.LogAbsensiUpdateWithoutLogScansInput, Prisma.LogAbsensiUncheckedUpdateWithoutLogScansInput>
+  create: Prisma.XOR<Prisma.LogAbsensiCreateWithoutLogScansInput, Prisma.LogAbsensiUncheckedCreateWithoutLogScansInput>
+  where?: Prisma.LogAbsensiWhereInput
+}
+
+export type LogAbsensiUpdateToOneWithWhereWithoutLogScansInput = {
+  where?: Prisma.LogAbsensiWhereInput
+  data: Prisma.XOR<Prisma.LogAbsensiUpdateWithoutLogScansInput, Prisma.LogAbsensiUncheckedUpdateWithoutLogScansInput>
+}
+
+export type LogAbsensiUpdateWithoutLogScansInput = {
+  shiftName?: Prisma.StringFieldUpdateOperationsInput | string
+  day?: Prisma.IntFieldUpdateOperationsInput | number
+  jamMasuk?: Prisma.StringFieldUpdateOperationsInput | string
+  jamMasukDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  jamKeluar?: Prisma.StringFieldUpdateOperationsInput | string
+  jamKeluarDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  checkIn?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  checkOut?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isLembur?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  pegawai?: Prisma.PegawaiUpdateOneRequiredWithoutLogsNestedInput
+  shift?: Prisma.ShiftUpdateOneWithoutLogsNestedInput
+  requestLembur?: Prisma.RequestLemburUpdateOneWithoutLogAbsensiNestedInput
+}
+
+export type LogAbsensiUncheckedUpdateWithoutLogScansInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  pegawaiId?: Prisma.IntFieldUpdateOperationsInput | number
+  shiftId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  shiftName?: Prisma.StringFieldUpdateOperationsInput | string
+  day?: Prisma.IntFieldUpdateOperationsInput | number
+  jamMasuk?: Prisma.StringFieldUpdateOperationsInput | string
+  jamMasukDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  jamKeluar?: Prisma.StringFieldUpdateOperationsInput | string
+  jamKeluarDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  checkIn?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  checkOut?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  isLembur?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  requestLembur?: Prisma.RequestLemburUncheckedUpdateOneWithoutLogAbsensiNestedInput
 }
 
 export type LogAbsensiCreateManyPegawaiInput = {
@@ -905,6 +1018,7 @@ export type LogAbsensiUpdateWithoutPegawaiInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   shift?: Prisma.ShiftUpdateOneWithoutLogsNestedInput
   requestLembur?: Prisma.RequestLemburUpdateOneWithoutLogAbsensiNestedInput
+  logScans?: Prisma.LogScanUpdateManyWithoutLogAbsensiNestedInput
 }
 
 export type LogAbsensiUncheckedUpdateWithoutPegawaiInput = {
@@ -921,6 +1035,7 @@ export type LogAbsensiUncheckedUpdateWithoutPegawaiInput = {
   isLembur?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   requestLembur?: Prisma.RequestLemburUncheckedUpdateOneWithoutLogAbsensiNestedInput
+  logScans?: Prisma.LogScanUncheckedUpdateManyWithoutLogAbsensiNestedInput
 }
 
 export type LogAbsensiUncheckedUpdateManyWithoutPegawaiInput = {
@@ -966,6 +1081,7 @@ export type LogAbsensiUpdateWithoutShiftInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   pegawai?: Prisma.PegawaiUpdateOneRequiredWithoutLogsNestedInput
   requestLembur?: Prisma.RequestLemburUpdateOneWithoutLogAbsensiNestedInput
+  logScans?: Prisma.LogScanUpdateManyWithoutLogAbsensiNestedInput
 }
 
 export type LogAbsensiUncheckedUpdateWithoutShiftInput = {
@@ -982,6 +1098,7 @@ export type LogAbsensiUncheckedUpdateWithoutShiftInput = {
   isLembur?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   requestLembur?: Prisma.RequestLemburUncheckedUpdateOneWithoutLogAbsensiNestedInput
+  logScans?: Prisma.LogScanUncheckedUpdateManyWithoutLogAbsensiNestedInput
 }
 
 export type LogAbsensiUncheckedUpdateManyWithoutShiftInput = {
@@ -999,6 +1116,35 @@ export type LogAbsensiUncheckedUpdateManyWithoutShiftInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
+
+/**
+ * Count Type LogAbsensiCountOutputType
+ */
+
+export type LogAbsensiCountOutputType = {
+  logScans: number
+}
+
+export type LogAbsensiCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  logScans?: boolean | LogAbsensiCountOutputTypeCountLogScansArgs
+}
+
+/**
+ * LogAbsensiCountOutputType without action
+ */
+export type LogAbsensiCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the LogAbsensiCountOutputType
+   */
+  select?: Prisma.LogAbsensiCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * LogAbsensiCountOutputType without action
+ */
+export type LogAbsensiCountOutputTypeCountLogScansArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.LogScanWhereInput
+}
 
 
 export type LogAbsensiSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1018,6 +1164,8 @@ export type LogAbsensiSelect<ExtArgs extends runtime.Types.Extensions.InternalAr
   pegawai?: boolean | Prisma.PegawaiDefaultArgs<ExtArgs>
   shift?: boolean | Prisma.LogAbsensi$shiftArgs<ExtArgs>
   requestLembur?: boolean | Prisma.LogAbsensi$requestLemburArgs<ExtArgs>
+  logScans?: boolean | Prisma.LogAbsensi$logScansArgs<ExtArgs>
+  _count?: boolean | Prisma.LogAbsensiCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["logAbsensi"]>
 
 export type LogAbsensiSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1077,6 +1225,8 @@ export type LogAbsensiInclude<ExtArgs extends runtime.Types.Extensions.InternalA
   pegawai?: boolean | Prisma.PegawaiDefaultArgs<ExtArgs>
   shift?: boolean | Prisma.LogAbsensi$shiftArgs<ExtArgs>
   requestLembur?: boolean | Prisma.LogAbsensi$requestLemburArgs<ExtArgs>
+  logScans?: boolean | Prisma.LogAbsensi$logScansArgs<ExtArgs>
+  _count?: boolean | Prisma.LogAbsensiCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type LogAbsensiIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   pegawai?: boolean | Prisma.PegawaiDefaultArgs<ExtArgs>
@@ -1093,6 +1243,7 @@ export type $LogAbsensiPayload<ExtArgs extends runtime.Types.Extensions.Internal
     pegawai: Prisma.$PegawaiPayload<ExtArgs>
     shift: Prisma.$ShiftPayload<ExtArgs> | null
     requestLembur: Prisma.$RequestLemburPayload<ExtArgs> | null
+    logScans: Prisma.$LogScanPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
@@ -1505,6 +1656,7 @@ export interface Prisma__LogAbsensiClient<T, Null = never, ExtArgs extends runti
   pegawai<T extends Prisma.PegawaiDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.PegawaiDefaultArgs<ExtArgs>>): Prisma.Prisma__PegawaiClient<runtime.Types.Result.GetResult<Prisma.$PegawaiPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   shift<T extends Prisma.LogAbsensi$shiftArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.LogAbsensi$shiftArgs<ExtArgs>>): Prisma.Prisma__ShiftClient<runtime.Types.Result.GetResult<Prisma.$ShiftPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   requestLembur<T extends Prisma.LogAbsensi$requestLemburArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.LogAbsensi$requestLemburArgs<ExtArgs>>): Prisma.Prisma__RequestLemburClient<runtime.Types.Result.GetResult<Prisma.$RequestLemburPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  logScans<T extends Prisma.LogAbsensi$logScansArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.LogAbsensi$logScansArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LogScanPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1978,6 +2130,30 @@ export type LogAbsensi$requestLemburArgs<ExtArgs extends runtime.Types.Extension
    */
   include?: Prisma.RequestLemburInclude<ExtArgs> | null
   where?: Prisma.RequestLemburWhereInput
+}
+
+/**
+ * LogAbsensi.logScans
+ */
+export type LogAbsensi$logScansArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the LogScan
+   */
+  select?: Prisma.LogScanSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the LogScan
+   */
+  omit?: Prisma.LogScanOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.LogScanInclude<ExtArgs> | null
+  where?: Prisma.LogScanWhereInput
+  orderBy?: Prisma.LogScanOrderByWithRelationInput | Prisma.LogScanOrderByWithRelationInput[]
+  cursor?: Prisma.LogScanWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.LogScanScalarFieldEnum | Prisma.LogScanScalarFieldEnum[]
 }
 
 /**

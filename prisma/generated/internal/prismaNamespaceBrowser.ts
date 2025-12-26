@@ -60,7 +60,8 @@ export const ModelName = {
   LogAbsensi: 'LogAbsensi',
   RequestLembur: 'RequestLembur',
   PengajuanIzin: 'PengajuanIzin',
-  AppConfig: 'AppConfig'
+  AppConfig: 'AppConfig',
+  LogScan: 'LogScan'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -220,6 +221,18 @@ export const AppConfigScalarFieldEnum = {
 } as const
 
 export type AppConfigScalarFieldEnum = (typeof AppConfigScalarFieldEnum)[keyof typeof AppConfigScalarFieldEnum]
+
+
+export const LogScanScalarFieldEnum = {
+  id: 'id',
+  pegawaiId: 'pegawaiId',
+  scanTime: 'scanTime',
+  scanType: 'scanType',
+  logAbsensiId: 'logAbsensiId',
+  createdAt: 'createdAt'
+} as const
+
+export type LogScanScalarFieldEnum = (typeof LogScanScalarFieldEnum)[keyof typeof LogScanScalarFieldEnum]
 
 
 export const SortOrder = {

@@ -68,6 +68,7 @@ model Pegawai {
   supervisedRequestLemburs RequestLembur[] @relation("SupervisorRequestLembur")
   users                    User[]
   pengajuanIzins           PengajuanIzin[]
+  logScans                 LogScan[]
 
   @@index([positionId])
 }
@@ -121,7 +122,8 @@ model LogAbsensi {
 
   requestLembur RequestLembur?
 
-  createdAt DateTime @default(now())
+  createdAt DateTime  @default(now())
+  logScans  LogScan[]
 
   @@index([pegawaiId])
   @@index([shiftId])
@@ -175,4 +177,26 @@ model AppConfig {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+enum ScanType {
+  IN
+  OUT
+  UNKNOWN
+}
+
+model LogScan {
+  id           Int      @id @default(autoincrement())
+  pegawaiId    Int
+  scanTime     DateTime
+  scanType     ScanType
+  logAbsensiId Int?
+
+  createdAt DateTime @default(now())
+
+  logAbsensi LogAbsensi? @relation(fields: [logAbsensiId], references: [id])
+  pegawai    Pegawai     @relation(fields: [pegawaiId], references: [id])
+
+  @@index([pegawaiId])
+  @@index([logAbsensiId])
 }
