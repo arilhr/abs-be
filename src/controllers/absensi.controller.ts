@@ -5,6 +5,7 @@ import { calculateJamShiftDate } from "../utils/calculate-jam-shift-date";
 import { CHECK_IN_MINUTE_OFFSET } from "../constants/absensi";
 import { convertDayDatabaseToDayjs } from "../utils/get-day-from-date";
 import { ScanType } from "../../prisma/generated/enums";
+import { SCAN_SECRET_CODE_CONFIG_KEY } from "../constants/config-key";
 
 export const getAllAbsensi = async (req: Request, res: Response) => {
   try {
@@ -89,7 +90,25 @@ export const getAllAbsensi = async (req: Request, res: Response) => {
 
 export const scanAbsensi = async (req: Request, res: Response) => {
   try {
-    const { pegawaiId } = req.body;
+    const { pegawaiId, code } = req.body;
+
+    if (!code) {
+      res.status(400).json({ message: "Scan secret code is required." });
+      return;
+    }
+
+    // check scan secret code
+    const scanSecretCodeConfig = await prisma.appConfig.findUnique({
+      where: { key: SCAN_SECRET_CODE_CONFIG_KEY },
+    });
+
+    if (scanSecretCodeConfig) {
+      const scanSecretCode = scanSecretCodeConfig.value;
+      if (code !== scanSecretCode) {
+        res.status(401).json({ message: "Invalid scan secret code." });
+        return;
+      }
+    }
 
     const NOW = dayjs();
 
