@@ -1,8 +1,8 @@
 import "dotenv/config";
-import prisma from "../src/prisma";
-import { seedDepartmentsAndPositions } from "./seed/department.seed";
-import { seedUsers } from "./seed/user.seed";
-import { seedShifts } from "./seed/shift.seed";
+import prisma from "../../src/prisma";
+import { seedDepartmentsAndPositions } from "./department.seed";
+import { seedUsers } from "./user.seed";
+import { seedShifts } from "./shift.seed";
 
 async function main() {
   console.log("Seeding started...");
