@@ -14,6 +14,8 @@ router.post(
 );
 router.get("/", pegawaiController.getPegawai);
 router.get("/salary", pegawaiController.getGajiPegawai);
+router.post("/qrcode/bulk", pegawaiController.generateBulkPegawaiQRCodeZip);
+router.post("/qrcode/:id", pegawaiController.generatePegawaiQRCodeUrl);
 router.get("/:id", pegawaiController.getPegawaiById);
 router.put("/:id", pegawaiController.updatePegawai);
 router.delete("/:id", pegawaiController.deletePegawai);

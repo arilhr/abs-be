@@ -8,6 +8,10 @@ import {
   LATE_DEDUCTION_SALARY_CONFIG_KEY,
   OVERTIME_SALARY_CONFIG_KEY,
 } from "../constants/config-key";
+import QRCode from "qrcode";
+import archiver from "archiver";
+import fs from "fs";
+import path from "path";
 
 async function createPegawai(req: Request, res: Response): Promise<void> {
   try {
@@ -494,6 +498,145 @@ export const importPegawai = async (req: Request, res: Response) => {
       error: "Internal server error",
       details: err.message,
     });
+  }
+};
+
+export const generatePegawaiQRCodeUrl = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+
+    const pegawaiId = Number(id);
+    if (Number.isNaN(pegawaiId)) {
+      res.status(400).json({ error: "Invalid pegawai ID" });
+      return;
+    }
+
+    const pegawai = await prisma.pegawai.findUnique({
+      where: { id: pegawaiId },
+    });
+
+    if (!pegawai) {
+      res.status(404).json({ error: "Pegawai not found" });
+      return;
+    }
+
+    const dirPath = path.join(process.cwd(), "tmp", "qrcodes");
+    fs.mkdirSync(dirPath, { recursive: true });
+
+    const filename = `qr-${pegawai.pegawaiId}-${pegawai.name}.png`;
+    const filePath = path.join(dirPath, filename);
+
+    const BASE_URL = process.env.APP_BASE_URL || "http://localhost:3300";
+
+    if (fs.existsSync(filePath)) {
+      res.status(200).json({
+        pegawai: {
+          id: pegawai.id,
+          pegawaiId: pegawai.pegawaiId,
+          name: pegawai.name,
+        },
+        downloadUrl: `${BASE_URL}/api/download/qrcodes/${filename}`,
+        cached: true,
+      });
+      return;
+    }
+
+    const qrData = {
+      id: pegawai.id,
+      pegawaiId: pegawai.pegawaiId,
+      name: pegawai.name,
+    };
+
+    const buffer = await QRCode.toBuffer(JSON.stringify(qrData), {
+      errorCorrectionLevel: "H",
+      type: "png",
+      width: 300,
+      margin: 2,
+    });
+
+    fs.writeFileSync(filePath, buffer);
+
+    res.status(200).json({
+      pegawai: {
+        id: pegawai.id,
+        pegawaiId: pegawai.pegawaiId,
+        name: pegawai.name,
+      },
+      downloadUrl: `${BASE_URL}/api/download/qrcodes/${filename}`,
+      cached: false,
+    });
+  } catch (err) {
+    console.error("Error generating QR code:", err);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+export const generateBulkPegawaiQRCodeZip = async (
+  req: Request,
+  res: Response
+) => {
+  try {
+    const { ids } = req.body;
+
+    if (!Array.isArray(ids) || !ids.length) {
+      res.status(400).json({ error: "ids must be a non-empty array" });
+      return;
+    }
+
+    const pegawais = await prisma.pegawai.findMany({
+      where: { id: { in: ids.map(Number) } },
+    });
+
+    if (!pegawais.length) {
+      res.status(404).json({ error: "No pegawai found" });
+      return;
+    }
+
+    const dirPath = path.join(process.cwd(), "tmp", "qrcodes");
+    fs.mkdirSync(dirPath, { recursive: true });
+
+    const timestamp = Date.now();
+    const random = Math.floor(Math.random() * 10000);
+    const filename = `qrcodes-${timestamp}-${random}.zip`;
+    const filePath = path.join(dirPath, filename);
+
+    const output = fs.createWriteStream(filePath);
+    const archive = archiver("zip", { zlib: { level: 9 } });
+
+    archive.pipe(output);
+
+    for (const pegawai of pegawais) {
+      const qrData = {
+        id: pegawai.id,
+        pegawaiId: pegawai.pegawaiId,
+        name: pegawai.name,
+      };
+
+      const buffer = await QRCode.toBuffer(JSON.stringify(qrData), {
+        errorCorrectionLevel: "H",
+        type: "png",
+        width: 300,
+        margin: 2,
+      });
+
+      archive.append(buffer, {
+        name: `qr-${pegawai.pegawaiId}-${pegawai.name}.png`,
+      });
+    }
+
+    await archive.finalize();
+
+    const BASE_URL = process.env.BASE_URL || "http://localhost:3300";
+
+    output.on("close", () => {
+      res.status(200).json({
+        downloadUrl: `${BASE_URL}/api/download/qrcodes/${filename}`,
+        expiresIn: 300,
+      });
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Internal server error" });
   }
 };
 
