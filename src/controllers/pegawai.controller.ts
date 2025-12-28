@@ -526,7 +526,7 @@ export const generatePegawaiQRCodeUrl = async (req: Request, res: Response) => {
     const filename = `qr-${pegawai.pegawaiId}-${pegawai.name}.png`;
     const filePath = path.join(dirPath, filename);
 
-    const BASE_URL = process.env.APP_BASE_URL || "http://localhost:3300";
+    const BASE_URL = process.env.BASE_URL || "http://localhost:3300";
 
     if (fs.existsSync(filePath)) {
       res.status(200).json({
@@ -626,7 +626,7 @@ export const generateBulkPegawaiQRCodeZip = async (
 
     await archive.finalize();
 
-    const BASE_URL = process.env.BASE_URL || "http://localhost:3300";
+    const BASE_URL = process.env.BASE_URL;
 
     output.on("close", () => {
       res.status(200).json({
