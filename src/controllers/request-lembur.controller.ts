@@ -61,13 +61,52 @@ export const createRequestLembur = async (req: Request, res: Response) => {
 
 export const getRequestLembur = async (req: Request, res: Response) => {
   try {
-    const { pegawaiId, page, limit } = req.query;
+    const {
+      pegawaiId,
+      page,
+      limit,
+      sortBy = "createdAt",
+      sortOrder = "desc",
+    } = req.query;
 
     const where: any = {};
 
     if (pegawaiId !== undefined && String(pegawaiId).trim() !== "") {
       const pid = Number(pegawaiId);
       if (!Number.isNaN(pid)) where.pegawaiId = pid;
+    }
+
+    let orderBy: any = {};
+    if (sortBy && sortOrder) {
+      orderBy[sortBy as string] = sortOrder === "asc" ? "asc" : "desc";
+      if (sortBy === "pegawaiName") {
+        orderBy = {
+          pegawai: {
+            name: sortOrder === "asc" ? "asc" : "desc",
+          },
+        };
+      }
+      if (sortBy === "supervisorName") {
+        orderBy = {
+          supervisor: {
+            name: sortOrder === "asc" ? "asc" : "desc",
+          },
+        };
+      }
+      if (sortBy === "jamMasuk") {
+        orderBy = {
+          shift: {
+            jamMasuk: sortOrder === "asc" ? "asc" : "desc",
+          },
+        };
+      }
+      if (sortBy === "jamKeluar") {
+        orderBy = {
+          shift: {
+            jamKeluar: sortOrder === "asc" ? "asc" : "desc",
+          },
+        };
+      }
     }
 
     const withPagination = !isNaN(Number(page)) || !isNaN(Number(limit));
@@ -90,7 +129,7 @@ export const getRequestLembur = async (req: Request, res: Response) => {
             },
           },
         },
-        orderBy: { createdAt: "desc" },
+        orderBy,
         ...(withPagination && {
           skip: (Number(page) - 1) * Number(limit),
           take: Number(limit),
