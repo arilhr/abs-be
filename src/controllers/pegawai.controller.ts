@@ -273,6 +273,7 @@ export const getGajiPegawai = async (req: Request, res: Response) => {
 
     const logAbsensiDatas = await prisma.logAbsensi.findMany({
       where: {
+        isArchive: false,
         pegawaiId: pegawaiData.id,
         jamMasukDate: {
           gte: startDate,
