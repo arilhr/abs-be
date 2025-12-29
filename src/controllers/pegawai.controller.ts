@@ -237,7 +237,11 @@ export const getGajiPegawai = async (req: Request, res: Response) => {
         id: +pegawaiId,
       },
       include: {
-        position: true,
+        position: {
+          include: {
+            department: true,
+          },
+        },
       },
     });
 
