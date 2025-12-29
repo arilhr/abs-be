@@ -11,6 +11,7 @@ router.use(checkRoles(["SUPERADMIN", "ADMIN"]));
 router.post("/", ctrl.createUser);
 router.get("/", ctrl.getUsers);
 router.put("/change-password", ctrl.changePasswordUserByID);
+router.put("/change-my-password", ctrl.changePassword);
 router.put("/:id", ctrl.updateUser);
 router.delete("/:id", ctrl.deleteUser);
 

@@ -239,3 +239,31 @@ export const changePasswordUserByID = async (req: Request, res: Response) => {
     res.status(500).json(err);
   }
 };
+
+export const changePassword = async (req: Request, res: Response) => {
+  try {
+    const { newPassword } = req.body;
+    if (!req.user?.userId) {
+      res.status(401).json({ message: "Not Authorized" });
+      return;
+    }
+
+    if (!newPassword) {
+      res.status(400).json({ message: "New password is required." });
+      return;
+    }
+
+    const hashedPassword = await hashPassword(newPassword as string);
+
+    const updatedUser = await prisma.user.update({
+      where: { id: req.user.userId },
+      data: { password: hashedPassword },
+    });
+
+    res
+      .status(200)
+      .json({ message: "Password changed successfully.", user: updatedUser });
+  } catch (err) {
+    res.status(500).json(err);
+  }
+};
