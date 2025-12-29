@@ -36,7 +36,15 @@ export const createRequestIzin = async (req: Request, res: Response) => {
 // Get all request izin with optional filters & pagination
 export const getRequestIzins = async (req: Request, res: Response) => {
   try {
-    const { pegawaiName, date, isAccepted, page, limit } = req.query;
+    const {
+      pegawaiName,
+      date,
+      isAccepted,
+      page,
+      limit,
+      sortBy = "createdAt",
+      sortOrder = "desc",
+    } = req.query;
 
     const where: any = {};
 
@@ -58,13 +66,25 @@ export const getRequestIzins = async (req: Request, res: Response) => {
       }
     }
 
+    let orderBy: any = {};
+    if (sortBy && sortOrder) {
+      orderBy[sortBy as string] = sortOrder === "asc" ? "asc" : "desc";
+      if (sortBy === "pegawaiName") {
+        orderBy = {
+          pegawai: {
+            name: sortOrder === "asc" ? "asc" : "desc",
+          },
+        };
+      }
+    }
+
     const withPagination = !isNaN(Number(page)) || !isNaN(Number(limit));
 
     const [total, data] = await Promise.all([
       prisma.pengajuanIzin.count({ where }),
       prisma.pengajuanIzin.findMany({
         where,
-        orderBy: { createdAt: "desc" },
+        orderBy,
         ...(withPagination && {
           skip: Number(page) - 1,
           take: Number(limit),
