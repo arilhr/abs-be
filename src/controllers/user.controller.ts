@@ -11,6 +11,7 @@ export const createUser = async (req: Request, res: Response) => {
       password,
       isActive = true,
       isArchive = false,
+      role,
       pegawaiId,
     } = req.body;
     if (!username || !password) {
@@ -24,6 +25,7 @@ export const createUser = async (req: Request, res: Response) => {
       data: {
         username,
         password: passwordHashed,
+        role,
         isActive,
         isArchive,
         pegawaiId,
@@ -48,6 +50,7 @@ export const getUsers = async (req: Request, res: Response) => {
       lastLogin,
       pegawaiName,
       pegawaiId,
+      role,
       isActive,
       sortBy = "createdAt",
       sortOrder = "desc",
@@ -78,6 +81,10 @@ export const getUsers = async (req: Request, res: Response) => {
       where.pegawai = {
         name: { contains: pegawaiName.trim(), mode: "insensitive" },
       };
+    }
+
+    if (typeof role === "string" && role.trim() !== "") {
+      where.role = role;
     }
 
     if (typeof lastLogin === "string" && lastLogin.trim() !== "") {
@@ -116,6 +123,7 @@ export const getUsers = async (req: Request, res: Response) => {
           lastLogin: true,
           pegawai: true,
           isActive: true,
+          role: true,
         },
       }),
     ]);
@@ -162,12 +170,13 @@ export const getUserById = async (req: Request, res: Response) => {
 export const updateUser = async (req: Request, res: Response) => {
   try {
     const id = Number(req.params.id);
-    const { username, isActive, isArchive, pegawaiId } = req.body;
+    const { username, isActive, isArchive, pegawaiId, role } = req.body;
     const data: any = {};
     if (username !== undefined) data.username = username;
     if (isActive !== undefined) data.isActive = isActive;
     if (isArchive !== undefined) data.isArchive = isArchive;
     if (pegawaiId !== undefined) data.pegawaiId = pegawaiId;
+    if (role !== undefined) data.role = role;
 
     const user = await prisma.user.update({
       where: { id },
