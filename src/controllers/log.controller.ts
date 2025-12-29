@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import prisma from "../prisma";
+import dayjs from "dayjs";
 
 export const getLogScan = async (req: Request, res: Response) => {
   try {
@@ -17,14 +18,22 @@ export const getLogScan = async (req: Request, res: Response) => {
       };
     }
 
-    if (scanTimeStart || scanTimeEnd) {
-      where.scanTime = {};
-      if (scanTimeStart) {
-        where.scanTime.gte = new Date(String(scanTimeStart));
-      }
-      if (scanTimeEnd) {
-        where.scanTime.lte = new Date(String(scanTimeEnd));
-      }
+    if (scanTimeStart) {
+      const startScanTimeDate = dayjs(String(scanTimeStart))
+        .startOf("day")
+        .toDate();
+      where.scanTime = {
+        ...where.scanTime,
+        gte: startScanTimeDate,
+      };
+    }
+
+    if (scanTimeEnd) {
+      const endScanTimeDate = dayjs(String(scanTimeEnd)).endOf("day").toDate();
+      where.scanTime = {
+        ...where.scanTime,
+        lte: endScanTimeDate,
+      };
     }
 
     if (scanType) {
