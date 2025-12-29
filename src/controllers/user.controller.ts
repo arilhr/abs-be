@@ -49,6 +49,8 @@ export const getUsers = async (req: Request, res: Response) => {
       pegawaiName,
       pegawaiId,
       isActive,
+      sortBy = "createdAt",
+      sortOrder = "desc",
       page,
       limit,
     } = req.query;
@@ -85,13 +87,25 @@ export const getUsers = async (req: Request, res: Response) => {
       }
     }
 
+    let orderBy: any = {};
+    if (sortBy && sortOrder) {
+      orderBy[sortBy as string] = sortOrder === "asc" ? "asc" : "desc";
+      if (sortBy === "pegawaiName") {
+        orderBy = {
+          pegawai: {
+            name: sortOrder === "asc" ? "asc" : "desc",
+          },
+        };
+      }
+    }
+
     const withPagination = !isNaN(Number(page)) || !isNaN(Number(limit));
 
     const [total, data] = await Promise.all([
       prisma.user.count({ where }),
       prisma.user.findMany({
         where,
-        orderBy: { createdAt: "desc" },
+        orderBy,
         ...(withPagination && {
           skip: (Number(page) - 1) * Number(limit),
           take: Number(limit),
