@@ -38,12 +38,15 @@ async function getPegawai(req: Request, res: Response): Promise<void> {
       pegawaiId,
       name,
       positionId,
+      departmentId,
       status,
       page,
       limit,
       salaryMin,
       salaryMax,
       isArchive = false,
+      sortBy = "createdAt",
+      sortOrder = "desc",
     } = req.query;
 
     const where: any = {};
@@ -80,8 +83,39 @@ async function getPegawai(req: Request, res: Response): Promise<void> {
       const pid = Number(positionId);
       if (!Number.isNaN(pid)) where.positionId = pid;
     }
+
+    if (departmentId !== undefined) {
+      const did = Number(departmentId);
+      if (!Number.isNaN(did)) {
+        where.position = {
+          departmentId: did,
+        };
+      }
+    }
+
     if (typeof status === "string" && status.trim() !== "") {
       where.status = status.trim();
+    }
+
+    let orderBy: any = {};
+    if (sortBy && sortOrder) {
+      orderBy[sortBy as string] = sortOrder === "asc" ? "asc" : "desc";
+      if (sortBy === "positionName") {
+        orderBy = {
+          position: {
+            name: sortOrder === "asc" ? "asc" : "desc",
+          },
+        };
+      }
+      if (sortBy === "departmentName") {
+        orderBy = {
+          position: {
+            department: {
+              name: sortOrder === "asc" ? "asc" : "desc",
+            },
+          },
+        };
+      }
     }
 
     const withPagination = !isNaN(Number(page)) || !isNaN(Number(limit));
@@ -90,7 +124,7 @@ async function getPegawai(req: Request, res: Response): Promise<void> {
       prisma.pegawai.count({ where }),
       prisma.pegawai.findMany({
         where,
-        orderBy: { createdAt: "desc" },
+        orderBy,
         ...(withPagination && {
           skip: (Number(page) - 1) * Number(limit),
           take: Number(limit),
