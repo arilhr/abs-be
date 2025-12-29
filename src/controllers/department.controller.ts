@@ -26,11 +26,23 @@ export const createDepartment = async (req: Request, res: Response) => {
 
 export const getDepartments = async (req: Request, res: Response) => {
   try {
-    const { name, isArchive, page, limit } = req.query;
+    const {
+      name,
+      isArchive,
+      page,
+      limit,
+      sortBy = "createdAt",
+      sortOrder = "desc",
+    } = req.query;
 
     const where: any = {
       isArchive: isArchive === undefined ? false : isArchive === "true",
     };
+
+    let orderBy: any = {};
+    if (sortBy && sortOrder) {
+      orderBy[sortBy as string] = sortOrder === "asc" ? "asc" : "desc";
+    }
 
     if (typeof name === "string" && name.trim() !== "") {
       where.name = {
@@ -45,7 +57,7 @@ export const getDepartments = async (req: Request, res: Response) => {
       prisma.department.count({ where }),
       prisma.department.findMany({
         where,
-        orderBy: { createdAt: "desc" },
+        orderBy,
         ...(withPagination && {
           skip: Number(page) - 1,
           take: Number(limit),

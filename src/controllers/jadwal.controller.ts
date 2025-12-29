@@ -65,6 +65,8 @@ async function getJadwals(req: Request, res: Response): Promise<void> {
       isActive,
       page,
       limit,
+      sortBy = "createdAt",
+      sortOrder = "desc",
       isArchive = false,
     } = req.query;
 
@@ -99,6 +101,39 @@ async function getJadwals(req: Request, res: Response): Promise<void> {
       };
     }
 
+    let orderBy: any = {};
+    if (sortBy && sortOrder) {
+      orderBy[sortBy as string] = sortOrder === "asc" ? "asc" : "desc";
+      if (sortBy === "pegawaiName") {
+        orderBy = {
+          pegawai: {
+            name: sortOrder === "asc" ? "asc" : "desc",
+          },
+        };
+      }
+      if (sortBy === "shiftName") {
+        orderBy = {
+          shift: {
+            name: sortOrder === "asc" ? "asc" : "desc",
+          },
+        };
+      }
+      if (sortBy === "jamMasuk") {
+        orderBy = {
+          shift: {
+            jamMasuk: sortOrder === "asc" ? "asc" : "desc",
+          },
+        };
+      }
+      if (sortBy === "jamKeluar") {
+        orderBy = {
+          shift: {
+            jamKeluar: sortOrder === "asc" ? "asc" : "desc",
+          },
+        };
+      }
+    }
+
     const withPagination = !isNaN(Number(page)) || !isNaN(Number(limit));
 
     const [total, data] = await Promise.all([
@@ -106,7 +141,7 @@ async function getJadwals(req: Request, res: Response): Promise<void> {
       prisma.jadwal.findMany({
         where,
         include,
-        orderBy: { createdAt: "desc" },
+        orderBy,
         ...(withPagination && {
           skip: Number(page) - 1,
           take: Number(limit),

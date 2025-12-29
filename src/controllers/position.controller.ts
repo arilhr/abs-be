@@ -30,7 +30,15 @@ async function createPosition(req: Request, res: Response): Promise<void> {
  */
 export const getPositions = async (req: Request, res: Response) => {
   try {
-    const { name, departmentName, page, limit, isArchive } = req.query;
+    const {
+      name,
+      departmentName,
+      page,
+      limit,
+      isArchive,
+      sortBy = "createdAt",
+      sortOrder = "desc",
+    } = req.query;
 
     const where: any = {};
 
@@ -48,6 +56,19 @@ export const getPositions = async (req: Request, res: Response) => {
         },
       };
     }
+
+    let orderBy: any = {};
+    if (sortBy && sortOrder) {
+      orderBy[sortBy as string] = sortOrder === "asc" ? "asc" : "desc";
+      if (sortBy === "departmentName") {
+        orderBy = {
+          department: {
+            name: sortOrder === "asc" ? "asc" : "desc",
+          },
+        };
+      }
+    }
+
     const withPagination = !isNaN(Number(page)) || !isNaN(Number(limit));
 
     let resultsData = [];
@@ -55,7 +76,7 @@ export const getPositions = async (req: Request, res: Response) => {
       prisma.position.count({ where }),
       prisma.position.findMany({
         where,
-        orderBy: { createdAt: "desc" },
+        orderBy,
         ...(withPagination && {
           skip: (Number(page) - 1) * Number(limit),
           take: Number(limit),
