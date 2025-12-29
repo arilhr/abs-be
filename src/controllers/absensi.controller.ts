@@ -20,8 +20,10 @@ export const getAllAbsensi = async (req: Request, res: Response) => {
       checkOutStart,
       checkOutEnd,
       day,
-      page: pageQ,
-      limit: limitQ,
+      sortBy = "createdAt",
+      sortOrder = "desc",
+      page,
+      limit,
     } = req.query;
 
     const where: any = {};
@@ -79,41 +81,44 @@ export const getAllAbsensi = async (req: Request, res: Response) => {
       };
     }
 
-    const page = pageQ ? Number(pageQ) : undefined;
-    const limit = limitQ ? Number(limitQ) : undefined;
-    const shouldPaginate =
-      page !== undefined &&
-      limit !== undefined &&
-      Number.isInteger(page) &&
-      page > 0 &&
-      Number.isInteger(limit) &&
-      limit > 0;
-
-    if (shouldPaginate) {
-      const skip = (page - 1) * limit;
-      const [total, data] = await Promise.all([
-        prisma.logAbsensi.count({ where }),
-        prisma.logAbsensi.findMany({
-          where,
-          include,
-          orderBy: { createdAt: "desc" },
-          skip,
-          take: limit,
-        }),
-      ]);
-      res.json({
-        data,
-        meta: { total, page, limit, totalPages: Math.ceil(total / limit) },
-      });
-      return;
+    // order sorting default createdAt desc, sort can be by jamMasukDate, pegawaiName, day
+    const orderBy: any = {};
+    if (sortBy === "pegawaiName") {
+      orderBy.pegawai = {
+        name: sortOrder === "asc" ? "asc" : "desc",
+      };
+    } else if (sortBy === "day") {
+      orderBy.day = sortOrder === "asc" ? "asc" : "desc";
+    } else if (sortBy === "jamMasukDate") {
+      orderBy.jamMasukDate = sortOrder === "asc" ? "asc" : "desc";
+    } else {
+      orderBy.createdAt = sortOrder === "asc" ? "asc" : "desc";
     }
 
-    const data = await prisma.logAbsensi.findMany({
-      where,
-      include,
-      orderBy: { createdAt: "desc" },
+    const withPagination = !isNaN(Number(page)) || !isNaN(Number(limit));
+
+    const [total, data] = await Promise.all([
+      prisma.logAbsensi.count({ where }),
+      prisma.logAbsensi.findMany({
+        where,
+        include,
+        orderBy,
+        ...(withPagination && {
+          skip: (Number(page) - 1) * Number(limit),
+          take: Number(limit),
+        }),
+      }),
+    ]);
+
+    res.json({
+      data,
+      total,
+      ...(withPagination && {
+        page: Number(page),
+        limit: Number(limit),
+        totalPages: Math.ceil(total / Number(limit)),
+      }),
     });
-    res.json(data);
   } catch (err) {
     res.status(500).json({ error: "internal error", err });
   }
