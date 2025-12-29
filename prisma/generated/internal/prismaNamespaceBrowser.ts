@@ -175,6 +175,7 @@ export const LogAbsensiScalarFieldEnum = {
   checkIn: 'checkIn',
   checkOut: 'checkOut',
   isLembur: 'isLembur',
+  isArchive: 'isArchive',
   createdAt: 'createdAt'
 } as const
 

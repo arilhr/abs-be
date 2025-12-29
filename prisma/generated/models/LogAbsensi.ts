@@ -53,6 +53,7 @@ export type LogAbsensiMinAggregateOutputType = {
   checkIn: Date | null
   checkOut: Date | null
   isLembur: boolean | null
+  isArchive: boolean | null
   createdAt: Date | null
 }
 
@@ -69,6 +70,7 @@ export type LogAbsensiMaxAggregateOutputType = {
   checkIn: Date | null
   checkOut: Date | null
   isLembur: boolean | null
+  isArchive: boolean | null
   createdAt: Date | null
 }
 
@@ -85,6 +87,7 @@ export type LogAbsensiCountAggregateOutputType = {
   checkIn: number
   checkOut: number
   isLembur: number
+  isArchive: number
   createdAt: number
   _all: number
 }
@@ -117,6 +120,7 @@ export type LogAbsensiMinAggregateInputType = {
   checkIn?: true
   checkOut?: true
   isLembur?: true
+  isArchive?: true
   createdAt?: true
 }
 
@@ -133,6 +137,7 @@ export type LogAbsensiMaxAggregateInputType = {
   checkIn?: true
   checkOut?: true
   isLembur?: true
+  isArchive?: true
   createdAt?: true
 }
 
@@ -149,6 +154,7 @@ export type LogAbsensiCountAggregateInputType = {
   checkIn?: true
   checkOut?: true
   isLembur?: true
+  isArchive?: true
   createdAt?: true
   _all?: true
 }
@@ -252,6 +258,7 @@ export type LogAbsensiGroupByOutputType = {
   checkIn: Date | null
   checkOut: Date | null
   isLembur: boolean
+  isArchive: boolean
   createdAt: Date
   _count: LogAbsensiCountAggregateOutputType | null
   _avg: LogAbsensiAvgAggregateOutputType | null
@@ -291,6 +298,7 @@ export type LogAbsensiWhereInput = {
   checkIn?: Prisma.DateTimeNullableFilter<"LogAbsensi"> | Date | string | null
   checkOut?: Prisma.DateTimeNullableFilter<"LogAbsensi"> | Date | string | null
   isLembur?: Prisma.BoolFilter<"LogAbsensi"> | boolean
+  isArchive?: Prisma.BoolFilter<"LogAbsensi"> | boolean
   createdAt?: Prisma.DateTimeFilter<"LogAbsensi"> | Date | string
   pegawai?: Prisma.XOR<Prisma.PegawaiScalarRelationFilter, Prisma.PegawaiWhereInput>
   shift?: Prisma.XOR<Prisma.ShiftNullableScalarRelationFilter, Prisma.ShiftWhereInput> | null
@@ -311,6 +319,7 @@ export type LogAbsensiOrderByWithRelationInput = {
   checkIn?: Prisma.SortOrderInput | Prisma.SortOrder
   checkOut?: Prisma.SortOrderInput | Prisma.SortOrder
   isLembur?: Prisma.SortOrder
+  isArchive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   pegawai?: Prisma.PegawaiOrderByWithRelationInput
   shift?: Prisma.ShiftOrderByWithRelationInput
@@ -334,6 +343,7 @@ export type LogAbsensiWhereUniqueInput = Prisma.AtLeast<{
   checkIn?: Prisma.DateTimeNullableFilter<"LogAbsensi"> | Date | string | null
   checkOut?: Prisma.DateTimeNullableFilter<"LogAbsensi"> | Date | string | null
   isLembur?: Prisma.BoolFilter<"LogAbsensi"> | boolean
+  isArchive?: Prisma.BoolFilter<"LogAbsensi"> | boolean
   createdAt?: Prisma.DateTimeFilter<"LogAbsensi"> | Date | string
   pegawai?: Prisma.XOR<Prisma.PegawaiScalarRelationFilter, Prisma.PegawaiWhereInput>
   shift?: Prisma.XOR<Prisma.ShiftNullableScalarRelationFilter, Prisma.ShiftWhereInput> | null
@@ -354,6 +364,7 @@ export type LogAbsensiOrderByWithAggregationInput = {
   checkIn?: Prisma.SortOrderInput | Prisma.SortOrder
   checkOut?: Prisma.SortOrderInput | Prisma.SortOrder
   isLembur?: Prisma.SortOrder
+  isArchive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   _count?: Prisma.LogAbsensiCountOrderByAggregateInput
   _avg?: Prisma.LogAbsensiAvgOrderByAggregateInput
@@ -378,6 +389,7 @@ export type LogAbsensiScalarWhereWithAggregatesInput = {
   checkIn?: Prisma.DateTimeNullableWithAggregatesFilter<"LogAbsensi"> | Date | string | null
   checkOut?: Prisma.DateTimeNullableWithAggregatesFilter<"LogAbsensi"> | Date | string | null
   isLembur?: Prisma.BoolWithAggregatesFilter<"LogAbsensi"> | boolean
+  isArchive?: Prisma.BoolWithAggregatesFilter<"LogAbsensi"> | boolean
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"LogAbsensi"> | Date | string
 }
 
@@ -391,6 +403,7 @@ export type LogAbsensiCreateInput = {
   checkIn?: Date | string | null
   checkOut?: Date | string | null
   isLembur?: boolean
+  isArchive?: boolean
   createdAt?: Date | string
   pegawai: Prisma.PegawaiCreateNestedOneWithoutLogsInput
   shift?: Prisma.ShiftCreateNestedOneWithoutLogsInput
@@ -411,6 +424,7 @@ export type LogAbsensiUncheckedCreateInput = {
   checkIn?: Date | string | null
   checkOut?: Date | string | null
   isLembur?: boolean
+  isArchive?: boolean
   createdAt?: Date | string
   requestLembur?: Prisma.RequestLemburUncheckedCreateNestedOneWithoutLogAbsensiInput
   logScans?: Prisma.LogScanUncheckedCreateNestedManyWithoutLogAbsensiInput
@@ -426,6 +440,7 @@ export type LogAbsensiUpdateInput = {
   checkIn?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   checkOut?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isLembur?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isArchive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   pegawai?: Prisma.PegawaiUpdateOneRequiredWithoutLogsNestedInput
   shift?: Prisma.ShiftUpdateOneWithoutLogsNestedInput
@@ -446,6 +461,7 @@ export type LogAbsensiUncheckedUpdateInput = {
   checkIn?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   checkOut?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isLembur?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isArchive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   requestLembur?: Prisma.RequestLemburUncheckedUpdateOneWithoutLogAbsensiNestedInput
   logScans?: Prisma.LogScanUncheckedUpdateManyWithoutLogAbsensiNestedInput
@@ -464,6 +480,7 @@ export type LogAbsensiCreateManyInput = {
   checkIn?: Date | string | null
   checkOut?: Date | string | null
   isLembur?: boolean
+  isArchive?: boolean
   createdAt?: Date | string
 }
 
@@ -477,6 +494,7 @@ export type LogAbsensiUpdateManyMutationInput = {
   checkIn?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   checkOut?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isLembur?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isArchive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -493,6 +511,7 @@ export type LogAbsensiUncheckedUpdateManyInput = {
   checkIn?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   checkOut?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isLembur?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isArchive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -519,6 +538,7 @@ export type LogAbsensiCountOrderByAggregateInput = {
   checkIn?: Prisma.SortOrder
   checkOut?: Prisma.SortOrder
   isLembur?: Prisma.SortOrder
+  isArchive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -542,6 +562,7 @@ export type LogAbsensiMaxOrderByAggregateInput = {
   checkIn?: Prisma.SortOrder
   checkOut?: Prisma.SortOrder
   isLembur?: Prisma.SortOrder
+  isArchive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -558,6 +579,7 @@ export type LogAbsensiMinOrderByAggregateInput = {
   checkIn?: Prisma.SortOrder
   checkOut?: Prisma.SortOrder
   isLembur?: Prisma.SortOrder
+  isArchive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -699,6 +721,7 @@ export type LogAbsensiCreateWithoutPegawaiInput = {
   checkIn?: Date | string | null
   checkOut?: Date | string | null
   isLembur?: boolean
+  isArchive?: boolean
   createdAt?: Date | string
   shift?: Prisma.ShiftCreateNestedOneWithoutLogsInput
   requestLembur?: Prisma.RequestLemburCreateNestedOneWithoutLogAbsensiInput
@@ -717,6 +740,7 @@ export type LogAbsensiUncheckedCreateWithoutPegawaiInput = {
   checkIn?: Date | string | null
   checkOut?: Date | string | null
   isLembur?: boolean
+  isArchive?: boolean
   createdAt?: Date | string
   requestLembur?: Prisma.RequestLemburUncheckedCreateNestedOneWithoutLogAbsensiInput
   logScans?: Prisma.LogScanUncheckedCreateNestedManyWithoutLogAbsensiInput
@@ -764,6 +788,7 @@ export type LogAbsensiScalarWhereInput = {
   checkIn?: Prisma.DateTimeNullableFilter<"LogAbsensi"> | Date | string | null
   checkOut?: Prisma.DateTimeNullableFilter<"LogAbsensi"> | Date | string | null
   isLembur?: Prisma.BoolFilter<"LogAbsensi"> | boolean
+  isArchive?: Prisma.BoolFilter<"LogAbsensi"> | boolean
   createdAt?: Prisma.DateTimeFilter<"LogAbsensi"> | Date | string
 }
 
@@ -777,6 +802,7 @@ export type LogAbsensiCreateWithoutShiftInput = {
   checkIn?: Date | string | null
   checkOut?: Date | string | null
   isLembur?: boolean
+  isArchive?: boolean
   createdAt?: Date | string
   pegawai: Prisma.PegawaiCreateNestedOneWithoutLogsInput
   requestLembur?: Prisma.RequestLemburCreateNestedOneWithoutLogAbsensiInput
@@ -795,6 +821,7 @@ export type LogAbsensiUncheckedCreateWithoutShiftInput = {
   checkIn?: Date | string | null
   checkOut?: Date | string | null
   isLembur?: boolean
+  isArchive?: boolean
   createdAt?: Date | string
   requestLembur?: Prisma.RequestLemburUncheckedCreateNestedOneWithoutLogAbsensiInput
   logScans?: Prisma.LogScanUncheckedCreateNestedManyWithoutLogAbsensiInput
@@ -836,6 +863,7 @@ export type LogAbsensiCreateWithoutRequestLemburInput = {
   checkIn?: Date | string | null
   checkOut?: Date | string | null
   isLembur?: boolean
+  isArchive?: boolean
   createdAt?: Date | string
   pegawai: Prisma.PegawaiCreateNestedOneWithoutLogsInput
   shift?: Prisma.ShiftCreateNestedOneWithoutLogsInput
@@ -855,6 +883,7 @@ export type LogAbsensiUncheckedCreateWithoutRequestLemburInput = {
   checkIn?: Date | string | null
   checkOut?: Date | string | null
   isLembur?: boolean
+  isArchive?: boolean
   createdAt?: Date | string
   logScans?: Prisma.LogScanUncheckedCreateNestedManyWithoutLogAbsensiInput
 }
@@ -885,6 +914,7 @@ export type LogAbsensiUpdateWithoutRequestLemburInput = {
   checkIn?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   checkOut?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isLembur?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isArchive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   pegawai?: Prisma.PegawaiUpdateOneRequiredWithoutLogsNestedInput
   shift?: Prisma.ShiftUpdateOneWithoutLogsNestedInput
@@ -904,6 +934,7 @@ export type LogAbsensiUncheckedUpdateWithoutRequestLemburInput = {
   checkIn?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   checkOut?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isLembur?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isArchive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   logScans?: Prisma.LogScanUncheckedUpdateManyWithoutLogAbsensiNestedInput
 }
@@ -918,6 +949,7 @@ export type LogAbsensiCreateWithoutLogScansInput = {
   checkIn?: Date | string | null
   checkOut?: Date | string | null
   isLembur?: boolean
+  isArchive?: boolean
   createdAt?: Date | string
   pegawai: Prisma.PegawaiCreateNestedOneWithoutLogsInput
   shift?: Prisma.ShiftCreateNestedOneWithoutLogsInput
@@ -937,6 +969,7 @@ export type LogAbsensiUncheckedCreateWithoutLogScansInput = {
   checkIn?: Date | string | null
   checkOut?: Date | string | null
   isLembur?: boolean
+  isArchive?: boolean
   createdAt?: Date | string
   requestLembur?: Prisma.RequestLemburUncheckedCreateNestedOneWithoutLogAbsensiInput
 }
@@ -967,6 +1000,7 @@ export type LogAbsensiUpdateWithoutLogScansInput = {
   checkIn?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   checkOut?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isLembur?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isArchive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   pegawai?: Prisma.PegawaiUpdateOneRequiredWithoutLogsNestedInput
   shift?: Prisma.ShiftUpdateOneWithoutLogsNestedInput
@@ -986,6 +1020,7 @@ export type LogAbsensiUncheckedUpdateWithoutLogScansInput = {
   checkIn?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   checkOut?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isLembur?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isArchive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   requestLembur?: Prisma.RequestLemburUncheckedUpdateOneWithoutLogAbsensiNestedInput
 }
@@ -1002,6 +1037,7 @@ export type LogAbsensiCreateManyPegawaiInput = {
   checkIn?: Date | string | null
   checkOut?: Date | string | null
   isLembur?: boolean
+  isArchive?: boolean
   createdAt?: Date | string
 }
 
@@ -1015,6 +1051,7 @@ export type LogAbsensiUpdateWithoutPegawaiInput = {
   checkIn?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   checkOut?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isLembur?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isArchive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   shift?: Prisma.ShiftUpdateOneWithoutLogsNestedInput
   requestLembur?: Prisma.RequestLemburUpdateOneWithoutLogAbsensiNestedInput
@@ -1033,6 +1070,7 @@ export type LogAbsensiUncheckedUpdateWithoutPegawaiInput = {
   checkIn?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   checkOut?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isLembur?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isArchive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   requestLembur?: Prisma.RequestLemburUncheckedUpdateOneWithoutLogAbsensiNestedInput
   logScans?: Prisma.LogScanUncheckedUpdateManyWithoutLogAbsensiNestedInput
@@ -1050,6 +1088,7 @@ export type LogAbsensiUncheckedUpdateManyWithoutPegawaiInput = {
   checkIn?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   checkOut?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isLembur?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isArchive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -1065,6 +1104,7 @@ export type LogAbsensiCreateManyShiftInput = {
   checkIn?: Date | string | null
   checkOut?: Date | string | null
   isLembur?: boolean
+  isArchive?: boolean
   createdAt?: Date | string
 }
 
@@ -1078,6 +1118,7 @@ export type LogAbsensiUpdateWithoutShiftInput = {
   checkIn?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   checkOut?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isLembur?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isArchive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   pegawai?: Prisma.PegawaiUpdateOneRequiredWithoutLogsNestedInput
   requestLembur?: Prisma.RequestLemburUpdateOneWithoutLogAbsensiNestedInput
@@ -1096,6 +1137,7 @@ export type LogAbsensiUncheckedUpdateWithoutShiftInput = {
   checkIn?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   checkOut?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isLembur?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isArchive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   requestLembur?: Prisma.RequestLemburUncheckedUpdateOneWithoutLogAbsensiNestedInput
   logScans?: Prisma.LogScanUncheckedUpdateManyWithoutLogAbsensiNestedInput
@@ -1113,6 +1155,7 @@ export type LogAbsensiUncheckedUpdateManyWithoutShiftInput = {
   checkIn?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   checkOut?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isLembur?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isArchive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -1160,6 +1203,7 @@ export type LogAbsensiSelect<ExtArgs extends runtime.Types.Extensions.InternalAr
   checkIn?: boolean
   checkOut?: boolean
   isLembur?: boolean
+  isArchive?: boolean
   createdAt?: boolean
   pegawai?: boolean | Prisma.PegawaiDefaultArgs<ExtArgs>
   shift?: boolean | Prisma.LogAbsensi$shiftArgs<ExtArgs>
@@ -1181,6 +1225,7 @@ export type LogAbsensiSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ex
   checkIn?: boolean
   checkOut?: boolean
   isLembur?: boolean
+  isArchive?: boolean
   createdAt?: boolean
   pegawai?: boolean | Prisma.PegawaiDefaultArgs<ExtArgs>
   shift?: boolean | Prisma.LogAbsensi$shiftArgs<ExtArgs>
@@ -1199,6 +1244,7 @@ export type LogAbsensiSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ex
   checkIn?: boolean
   checkOut?: boolean
   isLembur?: boolean
+  isArchive?: boolean
   createdAt?: boolean
   pegawai?: boolean | Prisma.PegawaiDefaultArgs<ExtArgs>
   shift?: boolean | Prisma.LogAbsensi$shiftArgs<ExtArgs>
@@ -1217,10 +1263,11 @@ export type LogAbsensiSelectScalar = {
   checkIn?: boolean
   checkOut?: boolean
   isLembur?: boolean
+  isArchive?: boolean
   createdAt?: boolean
 }
 
-export type LogAbsensiOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "pegawaiId" | "shiftId" | "shiftName" | "day" | "jamMasuk" | "jamMasukDate" | "jamKeluar" | "jamKeluarDate" | "checkIn" | "checkOut" | "isLembur" | "createdAt", ExtArgs["result"]["logAbsensi"]>
+export type LogAbsensiOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "pegawaiId" | "shiftId" | "shiftName" | "day" | "jamMasuk" | "jamMasukDate" | "jamKeluar" | "jamKeluarDate" | "checkIn" | "checkOut" | "isLembur" | "isArchive" | "createdAt", ExtArgs["result"]["logAbsensi"]>
 export type LogAbsensiInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   pegawai?: boolean | Prisma.PegawaiDefaultArgs<ExtArgs>
   shift?: boolean | Prisma.LogAbsensi$shiftArgs<ExtArgs>
@@ -1258,6 +1305,7 @@ export type $LogAbsensiPayload<ExtArgs extends runtime.Types.Extensions.Internal
     checkIn: Date | null
     checkOut: Date | null
     isLembur: boolean
+    isArchive: boolean
     createdAt: Date
   }, ExtArgs["result"]["logAbsensi"]>
   composites: {}
@@ -1698,6 +1746,7 @@ export interface LogAbsensiFieldRefs {
   readonly checkIn: Prisma.FieldRef<"LogAbsensi", 'DateTime'>
   readonly checkOut: Prisma.FieldRef<"LogAbsensi", 'DateTime'>
   readonly isLembur: Prisma.FieldRef<"LogAbsensi", 'Boolean'>
+  readonly isArchive: Prisma.FieldRef<"LogAbsensi", 'Boolean'>
   readonly createdAt: Prisma.FieldRef<"LogAbsensi", 'DateTime'>
 }
     

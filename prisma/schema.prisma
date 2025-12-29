@@ -116,6 +116,7 @@ model LogAbsensi {
   checkIn       DateTime?
   checkOut      DateTime?
   isLembur      Boolean   @default(false)
+  isArchive     Boolean   @default(false)
 
   pegawai Pegawai @relation(fields: [pegawaiId], references: [id])
   shift   Shift?  @relation(fields: [shiftId], references: [id])

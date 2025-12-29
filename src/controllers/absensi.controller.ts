@@ -22,11 +22,16 @@ export const getAllAbsensi = async (req: Request, res: Response) => {
       day,
       sortBy = "createdAt",
       sortOrder = "desc",
+      isArchive,
       page,
       limit,
     } = req.query;
 
-    const where: any = {};
+    const where: any = { isArchive: false };
+
+    if (isArchive !== undefined && String(isArchive).trim() !== "") {
+      where.isArchive = isArchive === "true";
+    }
 
     if (pegawaiId !== undefined && String(pegawaiId).trim() !== "") {
       const pid = Number(pegawaiId);
@@ -423,8 +428,14 @@ export const scanAbsensi = async (req: Request, res: Response) => {
 export const updateAbsensi = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
-    const { checkIn, checkOut, jamMasukDate, jamKeluarDate, isLembur } =
-      req.body;
+    const {
+      checkIn,
+      checkOut,
+      jamMasukDate,
+      jamKeluarDate,
+      isLembur,
+      isArchive,
+    } = req.body;
 
     const result = await prisma.$transaction(async (tx) => {
       const logAbsensiData = await tx.logAbsensi.findFirst({
@@ -460,6 +471,8 @@ export const updateAbsensi = async (req: Request, res: Response) => {
       }
 
       if (isLembur !== undefined) data.isLembur = isLembur;
+
+      if (isArchive !== undefined) data.isArchive = isArchive;
 
       const updated = await tx.logAbsensi.update({
         where: {
