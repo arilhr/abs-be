@@ -9,3 +9,7 @@ export const getDayFromDate = (date: Date): number => {
 export const convertDayDatabaseToDayjs = (index: number): number => {
   return index >= 6 ? 0 : index + 1;
 };
+
+export const convertDayDayjsToDatabase = (index: number): number => {
+  return index <= 0 ? 6 : index - 1;
+};
