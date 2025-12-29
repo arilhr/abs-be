@@ -13,7 +13,13 @@ export const getAllAbsensi = async (req: Request, res: Response) => {
       pegawaiId,
       pegawaiName,
       shiftId,
-      date,
+      startDate,
+      endDate,
+      checkInStart,
+      checkInEnd,
+      checkOutStart,
+      checkOutEnd,
+      day,
       page: pageQ,
       limit: limitQ,
     } = req.query;
@@ -30,14 +36,39 @@ export const getAllAbsensi = async (req: Request, res: Response) => {
       if (!Number.isNaN(sid)) where.shiftId = sid;
     }
 
-    if (date !== undefined) {
-      const start = dayjs.tz(date.toString()).startOf("day").toDate();
-      const end = dayjs.tz(date.toString()).endOf("day").toDate();
+    if (day !== undefined && String(day).trim() !== "") {
+      const d = Number(day);
+      if (!Number.isNaN(d)) where.day = d;
+    }
 
-      where.jamMasukDate = {
-        gte: start,
-        lte: end,
-      };
+    if (startDate !== undefined && String(startDate).trim() !== "") {
+      const start = dayjs(String(startDate)).startOf("day").toDate();
+      where.jamMasukDate = { ...where.jamMasukDate, gte: start };
+    }
+
+    if (endDate !== undefined && String(endDate).trim() !== "") {
+      const end = dayjs(String(endDate)).endOf("day").toDate();
+      where.jamMasukDate = { ...where.jamMasukDate, lte: end };
+    }
+
+    if (checkInStart !== undefined && String(checkInStart).trim() !== "") {
+      const ciStart = dayjs(String(checkInStart)).startOf("day").toDate();
+      where.checkIn = { ...where.checkIn, gte: ciStart };
+    }
+
+    if (checkInEnd !== undefined && String(checkInEnd).trim() !== "") {
+      const ciEnd = dayjs(String(checkInEnd)).endOf("day").toDate();
+      where.checkIn = { ...where.checkIn, lte: ciEnd };
+    }
+
+    if (checkOutStart !== undefined && String(checkOutStart).trim() !== "") {
+      const coStart = dayjs(String(checkOutStart)).startOf("day").toDate();
+      where.checkOut = { ...where.checkOut, gte: coStart };
+    }
+
+    if (checkOutEnd !== undefined && String(checkOutEnd).trim() !== "") {
+      const coEnd = dayjs(String(checkOutEnd)).endOf("day").toDate();
+      where.checkOut = { ...where.checkOut, lte: coEnd };
     }
 
     // relation filter for pegawaiName
