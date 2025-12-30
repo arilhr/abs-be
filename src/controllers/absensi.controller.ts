@@ -3,7 +3,10 @@ import prisma from "../prisma";
 import dayjs from "dayjs";
 import { calculateJamShiftDate } from "../utils/calculate-jam-shift-date";
 import { CHECK_IN_MINUTE_OFFSET } from "../constants/absensi";
-import { convertDayDatabaseToDayjs } from "../utils/get-day-from-date";
+import {
+  convertDayDatabaseToDayjs,
+  convertDayDayjsToDatabase,
+} from "../utils/get-day-from-date";
 import { ScanType } from "../../prisma/generated/enums";
 import { SCAN_SECRET_CODE_CONFIG_KEY } from "../constants/config-key";
 
@@ -422,6 +425,89 @@ export const scanAbsensi = async (req: Request, res: Response) => {
   } catch (err) {
     console.log(`ERROR:`, err);
     res.status(500).json({ error: "internal error", err });
+  }
+};
+
+export const createLogAbsensi = async (req: Request, res: Response) => {
+  try {
+    const { pegawaiId, shiftId, date, checkIn, checkOut } = req.body;
+
+    if (!pegawaiId || !shiftId || date === undefined) {
+      res
+        .status(400)
+        .json({ message: "Wajib mengisi pegawai, shift, dan tanggal." });
+      return;
+    }
+
+    // check pegawai data
+    const pegawaiData = await prisma.pegawai.findFirst({
+      where: {
+        id: pegawaiId,
+      },
+    });
+
+    if (!pegawaiData) {
+      res.status(400).json({ message: "Data pegawai tidak ditemukan." });
+      return;
+    }
+
+    // get shift data
+    const shiftData = await prisma.shift.findFirst({
+      where: {
+        id: shiftId,
+      },
+    });
+
+    if (!shiftData) {
+      res.status(400).json({ message: "Data shift tidak ditemukan." });
+      return;
+    }
+
+    const shiftDate = calculateJamShiftDate(
+      shiftData.jamMasuk,
+      shiftData.jamKeluar,
+      dayjs(date).toDate()
+    );
+
+    const day = convertDayDayjsToDatabase(dayjs(date).day());
+
+    // check sudah ada log absensi di tanggal tersebut
+    const existingLogAbsensi = await prisma.logAbsensi.findFirst({
+      where: {
+        pegawaiId,
+        shiftId,
+        jamMasukDate: shiftDate.jamMasukDate,
+      },
+    });
+
+    if (existingLogAbsensi) {
+      res
+        .status(400)
+        .json({
+          message:
+            "Log absensi untuk pegawai dan shift tersebut sudah ada di tanggal tersebut.",
+        });
+      return;
+    }
+
+    const newLogAbsensi = await prisma.logAbsensi.create({
+      data: {
+        pegawaiId: pegawaiData.id,
+        shiftId: shiftData.id,
+        shiftName: shiftData.name,
+        jamMasukDate: shiftDate.jamMasukDate,
+        jamMasuk: shiftData.jamMasuk,
+        jamKeluarDate: shiftDate.jamKeluarDate,
+        jamKeluar: shiftData.jamKeluar,
+        checkIn: checkIn ? dayjs(checkIn).toDate() : null,
+        checkOut: checkOut ? dayjs(checkOut).toDate() : null,
+        day,
+      },
+    });
+
+    res.status(201).json(newLogAbsensi);
+  } catch (err) {
+    res.status(500).json(err);
   }
 };
 

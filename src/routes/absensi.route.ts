@@ -1,5 +1,6 @@
 import { Router } from "express";
 import {
+  createLogAbsensi,
   generateLogAbsensi,
   getAllAbsensi,
   scanAbsensi,
@@ -28,6 +29,7 @@ router.post("/scan", scanAbsensiRateLimiter, scanAbsensi);
 
 router.use(authenticate);
 router.get("/", getAllAbsensi);
+router.post("/", createLogAbsensi);
 router.put("/:id", updateAbsensi);
 
 export default router;
