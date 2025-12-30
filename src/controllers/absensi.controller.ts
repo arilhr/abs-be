@@ -481,12 +481,10 @@ export const createLogAbsensi = async (req: Request, res: Response) => {
     });
 
     if (existingLogAbsensi) {
-      res
-        .status(400)
-        .json({
-          message:
-            "Log absensi untuk pegawai dan shift tersebut sudah ada di tanggal tersebut.",
-        });
+      res.status(400).json({
+        message:
+          "Log absensi untuk pegawai dan shift tersebut sudah ada di tanggal tersebut.",
+      });
       return;
     }
 
@@ -517,6 +515,8 @@ export const updateAbsensi = async (req: Request, res: Response) => {
     const {
       checkIn,
       checkOut,
+      shiftId,
+      date,
       jamMasukDate,
       jamKeluarDate,
       isLembur,
@@ -537,6 +537,68 @@ export const updateAbsensi = async (req: Request, res: Response) => {
         };
 
       const data: any = {};
+
+      if (shiftId) {
+        // get and check shift data
+        const shiftData = await tx.shift.findFirst({
+          where: {
+            id: shiftId,
+          },
+        });
+
+        if (!shiftData) {
+          return {
+            code: 400,
+            message: "Data shift tidak ditemukan.",
+          };
+        }
+
+        const shiftDate = calculateJamShiftDate(
+          shiftData.jamMasuk,
+          shiftData.jamKeluar,
+          date ? dayjs(date).toDate() : logAbsensiData.jamMasukDate
+        );
+
+        data.shiftId = shiftData.id;
+        data.shiftName = shiftData.name;
+        data.jamMasuk = shiftData.jamMasuk;
+        data.jamKeluar = shiftData.jamKeluar;
+        data.jamMasukDate = shiftDate.jamMasukDate;
+        data.jamKeluarDate = shiftDate.jamKeluarDate;
+
+        data.day = convertDayDayjsToDatabase(
+          dayjs(date ? date : logAbsensiData.jamMasukDate).day()
+        );
+
+        const existingLogAbsensi = await tx.logAbsensi.findFirst({
+          where: {
+            id: { not: logAbsensiData.id },
+            shiftId: shiftData.id,
+            pegawaiId: logAbsensiData.pegawaiId,
+            jamMasukDate: shiftDate.jamMasukDate,
+          },
+        });
+
+        if (existingLogAbsensi) {
+          return {
+            code: 400,
+            message:
+              "Log absensi untuk pegawai dan shift tersebut sudah ada di tanggal tersebut.",
+          };
+        }
+
+        const result = await tx.logAbsensi.update({
+          where: {
+            id: logAbsensiData.id,
+          },
+          data: data,
+        });
+
+        return {
+          code: 200,
+          data: result,
+        };
+      }
 
       if (jamMasukDate) {
         data.jamMasukDate = dayjs(jamMasukDate).toDate();
@@ -559,6 +621,9 @@ export const updateAbsensi = async (req: Request, res: Response) => {
       if (isLembur !== undefined) data.isLembur = isLembur;
 
       if (isArchive !== undefined) data.isArchive = isArchive;
+
+      data.shiftId = null;
+      data.shiftName = "Custom";
 
       const updated = await tx.logAbsensi.update({
         where: {
