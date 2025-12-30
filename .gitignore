@@ -4,3 +4,7 @@ dist/
 note/
 .vscode/
 tmp/
+google-credentials.json
+oauth-credentials.json
+backups/
+token.json

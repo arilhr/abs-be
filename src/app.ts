@@ -21,6 +21,7 @@ import timezone from "dayjs/plugin/timezone";
 import duration from "dayjs/plugin/duration";
 
 import { startShiftCron } from "./cron/log-absensi-cron";
+import { startAutoBackupCron } from "./cron/auto-backup-cron";
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -54,5 +55,6 @@ app.use("/api", apiRouter);
 app.get("/", (_, res) => res.json({ ok: true }));
 
 startShiftCron();
+startAutoBackupCron();
 
 export default app;
