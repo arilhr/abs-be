@@ -35,7 +35,7 @@ async function getShifts(req: Request, res: Response): Promise<void> {
     };
 
     if (typeof name === "string" && name.trim() !== "") {
-      where.name = { contains: name.trim(), mode: "insensitive" };
+      where.name = { contains: name.trim() };
     }
     if (typeof jamMasuk === "string" && jamMasuk.trim() !== "") {
       where.jamMasuk = jamMasuk.trim();

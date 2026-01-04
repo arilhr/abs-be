@@ -248,6 +248,7 @@ export type PengajuanIzinOrderByWithRelationInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   pegawai?: Prisma.PegawaiOrderByWithRelationInput
+  _relevance?: Prisma.PengajuanIzinOrderByRelevanceInput
 }
 
 export type PengajuanIzinWhereUniqueInput = Prisma.AtLeast<{
@@ -366,6 +367,12 @@ export type PengajuanIzinListRelationFilter = {
 
 export type PengajuanIzinOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
+}
+
+export type PengajuanIzinOrderByRelevanceInput = {
+  fields: Prisma.PengajuanIzinOrderByRelevanceFieldEnum | Prisma.PengajuanIzinOrderByRelevanceFieldEnum[]
+  sort: Prisma.SortOrder
+  search: string
 }
 
 export type PengajuanIzinCountOrderByAggregateInput = {
@@ -554,27 +561,7 @@ export type PengajuanIzinSelect<ExtArgs extends runtime.Types.Extensions.Interna
   pegawai?: boolean | Prisma.PegawaiDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["pengajuanIzin"]>
 
-export type PengajuanIzinSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
-  id?: boolean
-  pegawaiId?: boolean
-  date?: boolean
-  reason?: boolean
-  isAccepted?: boolean
-  createdAt?: boolean
-  updatedAt?: boolean
-  pegawai?: boolean | Prisma.PegawaiDefaultArgs<ExtArgs>
-}, ExtArgs["result"]["pengajuanIzin"]>
 
-export type PengajuanIzinSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
-  id?: boolean
-  pegawaiId?: boolean
-  date?: boolean
-  reason?: boolean
-  isAccepted?: boolean
-  createdAt?: boolean
-  updatedAt?: boolean
-  pegawai?: boolean | Prisma.PegawaiDefaultArgs<ExtArgs>
-}, ExtArgs["result"]["pengajuanIzin"]>
 
 export type PengajuanIzinSelectScalar = {
   id?: boolean
@@ -588,12 +575,6 @@ export type PengajuanIzinSelectScalar = {
 
 export type PengajuanIzinOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "pegawaiId" | "date" | "reason" | "isAccepted" | "createdAt" | "updatedAt", ExtArgs["result"]["pengajuanIzin"]>
 export type PengajuanIzinInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  pegawai?: boolean | Prisma.PegawaiDefaultArgs<ExtArgs>
-}
-export type PengajuanIzinIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  pegawai?: boolean | Prisma.PegawaiDefaultArgs<ExtArgs>
-}
-export type PengajuanIzinIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   pegawai?: boolean | Prisma.PegawaiDefaultArgs<ExtArgs>
 }
 
@@ -728,30 +709,6 @@ export interface PengajuanIzinDelegate<ExtArgs extends runtime.Types.Extensions.
   createMany<T extends PengajuanIzinCreateManyArgs>(args?: Prisma.SelectSubset<T, PengajuanIzinCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>
 
   /**
-   * Create many PengajuanIzins and returns the data saved in the database.
-   * @param {PengajuanIzinCreateManyAndReturnArgs} args - Arguments to create many PengajuanIzins.
-   * @example
-   * // Create many PengajuanIzins
-   * const pengajuanIzin = await prisma.pengajuanIzin.createManyAndReturn({
-   *   data: [
-   *     // ... provide data here
-   *   ]
-   * })
-   * 
-   * // Create many PengajuanIzins and only return the `id`
-   * const pengajuanIzinWithIdOnly = await prisma.pengajuanIzin.createManyAndReturn({
-   *   select: { id: true },
-   *   data: [
-   *     // ... provide data here
-   *   ]
-   * })
-   * Note, that providing `undefined` is treated as the value not being there.
-   * Read more here: https://pris.ly/d/null-undefined
-   * 
-   */
-  createManyAndReturn<T extends PengajuanIzinCreateManyAndReturnArgs>(args?: Prisma.SelectSubset<T, PengajuanIzinCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PengajuanIzinPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
-
-  /**
    * Delete a PengajuanIzin.
    * @param {PengajuanIzinDeleteArgs} args - Arguments to delete one PengajuanIzin.
    * @example
@@ -814,36 +771,6 @@ export interface PengajuanIzinDelegate<ExtArgs extends runtime.Types.Extensions.
    * 
    */
   updateMany<T extends PengajuanIzinUpdateManyArgs>(args: Prisma.SelectSubset<T, PengajuanIzinUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>
-
-  /**
-   * Update zero or more PengajuanIzins and returns the data updated in the database.
-   * @param {PengajuanIzinUpdateManyAndReturnArgs} args - Arguments to update many PengajuanIzins.
-   * @example
-   * // Update many PengajuanIzins
-   * const pengajuanIzin = await prisma.pengajuanIzin.updateManyAndReturn({
-   *   where: {
-   *     // ... provide filter here
-   *   },
-   *   data: [
-   *     // ... provide data here
-   *   ]
-   * })
-   * 
-   * // Update zero or more PengajuanIzins and only return the `id`
-   * const pengajuanIzinWithIdOnly = await prisma.pengajuanIzin.updateManyAndReturn({
-   *   select: { id: true },
-   *   where: {
-   *     // ... provide filter here
-   *   },
-   *   data: [
-   *     // ... provide data here
-   *   ]
-   * })
-   * Note, that providing `undefined` is treated as the value not being there.
-   * Read more here: https://pris.ly/d/null-undefined
-   * 
-   */
-  updateManyAndReturn<T extends PengajuanIzinUpdateManyAndReturnArgs>(args: Prisma.SelectSubset<T, PengajuanIzinUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PengajuanIzinPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
 
   /**
    * Create or update one PengajuanIzin.
@@ -1274,29 +1201,6 @@ export type PengajuanIzinCreateManyArgs<ExtArgs extends runtime.Types.Extensions
 }
 
 /**
- * PengajuanIzin createManyAndReturn
- */
-export type PengajuanIzinCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the PengajuanIzin
-   */
-  select?: Prisma.PengajuanIzinSelectCreateManyAndReturn<ExtArgs> | null
-  /**
-   * Omit specific fields from the PengajuanIzin
-   */
-  omit?: Prisma.PengajuanIzinOmit<ExtArgs> | null
-  /**
-   * The data used to create many PengajuanIzins.
-   */
-  data: Prisma.PengajuanIzinCreateManyInput | Prisma.PengajuanIzinCreateManyInput[]
-  skipDuplicates?: boolean
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.PengajuanIzinIncludeCreateManyAndReturn<ExtArgs> | null
-}
-
-/**
  * PengajuanIzin update
  */
 export type PengajuanIzinUpdateArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1338,36 +1242,6 @@ export type PengajuanIzinUpdateManyArgs<ExtArgs extends runtime.Types.Extensions
    * Limit how many PengajuanIzins to update.
    */
   limit?: number
-}
-
-/**
- * PengajuanIzin updateManyAndReturn
- */
-export type PengajuanIzinUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the PengajuanIzin
-   */
-  select?: Prisma.PengajuanIzinSelectUpdateManyAndReturn<ExtArgs> | null
-  /**
-   * Omit specific fields from the PengajuanIzin
-   */
-  omit?: Prisma.PengajuanIzinOmit<ExtArgs> | null
-  /**
-   * The data used to update PengajuanIzins.
-   */
-  data: Prisma.XOR<Prisma.PengajuanIzinUpdateManyMutationInput, Prisma.PengajuanIzinUncheckedUpdateManyInput>
-  /**
-   * Filter which PengajuanIzins to update
-   */
-  where?: Prisma.PengajuanIzinWhereInput
-  /**
-   * Limit how many PengajuanIzins to update.
-   */
-  limit?: number
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.PengajuanIzinIncludeUpdateManyAndReturn<ExtArgs> | null
 }
 
 /**

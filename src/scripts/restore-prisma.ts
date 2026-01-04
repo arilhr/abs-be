@@ -114,10 +114,10 @@ async function testPrismaRestore() {
     console.log("\n⚠️  WARNING: This will INSERT data into your database!");
     console.log("💡 Tip: This test will skip duplicates automatically\n");
 
-    // 8. Disable foreign key checks temporarily (PostgreSQL)
+    // 8. Disable foreign key checks temporarily (MySQL)
     console.log("🔓 Disabling foreign key constraints temporarily...");
     try {
-      await prisma.$executeRawUnsafe("SET session_replication_role = replica;");
+      await prisma.$executeRawUnsafe("SET FOREIGN_KEY_CHECKS = 0;");
       console.log("✅ Foreign key constraints disabled\n");
     } catch (error: any) {
       console.warn("⚠️  Could not disable constraints:", error.message);
@@ -187,7 +187,7 @@ async function testPrismaRestore() {
     // 10. Re-enable foreign key checks
     console.log("\n🔒 Re-enabling foreign key constraints...");
     try {
-      await prisma.$executeRawUnsafe("SET session_replication_role = DEFAULT;");
+      await prisma.$executeRawUnsafe("SET FOREIGN_KEY_CHECKS = 1;");
       console.log("✅ Foreign key constraints re-enabled\n");
     } catch (error: any) {
       console.warn("⚠️  Could not re-enable constraints:", error.message);

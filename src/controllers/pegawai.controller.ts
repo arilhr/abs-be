@@ -55,11 +55,11 @@ async function getPegawai(req: Request, res: Response): Promise<void> {
     where.isArchive = isArchive === undefined ? false : isArchive === "true";
 
     if (typeof name === "string" && name.trim() !== "") {
-      where.name = { contains: name.trim(), mode: "insensitive" };
+      where.name = { contains: name.trim() };
     }
 
     if (typeof pegawaiId === "string" && pegawaiId.trim() !== "") {
-      where.pegawaiId = { contains: pegawaiId.trim(), mode: "insensitive" };
+      where.pegawaiId = { contains: pegawaiId.trim() };
     }
 
     if (salaryMin !== undefined && salaryMin !== null && salaryMin !== "") {
@@ -473,7 +473,6 @@ export const importPegawai = async (req: Request, res: Response) => {
             where: {
               name: {
                 equals: pegawaiData.departmentName,
-                mode: "insensitive",
               },
             },
           });
@@ -489,7 +488,6 @@ export const importPegawai = async (req: Request, res: Response) => {
             where: {
               name: {
                 equals: pegawaiData.positionName,
-                mode: "insensitive",
               },
               departmentId: department.id,
             },

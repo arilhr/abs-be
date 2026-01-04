@@ -45,14 +45,13 @@ export const getPositions = async (req: Request, res: Response) => {
     where.isArchive = isArchive === undefined ? false : isArchive === "true";
 
     if (typeof name === "string" && name.trim() !== "") {
-      where.name = { contains: name.trim(), mode: "insensitive" };
+      where.name = { contains: name.trim() };
     }
 
     if (typeof departmentName === "string" && departmentName.trim() !== "") {
       where.department = {
         name: {
           contains: departmentName.trim(),
-          mode: "insensitive",
         },
       };
     }

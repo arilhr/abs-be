@@ -284,6 +284,7 @@ export type PegawaiOrderByWithRelationInput = {
   users?: Prisma.UserOrderByRelationAggregateInput
   pengajuanIzins?: Prisma.PengajuanIzinOrderByRelationAggregateInput
   logScans?: Prisma.LogScanOrderByRelationAggregateInput
+  _relevance?: Prisma.PegawaiOrderByRelevanceInput
 }
 
 export type PegawaiWhereUniqueInput = Prisma.AtLeast<{
@@ -462,6 +463,12 @@ export type PegawaiListRelationFilter = {
 
 export type PegawaiOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
+}
+
+export type PegawaiOrderByRelevanceInput = {
+  fields: Prisma.PegawaiOrderByRelevanceFieldEnum | Prisma.PegawaiOrderByRelevanceFieldEnum[]
+  sort: Prisma.SortOrder
+  search: string
 }
 
 export type PegawaiCountOrderByAggregateInput = {
@@ -1506,31 +1513,7 @@ export type PegawaiSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   _count?: boolean | Prisma.PegawaiCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["pegawai"]>
 
-export type PegawaiSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
-  id?: boolean
-  pegawaiId?: boolean
-  name?: boolean
-  positionId?: boolean
-  status?: boolean
-  salary?: boolean
-  isArchive?: boolean
-  createdAt?: boolean
-  updatedAt?: boolean
-  position?: boolean | Prisma.PositionDefaultArgs<ExtArgs>
-}, ExtArgs["result"]["pegawai"]>
 
-export type PegawaiSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
-  id?: boolean
-  pegawaiId?: boolean
-  name?: boolean
-  positionId?: boolean
-  status?: boolean
-  salary?: boolean
-  isArchive?: boolean
-  createdAt?: boolean
-  updatedAt?: boolean
-  position?: boolean | Prisma.PositionDefaultArgs<ExtArgs>
-}, ExtArgs["result"]["pegawai"]>
 
 export type PegawaiSelectScalar = {
   id?: boolean
@@ -1555,12 +1538,6 @@ export type PegawaiInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs
   pengajuanIzins?: boolean | Prisma.Pegawai$pengajuanIzinsArgs<ExtArgs>
   logScans?: boolean | Prisma.Pegawai$logScansArgs<ExtArgs>
   _count?: boolean | Prisma.PegawaiCountOutputTypeDefaultArgs<ExtArgs>
-}
-export type PegawaiIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  position?: boolean | Prisma.PositionDefaultArgs<ExtArgs>
-}
-export type PegawaiIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  position?: boolean | Prisma.PositionDefaultArgs<ExtArgs>
 }
 
 export type $PegawaiPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1703,30 +1680,6 @@ export interface PegawaiDelegate<ExtArgs extends runtime.Types.Extensions.Intern
   createMany<T extends PegawaiCreateManyArgs>(args?: Prisma.SelectSubset<T, PegawaiCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>
 
   /**
-   * Create many Pegawais and returns the data saved in the database.
-   * @param {PegawaiCreateManyAndReturnArgs} args - Arguments to create many Pegawais.
-   * @example
-   * // Create many Pegawais
-   * const pegawai = await prisma.pegawai.createManyAndReturn({
-   *   data: [
-   *     // ... provide data here
-   *   ]
-   * })
-   * 
-   * // Create many Pegawais and only return the `id`
-   * const pegawaiWithIdOnly = await prisma.pegawai.createManyAndReturn({
-   *   select: { id: true },
-   *   data: [
-   *     // ... provide data here
-   *   ]
-   * })
-   * Note, that providing `undefined` is treated as the value not being there.
-   * Read more here: https://pris.ly/d/null-undefined
-   * 
-   */
-  createManyAndReturn<T extends PegawaiCreateManyAndReturnArgs>(args?: Prisma.SelectSubset<T, PegawaiCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PegawaiPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
-
-  /**
    * Delete a Pegawai.
    * @param {PegawaiDeleteArgs} args - Arguments to delete one Pegawai.
    * @example
@@ -1789,36 +1742,6 @@ export interface PegawaiDelegate<ExtArgs extends runtime.Types.Extensions.Intern
    * 
    */
   updateMany<T extends PegawaiUpdateManyArgs>(args: Prisma.SelectSubset<T, PegawaiUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>
-
-  /**
-   * Update zero or more Pegawais and returns the data updated in the database.
-   * @param {PegawaiUpdateManyAndReturnArgs} args - Arguments to update many Pegawais.
-   * @example
-   * // Update many Pegawais
-   * const pegawai = await prisma.pegawai.updateManyAndReturn({
-   *   where: {
-   *     // ... provide filter here
-   *   },
-   *   data: [
-   *     // ... provide data here
-   *   ]
-   * })
-   * 
-   * // Update zero or more Pegawais and only return the `id`
-   * const pegawaiWithIdOnly = await prisma.pegawai.updateManyAndReturn({
-   *   select: { id: true },
-   *   where: {
-   *     // ... provide filter here
-   *   },
-   *   data: [
-   *     // ... provide data here
-   *   ]
-   * })
-   * Note, that providing `undefined` is treated as the value not being there.
-   * Read more here: https://pris.ly/d/null-undefined
-   * 
-   */
-  updateManyAndReturn<T extends PegawaiUpdateManyAndReturnArgs>(args: Prisma.SelectSubset<T, PegawaiUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PegawaiPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
 
   /**
    * Create or update one Pegawai.
@@ -2258,29 +2181,6 @@ export type PegawaiCreateManyArgs<ExtArgs extends runtime.Types.Extensions.Inter
 }
 
 /**
- * Pegawai createManyAndReturn
- */
-export type PegawaiCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the Pegawai
-   */
-  select?: Prisma.PegawaiSelectCreateManyAndReturn<ExtArgs> | null
-  /**
-   * Omit specific fields from the Pegawai
-   */
-  omit?: Prisma.PegawaiOmit<ExtArgs> | null
-  /**
-   * The data used to create many Pegawais.
-   */
-  data: Prisma.PegawaiCreateManyInput | Prisma.PegawaiCreateManyInput[]
-  skipDuplicates?: boolean
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.PegawaiIncludeCreateManyAndReturn<ExtArgs> | null
-}
-
-/**
  * Pegawai update
  */
 export type PegawaiUpdateArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2322,36 +2222,6 @@ export type PegawaiUpdateManyArgs<ExtArgs extends runtime.Types.Extensions.Inter
    * Limit how many Pegawais to update.
    */
   limit?: number
-}
-
-/**
- * Pegawai updateManyAndReturn
- */
-export type PegawaiUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the Pegawai
-   */
-  select?: Prisma.PegawaiSelectUpdateManyAndReturn<ExtArgs> | null
-  /**
-   * Omit specific fields from the Pegawai
-   */
-  omit?: Prisma.PegawaiOmit<ExtArgs> | null
-  /**
-   * The data used to update Pegawais.
-   */
-  data: Prisma.XOR<Prisma.PegawaiUpdateManyMutationInput, Prisma.PegawaiUncheckedUpdateManyInput>
-  /**
-   * Filter which Pegawais to update
-   */
-  where?: Prisma.PegawaiWhereInput
-  /**
-   * Limit how many Pegawais to update.
-   */
-  limit?: number
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.PegawaiIncludeUpdateManyAndReturn<ExtArgs> | null
 }
 
 /**

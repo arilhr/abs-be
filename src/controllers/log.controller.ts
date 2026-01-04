@@ -13,7 +13,6 @@ export const getLogScan = async (req: Request, res: Response) => {
       where.pegawai = {
         name: {
           contains: String(pegawaiName),
-          mode: "insensitive",
         },
       };
     }

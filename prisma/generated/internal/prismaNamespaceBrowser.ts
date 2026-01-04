@@ -251,20 +251,75 @@ export const JsonNullValueInput = {
 export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
 
 
-export const QueryMode = {
-  default: 'default',
-  insensitive: 'insensitive'
-} as const
-
-export type QueryMode = (typeof QueryMode)[keyof typeof QueryMode]
-
-
 export const NullsOrder = {
   first: 'first',
   last: 'last'
 } as const
 
 export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
+
+
+export const UserOrderByRelevanceFieldEnum = {
+  username: 'username',
+  password: 'password'
+} as const
+
+export type UserOrderByRelevanceFieldEnum = (typeof UserOrderByRelevanceFieldEnum)[keyof typeof UserOrderByRelevanceFieldEnum]
+
+
+export const PositionOrderByRelevanceFieldEnum = {
+  name: 'name'
+} as const
+
+export type PositionOrderByRelevanceFieldEnum = (typeof PositionOrderByRelevanceFieldEnum)[keyof typeof PositionOrderByRelevanceFieldEnum]
+
+
+export const DepartmentOrderByRelevanceFieldEnum = {
+  name: 'name'
+} as const
+
+export type DepartmentOrderByRelevanceFieldEnum = (typeof DepartmentOrderByRelevanceFieldEnum)[keyof typeof DepartmentOrderByRelevanceFieldEnum]
+
+
+export const PegawaiOrderByRelevanceFieldEnum = {
+  pegawaiId: 'pegawaiId',
+  name: 'name',
+  status: 'status'
+} as const
+
+export type PegawaiOrderByRelevanceFieldEnum = (typeof PegawaiOrderByRelevanceFieldEnum)[keyof typeof PegawaiOrderByRelevanceFieldEnum]
+
+
+export const ShiftOrderByRelevanceFieldEnum = {
+  name: 'name',
+  jamMasuk: 'jamMasuk',
+  jamKeluar: 'jamKeluar'
+} as const
+
+export type ShiftOrderByRelevanceFieldEnum = (typeof ShiftOrderByRelevanceFieldEnum)[keyof typeof ShiftOrderByRelevanceFieldEnum]
+
+
+export const LogAbsensiOrderByRelevanceFieldEnum = {
+  shiftName: 'shiftName',
+  jamMasuk: 'jamMasuk',
+  jamKeluar: 'jamKeluar'
+} as const
+
+export type LogAbsensiOrderByRelevanceFieldEnum = (typeof LogAbsensiOrderByRelevanceFieldEnum)[keyof typeof LogAbsensiOrderByRelevanceFieldEnum]
+
+
+export const RequestLemburOrderByRelevanceFieldEnum = {
+  reason: 'reason'
+} as const
+
+export type RequestLemburOrderByRelevanceFieldEnum = (typeof RequestLemburOrderByRelevanceFieldEnum)[keyof typeof RequestLemburOrderByRelevanceFieldEnum]
+
+
+export const PengajuanIzinOrderByRelevanceFieldEnum = {
+  reason: 'reason'
+} as const
+
+export type PengajuanIzinOrderByRelevanceFieldEnum = (typeof PengajuanIzinOrderByRelevanceFieldEnum)[keyof typeof PengajuanIzinOrderByRelevanceFieldEnum]
 
 
 export const JsonNullValueFilter = {
@@ -274,4 +329,21 @@ export const JsonNullValueFilter = {
 } as const
 
 export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]
+
+
+export const QueryMode = {
+  default: 'default',
+  insensitive: 'insensitive'
+} as const
+
+export type QueryMode = (typeof QueryMode)[keyof typeof QueryMode]
+
+
+export const AppConfigOrderByRelevanceFieldEnum = {
+  id: 'id',
+  key: 'key',
+  description: 'description'
+} as const
+
+export type AppConfigOrderByRelevanceFieldEnum = (typeof AppConfigOrderByRelevanceFieldEnum)[keyof typeof AppConfigOrderByRelevanceFieldEnum]
 

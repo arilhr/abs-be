@@ -308,6 +308,7 @@ export type RequestLemburOrderByWithRelationInput = {
   pegawai?: Prisma.PegawaiOrderByWithRelationInput
   shift?: Prisma.ShiftOrderByWithRelationInput
   logAbsensi?: Prisma.LogAbsensiOrderByWithRelationInput
+  _relevance?: Prisma.RequestLemburOrderByRelevanceInput
 }
 
 export type RequestLemburWhereUniqueInput = Prisma.AtLeast<{
@@ -471,6 +472,12 @@ export type RequestLemburOrderByRelationAggregateInput = {
 export type RequestLemburNullableScalarRelationFilter = {
   is?: Prisma.RequestLemburWhereInput | null
   isNot?: Prisma.RequestLemburWhereInput | null
+}
+
+export type RequestLemburOrderByRelevanceInput = {
+  fields: Prisma.RequestLemburOrderByRelevanceFieldEnum | Prisma.RequestLemburOrderByRelevanceFieldEnum[]
+  sort: Prisma.SortOrder
+  search: string
 }
 
 export type RequestLemburCountOrderByAggregateInput = {
@@ -1249,43 +1256,7 @@ export type RequestLemburSelect<ExtArgs extends runtime.Types.Extensions.Interna
   logAbsensi?: boolean | Prisma.RequestLembur$logAbsensiArgs<ExtArgs>
 }, ExtArgs["result"]["requestLembur"]>
 
-export type RequestLemburSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
-  id?: boolean
-  userId?: boolean
-  supervisorId?: boolean
-  pegawaiId?: boolean
-  shiftId?: boolean
-  logAbsensiId?: boolean
-  date?: boolean
-  reason?: boolean
-  isAccepted?: boolean
-  createdAt?: boolean
-  updatedAt?: boolean
-  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
-  supervisor?: boolean | Prisma.RequestLembur$supervisorArgs<ExtArgs>
-  pegawai?: boolean | Prisma.PegawaiDefaultArgs<ExtArgs>
-  shift?: boolean | Prisma.ShiftDefaultArgs<ExtArgs>
-  logAbsensi?: boolean | Prisma.RequestLembur$logAbsensiArgs<ExtArgs>
-}, ExtArgs["result"]["requestLembur"]>
 
-export type RequestLemburSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
-  id?: boolean
-  userId?: boolean
-  supervisorId?: boolean
-  pegawaiId?: boolean
-  shiftId?: boolean
-  logAbsensiId?: boolean
-  date?: boolean
-  reason?: boolean
-  isAccepted?: boolean
-  createdAt?: boolean
-  updatedAt?: boolean
-  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
-  supervisor?: boolean | Prisma.RequestLembur$supervisorArgs<ExtArgs>
-  pegawai?: boolean | Prisma.PegawaiDefaultArgs<ExtArgs>
-  shift?: boolean | Prisma.ShiftDefaultArgs<ExtArgs>
-  logAbsensi?: boolean | Prisma.RequestLembur$logAbsensiArgs<ExtArgs>
-}, ExtArgs["result"]["requestLembur"]>
 
 export type RequestLemburSelectScalar = {
   id?: boolean
@@ -1303,20 +1274,6 @@ export type RequestLemburSelectScalar = {
 
 export type RequestLemburOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "supervisorId" | "pegawaiId" | "shiftId" | "logAbsensiId" | "date" | "reason" | "isAccepted" | "createdAt" | "updatedAt", ExtArgs["result"]["requestLembur"]>
 export type RequestLemburInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
-  supervisor?: boolean | Prisma.RequestLembur$supervisorArgs<ExtArgs>
-  pegawai?: boolean | Prisma.PegawaiDefaultArgs<ExtArgs>
-  shift?: boolean | Prisma.ShiftDefaultArgs<ExtArgs>
-  logAbsensi?: boolean | Prisma.RequestLembur$logAbsensiArgs<ExtArgs>
-}
-export type RequestLemburIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
-  supervisor?: boolean | Prisma.RequestLembur$supervisorArgs<ExtArgs>
-  pegawai?: boolean | Prisma.PegawaiDefaultArgs<ExtArgs>
-  shift?: boolean | Prisma.ShiftDefaultArgs<ExtArgs>
-  logAbsensi?: boolean | Prisma.RequestLembur$logAbsensiArgs<ExtArgs>
-}
-export type RequestLemburIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   supervisor?: boolean | Prisma.RequestLembur$supervisorArgs<ExtArgs>
   pegawai?: boolean | Prisma.PegawaiDefaultArgs<ExtArgs>
@@ -1463,30 +1420,6 @@ export interface RequestLemburDelegate<ExtArgs extends runtime.Types.Extensions.
   createMany<T extends RequestLemburCreateManyArgs>(args?: Prisma.SelectSubset<T, RequestLemburCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>
 
   /**
-   * Create many RequestLemburs and returns the data saved in the database.
-   * @param {RequestLemburCreateManyAndReturnArgs} args - Arguments to create many RequestLemburs.
-   * @example
-   * // Create many RequestLemburs
-   * const requestLembur = await prisma.requestLembur.createManyAndReturn({
-   *   data: [
-   *     // ... provide data here
-   *   ]
-   * })
-   * 
-   * // Create many RequestLemburs and only return the `id`
-   * const requestLemburWithIdOnly = await prisma.requestLembur.createManyAndReturn({
-   *   select: { id: true },
-   *   data: [
-   *     // ... provide data here
-   *   ]
-   * })
-   * Note, that providing `undefined` is treated as the value not being there.
-   * Read more here: https://pris.ly/d/null-undefined
-   * 
-   */
-  createManyAndReturn<T extends RequestLemburCreateManyAndReturnArgs>(args?: Prisma.SelectSubset<T, RequestLemburCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RequestLemburPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
-
-  /**
    * Delete a RequestLembur.
    * @param {RequestLemburDeleteArgs} args - Arguments to delete one RequestLembur.
    * @example
@@ -1549,36 +1482,6 @@ export interface RequestLemburDelegate<ExtArgs extends runtime.Types.Extensions.
    * 
    */
   updateMany<T extends RequestLemburUpdateManyArgs>(args: Prisma.SelectSubset<T, RequestLemburUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>
-
-  /**
-   * Update zero or more RequestLemburs and returns the data updated in the database.
-   * @param {RequestLemburUpdateManyAndReturnArgs} args - Arguments to update many RequestLemburs.
-   * @example
-   * // Update many RequestLemburs
-   * const requestLembur = await prisma.requestLembur.updateManyAndReturn({
-   *   where: {
-   *     // ... provide filter here
-   *   },
-   *   data: [
-   *     // ... provide data here
-   *   ]
-   * })
-   * 
-   * // Update zero or more RequestLemburs and only return the `id`
-   * const requestLemburWithIdOnly = await prisma.requestLembur.updateManyAndReturn({
-   *   select: { id: true },
-   *   where: {
-   *     // ... provide filter here
-   *   },
-   *   data: [
-   *     // ... provide data here
-   *   ]
-   * })
-   * Note, that providing `undefined` is treated as the value not being there.
-   * Read more here: https://pris.ly/d/null-undefined
-   * 
-   */
-  updateManyAndReturn<T extends RequestLemburUpdateManyAndReturnArgs>(args: Prisma.SelectSubset<T, RequestLemburUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RequestLemburPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
 
   /**
    * Create or update one RequestLembur.
@@ -2017,29 +1920,6 @@ export type RequestLemburCreateManyArgs<ExtArgs extends runtime.Types.Extensions
 }
 
 /**
- * RequestLembur createManyAndReturn
- */
-export type RequestLemburCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the RequestLembur
-   */
-  select?: Prisma.RequestLemburSelectCreateManyAndReturn<ExtArgs> | null
-  /**
-   * Omit specific fields from the RequestLembur
-   */
-  omit?: Prisma.RequestLemburOmit<ExtArgs> | null
-  /**
-   * The data used to create many RequestLemburs.
-   */
-  data: Prisma.RequestLemburCreateManyInput | Prisma.RequestLemburCreateManyInput[]
-  skipDuplicates?: boolean
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.RequestLemburIncludeCreateManyAndReturn<ExtArgs> | null
-}
-
-/**
  * RequestLembur update
  */
 export type RequestLemburUpdateArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2081,36 +1961,6 @@ export type RequestLemburUpdateManyArgs<ExtArgs extends runtime.Types.Extensions
    * Limit how many RequestLemburs to update.
    */
   limit?: number
-}
-
-/**
- * RequestLembur updateManyAndReturn
- */
-export type RequestLemburUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the RequestLembur
-   */
-  select?: Prisma.RequestLemburSelectUpdateManyAndReturn<ExtArgs> | null
-  /**
-   * Omit specific fields from the RequestLembur
-   */
-  omit?: Prisma.RequestLemburOmit<ExtArgs> | null
-  /**
-   * The data used to update RequestLemburs.
-   */
-  data: Prisma.XOR<Prisma.RequestLemburUpdateManyMutationInput, Prisma.RequestLemburUncheckedUpdateManyInput>
-  /**
-   * Filter which RequestLemburs to update
-   */
-  where?: Prisma.RequestLemburWhereInput
-  /**
-   * Limit how many RequestLemburs to update.
-   */
-  limit?: number
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.RequestLemburIncludeUpdateManyAndReturn<ExtArgs> | null
 }
 
 /**

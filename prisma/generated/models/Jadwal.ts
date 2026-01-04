@@ -725,31 +725,7 @@ export type JadwalSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   shift?: boolean | Prisma.ShiftDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["jadwal"]>
 
-export type JadwalSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
-  id?: boolean
-  pegawaiId?: boolean
-  shiftId?: boolean
-  day?: boolean
-  isActive?: boolean
-  isArchive?: boolean
-  createdAt?: boolean
-  updatedAt?: boolean
-  pegawai?: boolean | Prisma.PegawaiDefaultArgs<ExtArgs>
-  shift?: boolean | Prisma.ShiftDefaultArgs<ExtArgs>
-}, ExtArgs["result"]["jadwal"]>
 
-export type JadwalSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
-  id?: boolean
-  pegawaiId?: boolean
-  shiftId?: boolean
-  day?: boolean
-  isActive?: boolean
-  isArchive?: boolean
-  createdAt?: boolean
-  updatedAt?: boolean
-  pegawai?: boolean | Prisma.PegawaiDefaultArgs<ExtArgs>
-  shift?: boolean | Prisma.ShiftDefaultArgs<ExtArgs>
-}, ExtArgs["result"]["jadwal"]>
 
 export type JadwalSelectScalar = {
   id?: boolean
@@ -764,14 +740,6 @@ export type JadwalSelectScalar = {
 
 export type JadwalOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "pegawaiId" | "shiftId" | "day" | "isActive" | "isArchive" | "createdAt" | "updatedAt", ExtArgs["result"]["jadwal"]>
 export type JadwalInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  pegawai?: boolean | Prisma.PegawaiDefaultArgs<ExtArgs>
-  shift?: boolean | Prisma.ShiftDefaultArgs<ExtArgs>
-}
-export type JadwalIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  pegawai?: boolean | Prisma.PegawaiDefaultArgs<ExtArgs>
-  shift?: boolean | Prisma.ShiftDefaultArgs<ExtArgs>
-}
-export type JadwalIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   pegawai?: boolean | Prisma.PegawaiDefaultArgs<ExtArgs>
   shift?: boolean | Prisma.ShiftDefaultArgs<ExtArgs>
 }
@@ -909,30 +877,6 @@ export interface JadwalDelegate<ExtArgs extends runtime.Types.Extensions.Interna
   createMany<T extends JadwalCreateManyArgs>(args?: Prisma.SelectSubset<T, JadwalCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>
 
   /**
-   * Create many Jadwals and returns the data saved in the database.
-   * @param {JadwalCreateManyAndReturnArgs} args - Arguments to create many Jadwals.
-   * @example
-   * // Create many Jadwals
-   * const jadwal = await prisma.jadwal.createManyAndReturn({
-   *   data: [
-   *     // ... provide data here
-   *   ]
-   * })
-   * 
-   * // Create many Jadwals and only return the `id`
-   * const jadwalWithIdOnly = await prisma.jadwal.createManyAndReturn({
-   *   select: { id: true },
-   *   data: [
-   *     // ... provide data here
-   *   ]
-   * })
-   * Note, that providing `undefined` is treated as the value not being there.
-   * Read more here: https://pris.ly/d/null-undefined
-   * 
-   */
-  createManyAndReturn<T extends JadwalCreateManyAndReturnArgs>(args?: Prisma.SelectSubset<T, JadwalCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$JadwalPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
-
-  /**
    * Delete a Jadwal.
    * @param {JadwalDeleteArgs} args - Arguments to delete one Jadwal.
    * @example
@@ -995,36 +939,6 @@ export interface JadwalDelegate<ExtArgs extends runtime.Types.Extensions.Interna
    * 
    */
   updateMany<T extends JadwalUpdateManyArgs>(args: Prisma.SelectSubset<T, JadwalUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>
-
-  /**
-   * Update zero or more Jadwals and returns the data updated in the database.
-   * @param {JadwalUpdateManyAndReturnArgs} args - Arguments to update many Jadwals.
-   * @example
-   * // Update many Jadwals
-   * const jadwal = await prisma.jadwal.updateManyAndReturn({
-   *   where: {
-   *     // ... provide filter here
-   *   },
-   *   data: [
-   *     // ... provide data here
-   *   ]
-   * })
-   * 
-   * // Update zero or more Jadwals and only return the `id`
-   * const jadwalWithIdOnly = await prisma.jadwal.updateManyAndReturn({
-   *   select: { id: true },
-   *   where: {
-   *     // ... provide filter here
-   *   },
-   *   data: [
-   *     // ... provide data here
-   *   ]
-   * })
-   * Note, that providing `undefined` is treated as the value not being there.
-   * Read more here: https://pris.ly/d/null-undefined
-   * 
-   */
-  updateManyAndReturn<T extends JadwalUpdateManyAndReturnArgs>(args: Prisma.SelectSubset<T, JadwalUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$JadwalPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
 
   /**
    * Create or update one Jadwal.
@@ -1457,29 +1371,6 @@ export type JadwalCreateManyArgs<ExtArgs extends runtime.Types.Extensions.Intern
 }
 
 /**
- * Jadwal createManyAndReturn
- */
-export type JadwalCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the Jadwal
-   */
-  select?: Prisma.JadwalSelectCreateManyAndReturn<ExtArgs> | null
-  /**
-   * Omit specific fields from the Jadwal
-   */
-  omit?: Prisma.JadwalOmit<ExtArgs> | null
-  /**
-   * The data used to create many Jadwals.
-   */
-  data: Prisma.JadwalCreateManyInput | Prisma.JadwalCreateManyInput[]
-  skipDuplicates?: boolean
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.JadwalIncludeCreateManyAndReturn<ExtArgs> | null
-}
-
-/**
  * Jadwal update
  */
 export type JadwalUpdateArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1521,36 +1412,6 @@ export type JadwalUpdateManyArgs<ExtArgs extends runtime.Types.Extensions.Intern
    * Limit how many Jadwals to update.
    */
   limit?: number
-}
-
-/**
- * Jadwal updateManyAndReturn
- */
-export type JadwalUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the Jadwal
-   */
-  select?: Prisma.JadwalSelectUpdateManyAndReturn<ExtArgs> | null
-  /**
-   * Omit specific fields from the Jadwal
-   */
-  omit?: Prisma.JadwalOmit<ExtArgs> | null
-  /**
-   * The data used to update Jadwals.
-   */
-  data: Prisma.XOR<Prisma.JadwalUpdateManyMutationInput, Prisma.JadwalUncheckedUpdateManyInput>
-  /**
-   * Filter which Jadwals to update
-   */
-  where?: Prisma.JadwalWhereInput
-  /**
-   * Limit how many Jadwals to update.
-   */
-  limit?: number
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.JadwalIncludeUpdateManyAndReturn<ExtArgs> | null
 }
 
 /**

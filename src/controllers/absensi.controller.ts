@@ -85,7 +85,7 @@ export const getAllAbsensi = async (req: Request, res: Response) => {
     const include: any = { pegawai: true, shift: true };
     if (pegawaiName !== undefined && String(pegawaiName).trim() !== "") {
       where.pegawai = {
-        name: { contains: String(pegawaiName).trim(), mode: "insensitive" },
+        name: { contains: String(pegawaiName).trim() },
       };
     }
 

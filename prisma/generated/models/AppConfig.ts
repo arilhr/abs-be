@@ -195,6 +195,7 @@ export type AppConfigOrderByWithRelationInput = {
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  _relevance?: Prisma.AppConfigOrderByRelevanceInput
 }
 
 export type AppConfigWhereUniqueInput = Prisma.AtLeast<{
@@ -296,6 +297,12 @@ export type AppConfigUncheckedUpdateManyInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
+export type AppConfigOrderByRelevanceInput = {
+  fields: Prisma.AppConfigOrderByRelevanceFieldEnum | Prisma.AppConfigOrderByRelevanceFieldEnum[]
+  sort: Prisma.SortOrder
+  search: string
+}
+
 export type AppConfigCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   key?: Prisma.SortOrder
@@ -332,23 +339,7 @@ export type AppConfigSelect<ExtArgs extends runtime.Types.Extensions.InternalArg
   updatedAt?: boolean
 }, ExtArgs["result"]["appConfig"]>
 
-export type AppConfigSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
-  id?: boolean
-  key?: boolean
-  value?: boolean
-  description?: boolean
-  createdAt?: boolean
-  updatedAt?: boolean
-}, ExtArgs["result"]["appConfig"]>
 
-export type AppConfigSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
-  id?: boolean
-  key?: boolean
-  value?: boolean
-  description?: boolean
-  createdAt?: boolean
-  updatedAt?: boolean
-}, ExtArgs["result"]["appConfig"]>
 
 export type AppConfigSelectScalar = {
   id?: boolean
@@ -489,30 +480,6 @@ export interface AppConfigDelegate<ExtArgs extends runtime.Types.Extensions.Inte
   createMany<T extends AppConfigCreateManyArgs>(args?: Prisma.SelectSubset<T, AppConfigCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>
 
   /**
-   * Create many AppConfigs and returns the data saved in the database.
-   * @param {AppConfigCreateManyAndReturnArgs} args - Arguments to create many AppConfigs.
-   * @example
-   * // Create many AppConfigs
-   * const appConfig = await prisma.appConfig.createManyAndReturn({
-   *   data: [
-   *     // ... provide data here
-   *   ]
-   * })
-   * 
-   * // Create many AppConfigs and only return the `id`
-   * const appConfigWithIdOnly = await prisma.appConfig.createManyAndReturn({
-   *   select: { id: true },
-   *   data: [
-   *     // ... provide data here
-   *   ]
-   * })
-   * Note, that providing `undefined` is treated as the value not being there.
-   * Read more here: https://pris.ly/d/null-undefined
-   * 
-   */
-  createManyAndReturn<T extends AppConfigCreateManyAndReturnArgs>(args?: Prisma.SelectSubset<T, AppConfigCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AppConfigPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
-
-  /**
    * Delete a AppConfig.
    * @param {AppConfigDeleteArgs} args - Arguments to delete one AppConfig.
    * @example
@@ -575,36 +542,6 @@ export interface AppConfigDelegate<ExtArgs extends runtime.Types.Extensions.Inte
    * 
    */
   updateMany<T extends AppConfigUpdateManyArgs>(args: Prisma.SelectSubset<T, AppConfigUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>
-
-  /**
-   * Update zero or more AppConfigs and returns the data updated in the database.
-   * @param {AppConfigUpdateManyAndReturnArgs} args - Arguments to update many AppConfigs.
-   * @example
-   * // Update many AppConfigs
-   * const appConfig = await prisma.appConfig.updateManyAndReturn({
-   *   where: {
-   *     // ... provide filter here
-   *   },
-   *   data: [
-   *     // ... provide data here
-   *   ]
-   * })
-   * 
-   * // Update zero or more AppConfigs and only return the `id`
-   * const appConfigWithIdOnly = await prisma.appConfig.updateManyAndReturn({
-   *   select: { id: true },
-   *   where: {
-   *     // ... provide filter here
-   *   },
-   *   data: [
-   *     // ... provide data here
-   *   ]
-   * })
-   * Note, that providing `undefined` is treated as the value not being there.
-   * Read more here: https://pris.ly/d/null-undefined
-   * 
-   */
-  updateManyAndReturn<T extends AppConfigUpdateManyAndReturnArgs>(args: Prisma.SelectSubset<T, AppConfigUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AppConfigPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
 
   /**
    * Create or update one AppConfig.
@@ -1009,25 +946,6 @@ export type AppConfigCreateManyArgs<ExtArgs extends runtime.Types.Extensions.Int
 }
 
 /**
- * AppConfig createManyAndReturn
- */
-export type AppConfigCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the AppConfig
-   */
-  select?: Prisma.AppConfigSelectCreateManyAndReturn<ExtArgs> | null
-  /**
-   * Omit specific fields from the AppConfig
-   */
-  omit?: Prisma.AppConfigOmit<ExtArgs> | null
-  /**
-   * The data used to create many AppConfigs.
-   */
-  data: Prisma.AppConfigCreateManyInput | Prisma.AppConfigCreateManyInput[]
-  skipDuplicates?: boolean
-}
-
-/**
  * AppConfig update
  */
 export type AppConfigUpdateArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1053,32 +971,6 @@ export type AppConfigUpdateArgs<ExtArgs extends runtime.Types.Extensions.Interna
  * AppConfig updateMany
  */
 export type AppConfigUpdateManyArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * The data used to update AppConfigs.
-   */
-  data: Prisma.XOR<Prisma.AppConfigUpdateManyMutationInput, Prisma.AppConfigUncheckedUpdateManyInput>
-  /**
-   * Filter which AppConfigs to update
-   */
-  where?: Prisma.AppConfigWhereInput
-  /**
-   * Limit how many AppConfigs to update.
-   */
-  limit?: number
-}
-
-/**
- * AppConfig updateManyAndReturn
- */
-export type AppConfigUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the AppConfig
-   */
-  select?: Prisma.AppConfigSelectUpdateManyAndReturn<ExtArgs> | null
-  /**
-   * Omit specific fields from the AppConfig
-   */
-  omit?: Prisma.AppConfigOmit<ExtArgs> | null
   /**
    * The data used to update AppConfigs.
    */

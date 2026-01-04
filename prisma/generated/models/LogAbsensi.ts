@@ -325,6 +325,7 @@ export type LogAbsensiOrderByWithRelationInput = {
   shift?: Prisma.ShiftOrderByWithRelationInput
   requestLembur?: Prisma.RequestLemburOrderByWithRelationInput
   logScans?: Prisma.LogScanOrderByRelationAggregateInput
+  _relevance?: Prisma.LogAbsensiOrderByRelevanceInput
 }
 
 export type LogAbsensiWhereUniqueInput = Prisma.AtLeast<{
@@ -523,6 +524,12 @@ export type LogAbsensiListRelationFilter = {
 
 export type LogAbsensiOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
+}
+
+export type LogAbsensiOrderByRelevanceInput = {
+  fields: Prisma.LogAbsensiOrderByRelevanceFieldEnum | Prisma.LogAbsensiOrderByRelevanceFieldEnum[]
+  sort: Prisma.SortOrder
+  search: string
 }
 
 export type LogAbsensiCountOrderByAggregateInput = {
@@ -1212,43 +1219,7 @@ export type LogAbsensiSelect<ExtArgs extends runtime.Types.Extensions.InternalAr
   _count?: boolean | Prisma.LogAbsensiCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["logAbsensi"]>
 
-export type LogAbsensiSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
-  id?: boolean
-  pegawaiId?: boolean
-  shiftId?: boolean
-  shiftName?: boolean
-  day?: boolean
-  jamMasuk?: boolean
-  jamMasukDate?: boolean
-  jamKeluar?: boolean
-  jamKeluarDate?: boolean
-  checkIn?: boolean
-  checkOut?: boolean
-  isLembur?: boolean
-  isArchive?: boolean
-  createdAt?: boolean
-  pegawai?: boolean | Prisma.PegawaiDefaultArgs<ExtArgs>
-  shift?: boolean | Prisma.LogAbsensi$shiftArgs<ExtArgs>
-}, ExtArgs["result"]["logAbsensi"]>
 
-export type LogAbsensiSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
-  id?: boolean
-  pegawaiId?: boolean
-  shiftId?: boolean
-  shiftName?: boolean
-  day?: boolean
-  jamMasuk?: boolean
-  jamMasukDate?: boolean
-  jamKeluar?: boolean
-  jamKeluarDate?: boolean
-  checkIn?: boolean
-  checkOut?: boolean
-  isLembur?: boolean
-  isArchive?: boolean
-  createdAt?: boolean
-  pegawai?: boolean | Prisma.PegawaiDefaultArgs<ExtArgs>
-  shift?: boolean | Prisma.LogAbsensi$shiftArgs<ExtArgs>
-}, ExtArgs["result"]["logAbsensi"]>
 
 export type LogAbsensiSelectScalar = {
   id?: boolean
@@ -1274,14 +1245,6 @@ export type LogAbsensiInclude<ExtArgs extends runtime.Types.Extensions.InternalA
   requestLembur?: boolean | Prisma.LogAbsensi$requestLemburArgs<ExtArgs>
   logScans?: boolean | Prisma.LogAbsensi$logScansArgs<ExtArgs>
   _count?: boolean | Prisma.LogAbsensiCountOutputTypeDefaultArgs<ExtArgs>
-}
-export type LogAbsensiIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  pegawai?: boolean | Prisma.PegawaiDefaultArgs<ExtArgs>
-  shift?: boolean | Prisma.LogAbsensi$shiftArgs<ExtArgs>
-}
-export type LogAbsensiIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  pegawai?: boolean | Prisma.PegawaiDefaultArgs<ExtArgs>
-  shift?: boolean | Prisma.LogAbsensi$shiftArgs<ExtArgs>
 }
 
 export type $LogAbsensiPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1425,30 +1388,6 @@ export interface LogAbsensiDelegate<ExtArgs extends runtime.Types.Extensions.Int
   createMany<T extends LogAbsensiCreateManyArgs>(args?: Prisma.SelectSubset<T, LogAbsensiCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>
 
   /**
-   * Create many LogAbsensis and returns the data saved in the database.
-   * @param {LogAbsensiCreateManyAndReturnArgs} args - Arguments to create many LogAbsensis.
-   * @example
-   * // Create many LogAbsensis
-   * const logAbsensi = await prisma.logAbsensi.createManyAndReturn({
-   *   data: [
-   *     // ... provide data here
-   *   ]
-   * })
-   * 
-   * // Create many LogAbsensis and only return the `id`
-   * const logAbsensiWithIdOnly = await prisma.logAbsensi.createManyAndReturn({
-   *   select: { id: true },
-   *   data: [
-   *     // ... provide data here
-   *   ]
-   * })
-   * Note, that providing `undefined` is treated as the value not being there.
-   * Read more here: https://pris.ly/d/null-undefined
-   * 
-   */
-  createManyAndReturn<T extends LogAbsensiCreateManyAndReturnArgs>(args?: Prisma.SelectSubset<T, LogAbsensiCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LogAbsensiPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
-
-  /**
    * Delete a LogAbsensi.
    * @param {LogAbsensiDeleteArgs} args - Arguments to delete one LogAbsensi.
    * @example
@@ -1511,36 +1450,6 @@ export interface LogAbsensiDelegate<ExtArgs extends runtime.Types.Extensions.Int
    * 
    */
   updateMany<T extends LogAbsensiUpdateManyArgs>(args: Prisma.SelectSubset<T, LogAbsensiUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>
-
-  /**
-   * Update zero or more LogAbsensis and returns the data updated in the database.
-   * @param {LogAbsensiUpdateManyAndReturnArgs} args - Arguments to update many LogAbsensis.
-   * @example
-   * // Update many LogAbsensis
-   * const logAbsensi = await prisma.logAbsensi.updateManyAndReturn({
-   *   where: {
-   *     // ... provide filter here
-   *   },
-   *   data: [
-   *     // ... provide data here
-   *   ]
-   * })
-   * 
-   * // Update zero or more LogAbsensis and only return the `id`
-   * const logAbsensiWithIdOnly = await prisma.logAbsensi.updateManyAndReturn({
-   *   select: { id: true },
-   *   where: {
-   *     // ... provide filter here
-   *   },
-   *   data: [
-   *     // ... provide data here
-   *   ]
-   * })
-   * Note, that providing `undefined` is treated as the value not being there.
-   * Read more here: https://pris.ly/d/null-undefined
-   * 
-   */
-  updateManyAndReturn<T extends LogAbsensiUpdateManyAndReturnArgs>(args: Prisma.SelectSubset<T, LogAbsensiUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LogAbsensiPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
 
   /**
    * Create or update one LogAbsensi.
@@ -1981,29 +1890,6 @@ export type LogAbsensiCreateManyArgs<ExtArgs extends runtime.Types.Extensions.In
 }
 
 /**
- * LogAbsensi createManyAndReturn
- */
-export type LogAbsensiCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the LogAbsensi
-   */
-  select?: Prisma.LogAbsensiSelectCreateManyAndReturn<ExtArgs> | null
-  /**
-   * Omit specific fields from the LogAbsensi
-   */
-  omit?: Prisma.LogAbsensiOmit<ExtArgs> | null
-  /**
-   * The data used to create many LogAbsensis.
-   */
-  data: Prisma.LogAbsensiCreateManyInput | Prisma.LogAbsensiCreateManyInput[]
-  skipDuplicates?: boolean
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.LogAbsensiIncludeCreateManyAndReturn<ExtArgs> | null
-}
-
-/**
  * LogAbsensi update
  */
 export type LogAbsensiUpdateArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2045,36 +1931,6 @@ export type LogAbsensiUpdateManyArgs<ExtArgs extends runtime.Types.Extensions.In
    * Limit how many LogAbsensis to update.
    */
   limit?: number
-}
-
-/**
- * LogAbsensi updateManyAndReturn
- */
-export type LogAbsensiUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the LogAbsensi
-   */
-  select?: Prisma.LogAbsensiSelectUpdateManyAndReturn<ExtArgs> | null
-  /**
-   * Omit specific fields from the LogAbsensi
-   */
-  omit?: Prisma.LogAbsensiOmit<ExtArgs> | null
-  /**
-   * The data used to update LogAbsensis.
-   */
-  data: Prisma.XOR<Prisma.LogAbsensiUpdateManyMutationInput, Prisma.LogAbsensiUncheckedUpdateManyInput>
-  /**
-   * Filter which LogAbsensis to update
-   */
-  where?: Prisma.LogAbsensiWhereInput
-  /**
-   * Limit how many LogAbsensis to update.
-   */
-  limit?: number
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.LogAbsensiIncludeUpdateManyAndReturn<ExtArgs> | null
 }
 
 /**

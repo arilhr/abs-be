@@ -651,27 +651,7 @@ export type LogScanSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   pegawai?: boolean | Prisma.PegawaiDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["logScan"]>
 
-export type LogScanSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
-  id?: boolean
-  pegawaiId?: boolean
-  scanTime?: boolean
-  scanType?: boolean
-  logAbsensiId?: boolean
-  createdAt?: boolean
-  logAbsensi?: boolean | Prisma.LogScan$logAbsensiArgs<ExtArgs>
-  pegawai?: boolean | Prisma.PegawaiDefaultArgs<ExtArgs>
-}, ExtArgs["result"]["logScan"]>
 
-export type LogScanSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
-  id?: boolean
-  pegawaiId?: boolean
-  scanTime?: boolean
-  scanType?: boolean
-  logAbsensiId?: boolean
-  createdAt?: boolean
-  logAbsensi?: boolean | Prisma.LogScan$logAbsensiArgs<ExtArgs>
-  pegawai?: boolean | Prisma.PegawaiDefaultArgs<ExtArgs>
-}, ExtArgs["result"]["logScan"]>
 
 export type LogScanSelectScalar = {
   id?: boolean
@@ -684,14 +664,6 @@ export type LogScanSelectScalar = {
 
 export type LogScanOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "pegawaiId" | "scanTime" | "scanType" | "logAbsensiId" | "createdAt", ExtArgs["result"]["logScan"]>
 export type LogScanInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  logAbsensi?: boolean | Prisma.LogScan$logAbsensiArgs<ExtArgs>
-  pegawai?: boolean | Prisma.PegawaiDefaultArgs<ExtArgs>
-}
-export type LogScanIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  logAbsensi?: boolean | Prisma.LogScan$logAbsensiArgs<ExtArgs>
-  pegawai?: boolean | Prisma.PegawaiDefaultArgs<ExtArgs>
-}
-export type LogScanIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   logAbsensi?: boolean | Prisma.LogScan$logAbsensiArgs<ExtArgs>
   pegawai?: boolean | Prisma.PegawaiDefaultArgs<ExtArgs>
 }
@@ -827,30 +799,6 @@ export interface LogScanDelegate<ExtArgs extends runtime.Types.Extensions.Intern
   createMany<T extends LogScanCreateManyArgs>(args?: Prisma.SelectSubset<T, LogScanCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>
 
   /**
-   * Create many LogScans and returns the data saved in the database.
-   * @param {LogScanCreateManyAndReturnArgs} args - Arguments to create many LogScans.
-   * @example
-   * // Create many LogScans
-   * const logScan = await prisma.logScan.createManyAndReturn({
-   *   data: [
-   *     // ... provide data here
-   *   ]
-   * })
-   * 
-   * // Create many LogScans and only return the `id`
-   * const logScanWithIdOnly = await prisma.logScan.createManyAndReturn({
-   *   select: { id: true },
-   *   data: [
-   *     // ... provide data here
-   *   ]
-   * })
-   * Note, that providing `undefined` is treated as the value not being there.
-   * Read more here: https://pris.ly/d/null-undefined
-   * 
-   */
-  createManyAndReturn<T extends LogScanCreateManyAndReturnArgs>(args?: Prisma.SelectSubset<T, LogScanCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LogScanPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
-
-  /**
    * Delete a LogScan.
    * @param {LogScanDeleteArgs} args - Arguments to delete one LogScan.
    * @example
@@ -913,36 +861,6 @@ export interface LogScanDelegate<ExtArgs extends runtime.Types.Extensions.Intern
    * 
    */
   updateMany<T extends LogScanUpdateManyArgs>(args: Prisma.SelectSubset<T, LogScanUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>
-
-  /**
-   * Update zero or more LogScans and returns the data updated in the database.
-   * @param {LogScanUpdateManyAndReturnArgs} args - Arguments to update many LogScans.
-   * @example
-   * // Update many LogScans
-   * const logScan = await prisma.logScan.updateManyAndReturn({
-   *   where: {
-   *     // ... provide filter here
-   *   },
-   *   data: [
-   *     // ... provide data here
-   *   ]
-   * })
-   * 
-   * // Update zero or more LogScans and only return the `id`
-   * const logScanWithIdOnly = await prisma.logScan.updateManyAndReturn({
-   *   select: { id: true },
-   *   where: {
-   *     // ... provide filter here
-   *   },
-   *   data: [
-   *     // ... provide data here
-   *   ]
-   * })
-   * Note, that providing `undefined` is treated as the value not being there.
-   * Read more here: https://pris.ly/d/null-undefined
-   * 
-   */
-  updateManyAndReturn<T extends LogScanUpdateManyAndReturnArgs>(args: Prisma.SelectSubset<T, LogScanUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LogScanPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
 
   /**
    * Create or update one LogScan.
@@ -1373,29 +1291,6 @@ export type LogScanCreateManyArgs<ExtArgs extends runtime.Types.Extensions.Inter
 }
 
 /**
- * LogScan createManyAndReturn
- */
-export type LogScanCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the LogScan
-   */
-  select?: Prisma.LogScanSelectCreateManyAndReturn<ExtArgs> | null
-  /**
-   * Omit specific fields from the LogScan
-   */
-  omit?: Prisma.LogScanOmit<ExtArgs> | null
-  /**
-   * The data used to create many LogScans.
-   */
-  data: Prisma.LogScanCreateManyInput | Prisma.LogScanCreateManyInput[]
-  skipDuplicates?: boolean
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.LogScanIncludeCreateManyAndReturn<ExtArgs> | null
-}
-
-/**
  * LogScan update
  */
 export type LogScanUpdateArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1437,36 +1332,6 @@ export type LogScanUpdateManyArgs<ExtArgs extends runtime.Types.Extensions.Inter
    * Limit how many LogScans to update.
    */
   limit?: number
-}
-
-/**
- * LogScan updateManyAndReturn
- */
-export type LogScanUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the LogScan
-   */
-  select?: Prisma.LogScanSelectUpdateManyAndReturn<ExtArgs> | null
-  /**
-   * Omit specific fields from the LogScan
-   */
-  omit?: Prisma.LogScanOmit<ExtArgs> | null
-  /**
-   * The data used to update LogScans.
-   */
-  data: Prisma.XOR<Prisma.LogScanUpdateManyMutationInput, Prisma.LogScanUncheckedUpdateManyInput>
-  /**
-   * Filter which LogScans to update
-   */
-  where?: Prisma.LogScanWhereInput
-  /**
-   * Limit how many LogScans to update.
-   */
-  limit?: number
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.LogScanIncludeUpdateManyAndReturn<ExtArgs> | null
 }
 
 /**

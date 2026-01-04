@@ -30,11 +30,11 @@ export const getSummary = async (req: Request, res: Response) => {
         },
       }),
       prisma.$queryRaw<CountResult[]>`
-        SELECT COUNT(*)::int AS total 
-        FROM "LogAbsensi" 
-        WHERE "checkIn" > "jamMasukDate"
-        AND "jamMasukDate" >= ${startOfToday}
-        AND "jamMasukDate" <= ${endOfToday}
+        SELECT COUNT(*) AS total 
+        FROM LogAbsensi 
+        WHERE checkIn > jamMasukDate
+        AND jamMasukDate >= ${startOfToday}
+        AND jamMasukDate <= ${endOfToday}
       `,
       prisma.logAbsensi.count({
         where: {
@@ -102,7 +102,6 @@ export const getCurrentJadwalActive = async (req: Request, res: Response) => {
         pegawai: {
           name: {
             contains: pegawaiName as string | undefined,
-            mode: "insensitive",
           },
         },
       },

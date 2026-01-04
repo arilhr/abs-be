@@ -50,7 +50,7 @@ export const getRequestIzins = async (req: Request, res: Response) => {
 
     if (typeof pegawaiName === "string" && pegawaiName.trim() !== "") {
       where.pegawai = {
-        name: { contains: pegawaiName.trim(), mode: "insensitive" },
+        name: { contains: pegawaiName.trim() },
       };
     }
 

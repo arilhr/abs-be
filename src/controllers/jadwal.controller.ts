@@ -97,7 +97,7 @@ async function getJadwals(req: Request, res: Response): Promise<void> {
     const include: any = { pegawai: true, shift: true };
     if (pegawaiName !== undefined && String(pegawaiName).trim() !== "") {
       where.pegawai = {
-        name: { contains: String(pegawaiName).trim(), mode: "insensitive" },
+        name: { contains: String(pegawaiName).trim() },
       };
     }
 

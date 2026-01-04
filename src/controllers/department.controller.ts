@@ -47,7 +47,6 @@ export const getDepartments = async (req: Request, res: Response) => {
     if (typeof name === "string" && name.trim() !== "") {
       where.name = {
         contains: name.trim(),
-        mode: "insensitive",
       };
     }
 

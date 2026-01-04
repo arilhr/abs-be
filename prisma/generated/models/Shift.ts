@@ -257,6 +257,7 @@ export type ShiftOrderByWithRelationInput = {
   jadwals?: Prisma.JadwalOrderByRelationAggregateInput
   logs?: Prisma.LogAbsensiOrderByRelationAggregateInput
   requestLemburs?: Prisma.RequestLemburOrderByRelationAggregateInput
+  _relevance?: Prisma.ShiftOrderByRelevanceInput
 }
 
 export type ShiftWhereUniqueInput = Prisma.AtLeast<{
@@ -390,6 +391,12 @@ export type ShiftUncheckedUpdateManyInput = {
   isArchive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type ShiftOrderByRelevanceInput = {
+  fields: Prisma.ShiftOrderByRelevanceFieldEnum | Prisma.ShiftOrderByRelevanceFieldEnum[]
+  sort: Prisma.SortOrder
+  search: string
 }
 
 export type ShiftCountOrderByAggregateInput = {
@@ -749,27 +756,7 @@ export type ShiftSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   _count?: boolean | Prisma.ShiftCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["shift"]>
 
-export type ShiftSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
-  id?: boolean
-  name?: boolean
-  jamMasuk?: boolean
-  jamKeluar?: boolean
-  isActive?: boolean
-  isArchive?: boolean
-  createdAt?: boolean
-  updatedAt?: boolean
-}, ExtArgs["result"]["shift"]>
 
-export type ShiftSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
-  id?: boolean
-  name?: boolean
-  jamMasuk?: boolean
-  jamKeluar?: boolean
-  isActive?: boolean
-  isArchive?: boolean
-  createdAt?: boolean
-  updatedAt?: boolean
-}, ExtArgs["result"]["shift"]>
 
 export type ShiftSelectScalar = {
   id?: boolean
@@ -789,8 +776,6 @@ export type ShiftInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   requestLemburs?: boolean | Prisma.Shift$requestLembursArgs<ExtArgs>
   _count?: boolean | Prisma.ShiftCountOutputTypeDefaultArgs<ExtArgs>
 }
-export type ShiftIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
-export type ShiftIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
 
 export type $ShiftPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Shift"
@@ -926,30 +911,6 @@ export interface ShiftDelegate<ExtArgs extends runtime.Types.Extensions.Internal
   createMany<T extends ShiftCreateManyArgs>(args?: Prisma.SelectSubset<T, ShiftCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>
 
   /**
-   * Create many Shifts and returns the data saved in the database.
-   * @param {ShiftCreateManyAndReturnArgs} args - Arguments to create many Shifts.
-   * @example
-   * // Create many Shifts
-   * const shift = await prisma.shift.createManyAndReturn({
-   *   data: [
-   *     // ... provide data here
-   *   ]
-   * })
-   * 
-   * // Create many Shifts and only return the `id`
-   * const shiftWithIdOnly = await prisma.shift.createManyAndReturn({
-   *   select: { id: true },
-   *   data: [
-   *     // ... provide data here
-   *   ]
-   * })
-   * Note, that providing `undefined` is treated as the value not being there.
-   * Read more here: https://pris.ly/d/null-undefined
-   * 
-   */
-  createManyAndReturn<T extends ShiftCreateManyAndReturnArgs>(args?: Prisma.SelectSubset<T, ShiftCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ShiftPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
-
-  /**
    * Delete a Shift.
    * @param {ShiftDeleteArgs} args - Arguments to delete one Shift.
    * @example
@@ -1012,36 +973,6 @@ export interface ShiftDelegate<ExtArgs extends runtime.Types.Extensions.Internal
    * 
    */
   updateMany<T extends ShiftUpdateManyArgs>(args: Prisma.SelectSubset<T, ShiftUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>
-
-  /**
-   * Update zero or more Shifts and returns the data updated in the database.
-   * @param {ShiftUpdateManyAndReturnArgs} args - Arguments to update many Shifts.
-   * @example
-   * // Update many Shifts
-   * const shift = await prisma.shift.updateManyAndReturn({
-   *   where: {
-   *     // ... provide filter here
-   *   },
-   *   data: [
-   *     // ... provide data here
-   *   ]
-   * })
-   * 
-   * // Update zero or more Shifts and only return the `id`
-   * const shiftWithIdOnly = await prisma.shift.updateManyAndReturn({
-   *   select: { id: true },
-   *   where: {
-   *     // ... provide filter here
-   *   },
-   *   data: [
-   *     // ... provide data here
-   *   ]
-   * })
-   * Note, that providing `undefined` is treated as the value not being there.
-   * Read more here: https://pris.ly/d/null-undefined
-   * 
-   */
-  updateManyAndReturn<T extends ShiftUpdateManyAndReturnArgs>(args: Prisma.SelectSubset<T, ShiftUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ShiftPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
 
   /**
    * Create or update one Shift.
@@ -1475,25 +1406,6 @@ export type ShiftCreateManyArgs<ExtArgs extends runtime.Types.Extensions.Interna
 }
 
 /**
- * Shift createManyAndReturn
- */
-export type ShiftCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the Shift
-   */
-  select?: Prisma.ShiftSelectCreateManyAndReturn<ExtArgs> | null
-  /**
-   * Omit specific fields from the Shift
-   */
-  omit?: Prisma.ShiftOmit<ExtArgs> | null
-  /**
-   * The data used to create many Shifts.
-   */
-  data: Prisma.ShiftCreateManyInput | Prisma.ShiftCreateManyInput[]
-  skipDuplicates?: boolean
-}
-
-/**
  * Shift update
  */
 export type ShiftUpdateArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1523,32 +1435,6 @@ export type ShiftUpdateArgs<ExtArgs extends runtime.Types.Extensions.InternalArg
  * Shift updateMany
  */
 export type ShiftUpdateManyArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * The data used to update Shifts.
-   */
-  data: Prisma.XOR<Prisma.ShiftUpdateManyMutationInput, Prisma.ShiftUncheckedUpdateManyInput>
-  /**
-   * Filter which Shifts to update
-   */
-  where?: Prisma.ShiftWhereInput
-  /**
-   * Limit how many Shifts to update.
-   */
-  limit?: number
-}
-
-/**
- * Shift updateManyAndReturn
- */
-export type ShiftUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the Shift
-   */
-  select?: Prisma.ShiftSelectUpdateManyAndReturn<ExtArgs> | null
-  /**
-   * Omit specific fields from the Shift
-   */
-  omit?: Prisma.ShiftOmit<ExtArgs> | null
   /**
    * The data used to update Shifts.
    */

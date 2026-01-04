@@ -61,7 +61,7 @@ export const getUsers = async (req: Request, res: Response) => {
     const where: any = {};
 
     if (typeof username === "string" && username.trim() !== "") {
-      where.username = { contains: username.trim(), mode: "insensitive" };
+      where.username = { contains: username.trim() };
     }
 
     if (typeof isActive === "string" && isActive.trim() !== "") {
@@ -72,14 +72,13 @@ export const getUsers = async (req: Request, res: Response) => {
       where.pegawai = {
         pegawaiId: {
           contains: pegawaiId.trim(),
-          mode: "insensitive",
         },
       };
     }
 
     if (typeof pegawaiName === "string" && pegawaiName.trim() !== "") {
       where.pegawai = {
-        name: { contains: pegawaiName.trim(), mode: "insensitive" },
+        name: { contains: pegawaiName.trim() },
       };
     }
 
