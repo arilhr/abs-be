@@ -8,7 +8,6 @@ import {
   convertDayDayjsToDatabase,
 } from "../utils/get-day-from-date";
 import { ScanType } from "../../prisma/generated/enums";
-import { SCAN_SECRET_CODE_CONFIG_KEY } from "../constants/config-key";
 
 export const getAllAbsensi = async (req: Request, res: Response) => {
   try {
@@ -142,12 +141,10 @@ export const scanAbsensi = async (req: Request, res: Response) => {
     }
 
     // check scan secret code
-    const scanSecretCodeConfig = await prisma.appConfig.findUnique({
-      where: { key: SCAN_SECRET_CODE_CONFIG_KEY },
-    });
+    const scanSecretCodeConfig = process.env.SCAN_CODE;
 
     if (scanSecretCodeConfig) {
-      const scanSecretCode = scanSecretCodeConfig.value;
+      const scanSecretCode = scanSecretCodeConfig;
       if (code !== scanSecretCode) {
         res.status(401).json({ message: "Invalid scan secret code." });
         return;
