@@ -18,7 +18,7 @@ export const getSummary = async (req: Request, res: Response) => {
     const startOfToday = currentDate.startOf("day").toDate();
     const endOfToday = currentDate.endOf("day").toDate();
 
-    const [masuk, terlambat, tidakDatang] = await Promise.all([
+    const [masuk, terlambatResult, tidakDatang] = await Promise.all([
       prisma.logAbsensi.count({
         where: {
           day: currentDay,
@@ -30,9 +30,11 @@ export const getSummary = async (req: Request, res: Response) => {
         },
       }),
       prisma.$queryRaw<CountResult[]>`
-        SELECT COUNT(*) AS total 
+        SELECT CAST(COUNT(*) AS UNSIGNED) AS total 
         FROM LogAbsensi 
-        WHERE checkIn > jamMasukDate
+        WHERE day = ${currentDay}
+        AND checkIn IS NOT NULL
+        AND checkIn > jamMasukDate
         AND jamMasukDate >= ${startOfToday}
         AND jamMasukDate <= ${endOfToday}
       `,
@@ -50,7 +52,7 @@ export const getSummary = async (req: Request, res: Response) => {
 
     res.status(200).json({
       masuk,
-      terlambat: terlambat[0].total,
+      terlambat: Number(terlambatResult[0].total),
       tidakDatang,
     });
   } catch (err) {
