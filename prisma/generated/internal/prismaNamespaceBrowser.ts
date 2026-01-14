@@ -57,6 +57,7 @@ export const ModelName = {
   Pegawai: 'Pegawai',
   Shift: 'Shift',
   Jadwal: 'Jadwal',
+  JadwalOverride: 'JadwalOverride',
   LogAbsensi: 'LogAbsensi',
   RequestLembur: 'RequestLembur',
   PengajuanIzin: 'PengajuanIzin',
@@ -160,6 +161,22 @@ export const JadwalScalarFieldEnum = {
 } as const
 
 export type JadwalScalarFieldEnum = (typeof JadwalScalarFieldEnum)[keyof typeof JadwalScalarFieldEnum]
+
+
+export const JadwalOverrideScalarFieldEnum = {
+  id: 'id',
+  pegawaiId: 'pegawaiId',
+  date: 'date',
+  originalShiftId: 'originalShiftId',
+  shiftId: 'shiftId',
+  reason: 'reason',
+  isActive: 'isActive',
+  isArchive: 'isArchive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type JadwalOverrideScalarFieldEnum = (typeof JadwalOverrideScalarFieldEnum)[keyof typeof JadwalOverrideScalarFieldEnum]
 
 
 export const LogAbsensiScalarFieldEnum = {
@@ -297,6 +314,13 @@ export const ShiftOrderByRelevanceFieldEnum = {
 } as const
 
 export type ShiftOrderByRelevanceFieldEnum = (typeof ShiftOrderByRelevanceFieldEnum)[keyof typeof ShiftOrderByRelevanceFieldEnum]
+
+
+export const JadwalOverrideOrderByRelevanceFieldEnum = {
+  reason: 'reason'
+} as const
+
+export type JadwalOverrideOrderByRelevanceFieldEnum = (typeof JadwalOverrideOrderByRelevanceFieldEnum)[keyof typeof JadwalOverrideOrderByRelevanceFieldEnum]
 
 
 export const LogAbsensiOrderByRelevanceFieldEnum = {

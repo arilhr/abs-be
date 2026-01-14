@@ -7,22 +7,22 @@ export const seedShifts = async () => {
     {
       id: 1,
       name: "Malam",
-      jamMasuk: "22:00",
-      jamKeluar: "06:00",
+      jamMasuk: "22:00:00",
+      jamKeluar: "06:00:00",
       isActive: true,
     },
     {
       id: 2,
       name: "Pagi",
-      jamMasuk: "06:00",
-      jamKeluar: "13:00",
+      jamMasuk: "06:00:00",
+      jamKeluar: "13:00:00",
       isActive: true,
     },
     {
       id: 3,
       name: "Siang",
-      jamMasuk: "13:00",
-      jamKeluar: "22:00",
+      jamMasuk: "13:00:00",
+      jamKeluar: "22:00:00",
       isActive: true,
     },
   ];

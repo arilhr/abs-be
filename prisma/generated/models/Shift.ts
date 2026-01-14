@@ -243,6 +243,8 @@ export type ShiftWhereInput = {
   jadwals?: Prisma.JadwalListRelationFilter
   logs?: Prisma.LogAbsensiListRelationFilter
   requestLemburs?: Prisma.RequestLemburListRelationFilter
+  jadwalOverridesAsOriginal?: Prisma.JadwalOverrideListRelationFilter
+  jadwalOverridesAsReplacement?: Prisma.JadwalOverrideListRelationFilter
 }
 
 export type ShiftOrderByWithRelationInput = {
@@ -257,6 +259,8 @@ export type ShiftOrderByWithRelationInput = {
   jadwals?: Prisma.JadwalOrderByRelationAggregateInput
   logs?: Prisma.LogAbsensiOrderByRelationAggregateInput
   requestLemburs?: Prisma.RequestLemburOrderByRelationAggregateInput
+  jadwalOverridesAsOriginal?: Prisma.JadwalOverrideOrderByRelationAggregateInput
+  jadwalOverridesAsReplacement?: Prisma.JadwalOverrideOrderByRelationAggregateInput
   _relevance?: Prisma.ShiftOrderByRelevanceInput
 }
 
@@ -275,6 +279,8 @@ export type ShiftWhereUniqueInput = Prisma.AtLeast<{
   jadwals?: Prisma.JadwalListRelationFilter
   logs?: Prisma.LogAbsensiListRelationFilter
   requestLemburs?: Prisma.RequestLemburListRelationFilter
+  jadwalOverridesAsOriginal?: Prisma.JadwalOverrideListRelationFilter
+  jadwalOverridesAsReplacement?: Prisma.JadwalOverrideListRelationFilter
 }, "id">
 
 export type ShiftOrderByWithAggregationInput = {
@@ -318,6 +324,8 @@ export type ShiftCreateInput = {
   jadwals?: Prisma.JadwalCreateNestedManyWithoutShiftInput
   logs?: Prisma.LogAbsensiCreateNestedManyWithoutShiftInput
   requestLemburs?: Prisma.RequestLemburCreateNestedManyWithoutShiftInput
+  jadwalOverridesAsOriginal?: Prisma.JadwalOverrideCreateNestedManyWithoutOriginalShiftInput
+  jadwalOverridesAsReplacement?: Prisma.JadwalOverrideCreateNestedManyWithoutShiftInput
 }
 
 export type ShiftUncheckedCreateInput = {
@@ -332,6 +340,8 @@ export type ShiftUncheckedCreateInput = {
   jadwals?: Prisma.JadwalUncheckedCreateNestedManyWithoutShiftInput
   logs?: Prisma.LogAbsensiUncheckedCreateNestedManyWithoutShiftInput
   requestLemburs?: Prisma.RequestLemburUncheckedCreateNestedManyWithoutShiftInput
+  jadwalOverridesAsOriginal?: Prisma.JadwalOverrideUncheckedCreateNestedManyWithoutOriginalShiftInput
+  jadwalOverridesAsReplacement?: Prisma.JadwalOverrideUncheckedCreateNestedManyWithoutShiftInput
 }
 
 export type ShiftUpdateInput = {
@@ -345,6 +355,8 @@ export type ShiftUpdateInput = {
   jadwals?: Prisma.JadwalUpdateManyWithoutShiftNestedInput
   logs?: Prisma.LogAbsensiUpdateManyWithoutShiftNestedInput
   requestLemburs?: Prisma.RequestLemburUpdateManyWithoutShiftNestedInput
+  jadwalOverridesAsOriginal?: Prisma.JadwalOverrideUpdateManyWithoutOriginalShiftNestedInput
+  jadwalOverridesAsReplacement?: Prisma.JadwalOverrideUpdateManyWithoutShiftNestedInput
 }
 
 export type ShiftUncheckedUpdateInput = {
@@ -359,6 +371,8 @@ export type ShiftUncheckedUpdateInput = {
   jadwals?: Prisma.JadwalUncheckedUpdateManyWithoutShiftNestedInput
   logs?: Prisma.LogAbsensiUncheckedUpdateManyWithoutShiftNestedInput
   requestLemburs?: Prisma.RequestLemburUncheckedUpdateManyWithoutShiftNestedInput
+  jadwalOverridesAsOriginal?: Prisma.JadwalOverrideUncheckedUpdateManyWithoutOriginalShiftNestedInput
+  jadwalOverridesAsReplacement?: Prisma.JadwalOverrideUncheckedUpdateManyWithoutShiftNestedInput
 }
 
 export type ShiftCreateManyInput = {
@@ -464,6 +478,38 @@ export type ShiftUpdateOneRequiredWithoutJadwalsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.ShiftUpdateToOneWithWhereWithoutJadwalsInput, Prisma.ShiftUpdateWithoutJadwalsInput>, Prisma.ShiftUncheckedUpdateWithoutJadwalsInput>
 }
 
+export type ShiftCreateNestedOneWithoutJadwalOverridesAsOriginalInput = {
+  create?: Prisma.XOR<Prisma.ShiftCreateWithoutJadwalOverridesAsOriginalInput, Prisma.ShiftUncheckedCreateWithoutJadwalOverridesAsOriginalInput>
+  connectOrCreate?: Prisma.ShiftCreateOrConnectWithoutJadwalOverridesAsOriginalInput
+  connect?: Prisma.ShiftWhereUniqueInput
+}
+
+export type ShiftCreateNestedOneWithoutJadwalOverridesAsReplacementInput = {
+  create?: Prisma.XOR<Prisma.ShiftCreateWithoutJadwalOverridesAsReplacementInput, Prisma.ShiftUncheckedCreateWithoutJadwalOverridesAsReplacementInput>
+  connectOrCreate?: Prisma.ShiftCreateOrConnectWithoutJadwalOverridesAsReplacementInput
+  connect?: Prisma.ShiftWhereUniqueInput
+}
+
+export type ShiftUpdateOneWithoutJadwalOverridesAsOriginalNestedInput = {
+  create?: Prisma.XOR<Prisma.ShiftCreateWithoutJadwalOverridesAsOriginalInput, Prisma.ShiftUncheckedCreateWithoutJadwalOverridesAsOriginalInput>
+  connectOrCreate?: Prisma.ShiftCreateOrConnectWithoutJadwalOverridesAsOriginalInput
+  upsert?: Prisma.ShiftUpsertWithoutJadwalOverridesAsOriginalInput
+  disconnect?: Prisma.ShiftWhereInput | boolean
+  delete?: Prisma.ShiftWhereInput | boolean
+  connect?: Prisma.ShiftWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ShiftUpdateToOneWithWhereWithoutJadwalOverridesAsOriginalInput, Prisma.ShiftUpdateWithoutJadwalOverridesAsOriginalInput>, Prisma.ShiftUncheckedUpdateWithoutJadwalOverridesAsOriginalInput>
+}
+
+export type ShiftUpdateOneWithoutJadwalOverridesAsReplacementNestedInput = {
+  create?: Prisma.XOR<Prisma.ShiftCreateWithoutJadwalOverridesAsReplacementInput, Prisma.ShiftUncheckedCreateWithoutJadwalOverridesAsReplacementInput>
+  connectOrCreate?: Prisma.ShiftCreateOrConnectWithoutJadwalOverridesAsReplacementInput
+  upsert?: Prisma.ShiftUpsertWithoutJadwalOverridesAsReplacementInput
+  disconnect?: Prisma.ShiftWhereInput | boolean
+  delete?: Prisma.ShiftWhereInput | boolean
+  connect?: Prisma.ShiftWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ShiftUpdateToOneWithWhereWithoutJadwalOverridesAsReplacementInput, Prisma.ShiftUpdateWithoutJadwalOverridesAsReplacementInput>, Prisma.ShiftUncheckedUpdateWithoutJadwalOverridesAsReplacementInput>
+}
+
 export type ShiftCreateNestedOneWithoutLogsInput = {
   create?: Prisma.XOR<Prisma.ShiftCreateWithoutLogsInput, Prisma.ShiftUncheckedCreateWithoutLogsInput>
   connectOrCreate?: Prisma.ShiftCreateOrConnectWithoutLogsInput
@@ -504,6 +550,8 @@ export type ShiftCreateWithoutJadwalsInput = {
   updatedAt?: Date | string
   logs?: Prisma.LogAbsensiCreateNestedManyWithoutShiftInput
   requestLemburs?: Prisma.RequestLemburCreateNestedManyWithoutShiftInput
+  jadwalOverridesAsOriginal?: Prisma.JadwalOverrideCreateNestedManyWithoutOriginalShiftInput
+  jadwalOverridesAsReplacement?: Prisma.JadwalOverrideCreateNestedManyWithoutShiftInput
 }
 
 export type ShiftUncheckedCreateWithoutJadwalsInput = {
@@ -517,6 +565,8 @@ export type ShiftUncheckedCreateWithoutJadwalsInput = {
   updatedAt?: Date | string
   logs?: Prisma.LogAbsensiUncheckedCreateNestedManyWithoutShiftInput
   requestLemburs?: Prisma.RequestLemburUncheckedCreateNestedManyWithoutShiftInput
+  jadwalOverridesAsOriginal?: Prisma.JadwalOverrideUncheckedCreateNestedManyWithoutOriginalShiftInput
+  jadwalOverridesAsReplacement?: Prisma.JadwalOverrideUncheckedCreateNestedManyWithoutShiftInput
 }
 
 export type ShiftCreateOrConnectWithoutJadwalsInput = {
@@ -545,6 +595,8 @@ export type ShiftUpdateWithoutJadwalsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   logs?: Prisma.LogAbsensiUpdateManyWithoutShiftNestedInput
   requestLemburs?: Prisma.RequestLemburUpdateManyWithoutShiftNestedInput
+  jadwalOverridesAsOriginal?: Prisma.JadwalOverrideUpdateManyWithoutOriginalShiftNestedInput
+  jadwalOverridesAsReplacement?: Prisma.JadwalOverrideUpdateManyWithoutShiftNestedInput
 }
 
 export type ShiftUncheckedUpdateWithoutJadwalsInput = {
@@ -558,6 +610,156 @@ export type ShiftUncheckedUpdateWithoutJadwalsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   logs?: Prisma.LogAbsensiUncheckedUpdateManyWithoutShiftNestedInput
   requestLemburs?: Prisma.RequestLemburUncheckedUpdateManyWithoutShiftNestedInput
+  jadwalOverridesAsOriginal?: Prisma.JadwalOverrideUncheckedUpdateManyWithoutOriginalShiftNestedInput
+  jadwalOverridesAsReplacement?: Prisma.JadwalOverrideUncheckedUpdateManyWithoutShiftNestedInput
+}
+
+export type ShiftCreateWithoutJadwalOverridesAsOriginalInput = {
+  name: string
+  jamMasuk: string
+  jamKeluar: string
+  isActive?: boolean
+  isArchive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  jadwals?: Prisma.JadwalCreateNestedManyWithoutShiftInput
+  logs?: Prisma.LogAbsensiCreateNestedManyWithoutShiftInput
+  requestLemburs?: Prisma.RequestLemburCreateNestedManyWithoutShiftInput
+  jadwalOverridesAsReplacement?: Prisma.JadwalOverrideCreateNestedManyWithoutShiftInput
+}
+
+export type ShiftUncheckedCreateWithoutJadwalOverridesAsOriginalInput = {
+  id?: number
+  name: string
+  jamMasuk: string
+  jamKeluar: string
+  isActive?: boolean
+  isArchive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  jadwals?: Prisma.JadwalUncheckedCreateNestedManyWithoutShiftInput
+  logs?: Prisma.LogAbsensiUncheckedCreateNestedManyWithoutShiftInput
+  requestLemburs?: Prisma.RequestLemburUncheckedCreateNestedManyWithoutShiftInput
+  jadwalOverridesAsReplacement?: Prisma.JadwalOverrideUncheckedCreateNestedManyWithoutShiftInput
+}
+
+export type ShiftCreateOrConnectWithoutJadwalOverridesAsOriginalInput = {
+  where: Prisma.ShiftWhereUniqueInput
+  create: Prisma.XOR<Prisma.ShiftCreateWithoutJadwalOverridesAsOriginalInput, Prisma.ShiftUncheckedCreateWithoutJadwalOverridesAsOriginalInput>
+}
+
+export type ShiftCreateWithoutJadwalOverridesAsReplacementInput = {
+  name: string
+  jamMasuk: string
+  jamKeluar: string
+  isActive?: boolean
+  isArchive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  jadwals?: Prisma.JadwalCreateNestedManyWithoutShiftInput
+  logs?: Prisma.LogAbsensiCreateNestedManyWithoutShiftInput
+  requestLemburs?: Prisma.RequestLemburCreateNestedManyWithoutShiftInput
+  jadwalOverridesAsOriginal?: Prisma.JadwalOverrideCreateNestedManyWithoutOriginalShiftInput
+}
+
+export type ShiftUncheckedCreateWithoutJadwalOverridesAsReplacementInput = {
+  id?: number
+  name: string
+  jamMasuk: string
+  jamKeluar: string
+  isActive?: boolean
+  isArchive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  jadwals?: Prisma.JadwalUncheckedCreateNestedManyWithoutShiftInput
+  logs?: Prisma.LogAbsensiUncheckedCreateNestedManyWithoutShiftInput
+  requestLemburs?: Prisma.RequestLemburUncheckedCreateNestedManyWithoutShiftInput
+  jadwalOverridesAsOriginal?: Prisma.JadwalOverrideUncheckedCreateNestedManyWithoutOriginalShiftInput
+}
+
+export type ShiftCreateOrConnectWithoutJadwalOverridesAsReplacementInput = {
+  where: Prisma.ShiftWhereUniqueInput
+  create: Prisma.XOR<Prisma.ShiftCreateWithoutJadwalOverridesAsReplacementInput, Prisma.ShiftUncheckedCreateWithoutJadwalOverridesAsReplacementInput>
+}
+
+export type ShiftUpsertWithoutJadwalOverridesAsOriginalInput = {
+  update: Prisma.XOR<Prisma.ShiftUpdateWithoutJadwalOverridesAsOriginalInput, Prisma.ShiftUncheckedUpdateWithoutJadwalOverridesAsOriginalInput>
+  create: Prisma.XOR<Prisma.ShiftCreateWithoutJadwalOverridesAsOriginalInput, Prisma.ShiftUncheckedCreateWithoutJadwalOverridesAsOriginalInput>
+  where?: Prisma.ShiftWhereInput
+}
+
+export type ShiftUpdateToOneWithWhereWithoutJadwalOverridesAsOriginalInput = {
+  where?: Prisma.ShiftWhereInput
+  data: Prisma.XOR<Prisma.ShiftUpdateWithoutJadwalOverridesAsOriginalInput, Prisma.ShiftUncheckedUpdateWithoutJadwalOverridesAsOriginalInput>
+}
+
+export type ShiftUpdateWithoutJadwalOverridesAsOriginalInput = {
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  jamMasuk?: Prisma.StringFieldUpdateOperationsInput | string
+  jamKeluar?: Prisma.StringFieldUpdateOperationsInput | string
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isArchive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  jadwals?: Prisma.JadwalUpdateManyWithoutShiftNestedInput
+  logs?: Prisma.LogAbsensiUpdateManyWithoutShiftNestedInput
+  requestLemburs?: Prisma.RequestLemburUpdateManyWithoutShiftNestedInput
+  jadwalOverridesAsReplacement?: Prisma.JadwalOverrideUpdateManyWithoutShiftNestedInput
+}
+
+export type ShiftUncheckedUpdateWithoutJadwalOverridesAsOriginalInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  jamMasuk?: Prisma.StringFieldUpdateOperationsInput | string
+  jamKeluar?: Prisma.StringFieldUpdateOperationsInput | string
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isArchive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  jadwals?: Prisma.JadwalUncheckedUpdateManyWithoutShiftNestedInput
+  logs?: Prisma.LogAbsensiUncheckedUpdateManyWithoutShiftNestedInput
+  requestLemburs?: Prisma.RequestLemburUncheckedUpdateManyWithoutShiftNestedInput
+  jadwalOverridesAsReplacement?: Prisma.JadwalOverrideUncheckedUpdateManyWithoutShiftNestedInput
+}
+
+export type ShiftUpsertWithoutJadwalOverridesAsReplacementInput = {
+  update: Prisma.XOR<Prisma.ShiftUpdateWithoutJadwalOverridesAsReplacementInput, Prisma.ShiftUncheckedUpdateWithoutJadwalOverridesAsReplacementInput>
+  create: Prisma.XOR<Prisma.ShiftCreateWithoutJadwalOverridesAsReplacementInput, Prisma.ShiftUncheckedCreateWithoutJadwalOverridesAsReplacementInput>
+  where?: Prisma.ShiftWhereInput
+}
+
+export type ShiftUpdateToOneWithWhereWithoutJadwalOverridesAsReplacementInput = {
+  where?: Prisma.ShiftWhereInput
+  data: Prisma.XOR<Prisma.ShiftUpdateWithoutJadwalOverridesAsReplacementInput, Prisma.ShiftUncheckedUpdateWithoutJadwalOverridesAsReplacementInput>
+}
+
+export type ShiftUpdateWithoutJadwalOverridesAsReplacementInput = {
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  jamMasuk?: Prisma.StringFieldUpdateOperationsInput | string
+  jamKeluar?: Prisma.StringFieldUpdateOperationsInput | string
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isArchive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  jadwals?: Prisma.JadwalUpdateManyWithoutShiftNestedInput
+  logs?: Prisma.LogAbsensiUpdateManyWithoutShiftNestedInput
+  requestLemburs?: Prisma.RequestLemburUpdateManyWithoutShiftNestedInput
+  jadwalOverridesAsOriginal?: Prisma.JadwalOverrideUpdateManyWithoutOriginalShiftNestedInput
+}
+
+export type ShiftUncheckedUpdateWithoutJadwalOverridesAsReplacementInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  jamMasuk?: Prisma.StringFieldUpdateOperationsInput | string
+  jamKeluar?: Prisma.StringFieldUpdateOperationsInput | string
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isArchive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  jadwals?: Prisma.JadwalUncheckedUpdateManyWithoutShiftNestedInput
+  logs?: Prisma.LogAbsensiUncheckedUpdateManyWithoutShiftNestedInput
+  requestLemburs?: Prisma.RequestLemburUncheckedUpdateManyWithoutShiftNestedInput
+  jadwalOverridesAsOriginal?: Prisma.JadwalOverrideUncheckedUpdateManyWithoutOriginalShiftNestedInput
 }
 
 export type ShiftCreateWithoutLogsInput = {
@@ -570,6 +772,8 @@ export type ShiftCreateWithoutLogsInput = {
   updatedAt?: Date | string
   jadwals?: Prisma.JadwalCreateNestedManyWithoutShiftInput
   requestLemburs?: Prisma.RequestLemburCreateNestedManyWithoutShiftInput
+  jadwalOverridesAsOriginal?: Prisma.JadwalOverrideCreateNestedManyWithoutOriginalShiftInput
+  jadwalOverridesAsReplacement?: Prisma.JadwalOverrideCreateNestedManyWithoutShiftInput
 }
 
 export type ShiftUncheckedCreateWithoutLogsInput = {
@@ -583,6 +787,8 @@ export type ShiftUncheckedCreateWithoutLogsInput = {
   updatedAt?: Date | string
   jadwals?: Prisma.JadwalUncheckedCreateNestedManyWithoutShiftInput
   requestLemburs?: Prisma.RequestLemburUncheckedCreateNestedManyWithoutShiftInput
+  jadwalOverridesAsOriginal?: Prisma.JadwalOverrideUncheckedCreateNestedManyWithoutOriginalShiftInput
+  jadwalOverridesAsReplacement?: Prisma.JadwalOverrideUncheckedCreateNestedManyWithoutShiftInput
 }
 
 export type ShiftCreateOrConnectWithoutLogsInput = {
@@ -611,6 +817,8 @@ export type ShiftUpdateWithoutLogsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   jadwals?: Prisma.JadwalUpdateManyWithoutShiftNestedInput
   requestLemburs?: Prisma.RequestLemburUpdateManyWithoutShiftNestedInput
+  jadwalOverridesAsOriginal?: Prisma.JadwalOverrideUpdateManyWithoutOriginalShiftNestedInput
+  jadwalOverridesAsReplacement?: Prisma.JadwalOverrideUpdateManyWithoutShiftNestedInput
 }
 
 export type ShiftUncheckedUpdateWithoutLogsInput = {
@@ -624,6 +832,8 @@ export type ShiftUncheckedUpdateWithoutLogsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   jadwals?: Prisma.JadwalUncheckedUpdateManyWithoutShiftNestedInput
   requestLemburs?: Prisma.RequestLemburUncheckedUpdateManyWithoutShiftNestedInput
+  jadwalOverridesAsOriginal?: Prisma.JadwalOverrideUncheckedUpdateManyWithoutOriginalShiftNestedInput
+  jadwalOverridesAsReplacement?: Prisma.JadwalOverrideUncheckedUpdateManyWithoutShiftNestedInput
 }
 
 export type ShiftCreateWithoutRequestLembursInput = {
@@ -636,6 +846,8 @@ export type ShiftCreateWithoutRequestLembursInput = {
   updatedAt?: Date | string
   jadwals?: Prisma.JadwalCreateNestedManyWithoutShiftInput
   logs?: Prisma.LogAbsensiCreateNestedManyWithoutShiftInput
+  jadwalOverridesAsOriginal?: Prisma.JadwalOverrideCreateNestedManyWithoutOriginalShiftInput
+  jadwalOverridesAsReplacement?: Prisma.JadwalOverrideCreateNestedManyWithoutShiftInput
 }
 
 export type ShiftUncheckedCreateWithoutRequestLembursInput = {
@@ -649,6 +861,8 @@ export type ShiftUncheckedCreateWithoutRequestLembursInput = {
   updatedAt?: Date | string
   jadwals?: Prisma.JadwalUncheckedCreateNestedManyWithoutShiftInput
   logs?: Prisma.LogAbsensiUncheckedCreateNestedManyWithoutShiftInput
+  jadwalOverridesAsOriginal?: Prisma.JadwalOverrideUncheckedCreateNestedManyWithoutOriginalShiftInput
+  jadwalOverridesAsReplacement?: Prisma.JadwalOverrideUncheckedCreateNestedManyWithoutShiftInput
 }
 
 export type ShiftCreateOrConnectWithoutRequestLembursInput = {
@@ -677,6 +891,8 @@ export type ShiftUpdateWithoutRequestLembursInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   jadwals?: Prisma.JadwalUpdateManyWithoutShiftNestedInput
   logs?: Prisma.LogAbsensiUpdateManyWithoutShiftNestedInput
+  jadwalOverridesAsOriginal?: Prisma.JadwalOverrideUpdateManyWithoutOriginalShiftNestedInput
+  jadwalOverridesAsReplacement?: Prisma.JadwalOverrideUpdateManyWithoutShiftNestedInput
 }
 
 export type ShiftUncheckedUpdateWithoutRequestLembursInput = {
@@ -690,6 +906,8 @@ export type ShiftUncheckedUpdateWithoutRequestLembursInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   jadwals?: Prisma.JadwalUncheckedUpdateManyWithoutShiftNestedInput
   logs?: Prisma.LogAbsensiUncheckedUpdateManyWithoutShiftNestedInput
+  jadwalOverridesAsOriginal?: Prisma.JadwalOverrideUncheckedUpdateManyWithoutOriginalShiftNestedInput
+  jadwalOverridesAsReplacement?: Prisma.JadwalOverrideUncheckedUpdateManyWithoutShiftNestedInput
 }
 
 
@@ -701,12 +919,16 @@ export type ShiftCountOutputType = {
   jadwals: number
   logs: number
   requestLemburs: number
+  jadwalOverridesAsOriginal: number
+  jadwalOverridesAsReplacement: number
 }
 
 export type ShiftCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   jadwals?: boolean | ShiftCountOutputTypeCountJadwalsArgs
   logs?: boolean | ShiftCountOutputTypeCountLogsArgs
   requestLemburs?: boolean | ShiftCountOutputTypeCountRequestLembursArgs
+  jadwalOverridesAsOriginal?: boolean | ShiftCountOutputTypeCountJadwalOverridesAsOriginalArgs
+  jadwalOverridesAsReplacement?: boolean | ShiftCountOutputTypeCountJadwalOverridesAsReplacementArgs
 }
 
 /**
@@ -740,6 +962,20 @@ export type ShiftCountOutputTypeCountRequestLembursArgs<ExtArgs extends runtime.
   where?: Prisma.RequestLemburWhereInput
 }
 
+/**
+ * ShiftCountOutputType without action
+ */
+export type ShiftCountOutputTypeCountJadwalOverridesAsOriginalArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.JadwalOverrideWhereInput
+}
+
+/**
+ * ShiftCountOutputType without action
+ */
+export type ShiftCountOutputTypeCountJadwalOverridesAsReplacementArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.JadwalOverrideWhereInput
+}
+
 
 export type ShiftSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -753,6 +989,8 @@ export type ShiftSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   jadwals?: boolean | Prisma.Shift$jadwalsArgs<ExtArgs>
   logs?: boolean | Prisma.Shift$logsArgs<ExtArgs>
   requestLemburs?: boolean | Prisma.Shift$requestLembursArgs<ExtArgs>
+  jadwalOverridesAsOriginal?: boolean | Prisma.Shift$jadwalOverridesAsOriginalArgs<ExtArgs>
+  jadwalOverridesAsReplacement?: boolean | Prisma.Shift$jadwalOverridesAsReplacementArgs<ExtArgs>
   _count?: boolean | Prisma.ShiftCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["shift"]>
 
@@ -774,6 +1012,8 @@ export type ShiftInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   jadwals?: boolean | Prisma.Shift$jadwalsArgs<ExtArgs>
   logs?: boolean | Prisma.Shift$logsArgs<ExtArgs>
   requestLemburs?: boolean | Prisma.Shift$requestLembursArgs<ExtArgs>
+  jadwalOverridesAsOriginal?: boolean | Prisma.Shift$jadwalOverridesAsOriginalArgs<ExtArgs>
+  jadwalOverridesAsReplacement?: boolean | Prisma.Shift$jadwalOverridesAsReplacementArgs<ExtArgs>
   _count?: boolean | Prisma.ShiftCountOutputTypeDefaultArgs<ExtArgs>
 }
 
@@ -783,6 +1023,8 @@ export type $ShiftPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     jadwals: Prisma.$JadwalPayload<ExtArgs>[]
     logs: Prisma.$LogAbsensiPayload<ExtArgs>[]
     requestLemburs: Prisma.$RequestLemburPayload<ExtArgs>[]
+    jadwalOverridesAsOriginal: Prisma.$JadwalOverridePayload<ExtArgs>[]
+    jadwalOverridesAsReplacement: Prisma.$JadwalOverridePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
@@ -1136,6 +1378,8 @@ export interface Prisma__ShiftClient<T, Null = never, ExtArgs extends runtime.Ty
   jadwals<T extends Prisma.Shift$jadwalsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Shift$jadwalsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$JadwalPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   logs<T extends Prisma.Shift$logsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Shift$logsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LogAbsensiPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   requestLemburs<T extends Prisma.Shift$requestLembursArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Shift$requestLembursArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RequestLemburPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  jadwalOverridesAsOriginal<T extends Prisma.Shift$jadwalOverridesAsOriginalArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Shift$jadwalOverridesAsOriginalArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$JadwalOverridePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  jadwalOverridesAsReplacement<T extends Prisma.Shift$jadwalOverridesAsReplacementArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Shift$jadwalOverridesAsReplacementArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$JadwalOverridePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1585,6 +1829,54 @@ export type Shift$requestLembursArgs<ExtArgs extends runtime.Types.Extensions.In
   take?: number
   skip?: number
   distinct?: Prisma.RequestLemburScalarFieldEnum | Prisma.RequestLemburScalarFieldEnum[]
+}
+
+/**
+ * Shift.jadwalOverridesAsOriginal
+ */
+export type Shift$jadwalOverridesAsOriginalArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the JadwalOverride
+   */
+  select?: Prisma.JadwalOverrideSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the JadwalOverride
+   */
+  omit?: Prisma.JadwalOverrideOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.JadwalOverrideInclude<ExtArgs> | null
+  where?: Prisma.JadwalOverrideWhereInput
+  orderBy?: Prisma.JadwalOverrideOrderByWithRelationInput | Prisma.JadwalOverrideOrderByWithRelationInput[]
+  cursor?: Prisma.JadwalOverrideWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.JadwalOverrideScalarFieldEnum | Prisma.JadwalOverrideScalarFieldEnum[]
+}
+
+/**
+ * Shift.jadwalOverridesAsReplacement
+ */
+export type Shift$jadwalOverridesAsReplacementArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the JadwalOverride
+   */
+  select?: Prisma.JadwalOverrideSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the JadwalOverride
+   */
+  omit?: Prisma.JadwalOverrideOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.JadwalOverrideInclude<ExtArgs> | null
+  where?: Prisma.JadwalOverrideWhereInput
+  orderBy?: Prisma.JadwalOverrideOrderByWithRelationInput | Prisma.JadwalOverrideOrderByWithRelationInput[]
+  cursor?: Prisma.JadwalOverrideWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.JadwalOverrideScalarFieldEnum | Prisma.JadwalOverrideScalarFieldEnum[]
 }
 
 /**

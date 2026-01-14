@@ -131,6 +131,50 @@ export const getAllAbsensi = async (req: Request, res: Response) => {
   }
 };
 
+/**
+ * Helper: Find consecutive shifts (where jamKeluar of one = jamMasuk of next)
+ * Returns array of shift groups, each group is an array of consecutive shifts sorted by jamMasuk
+ */
+function groupConsecutiveShifts(
+  shifts: Array<{
+    day: number;
+    shiftId: number;
+    shift: { jamMasuk: string; jamKeluar: string; name: string };
+    isOverride?: boolean;
+  }>,
+  currentDay: number
+): Array<typeof shifts> {
+  // Filter only today's shifts
+  const todayShifts = shifts.filter((s) => s.day === currentDay);
+
+  if (todayShifts.length <= 1) {
+    return todayShifts.map((s) => [s]);
+  }
+
+  // Sort by jamMasuk
+  todayShifts.sort((a, b) => a.shift.jamMasuk.localeCompare(b.shift.jamMasuk));
+
+  const groups: Array<typeof shifts> = [];
+  let currentGroup: typeof shifts = [todayShifts[0]];
+
+  for (let i = 1; i < todayShifts.length; i++) {
+    const prevShift = currentGroup[currentGroup.length - 1];
+    const currShift = todayShifts[i];
+
+    // Check if consecutive (prevShift.jamKeluar === currShift.jamMasuk)
+    if (prevShift.shift.jamKeluar === currShift.shift.jamMasuk) {
+      currentGroup.push(currShift);
+    } else {
+      // Start new group
+      groups.push(currentGroup);
+      currentGroup = [currShift];
+    }
+  }
+
+  groups.push(currentGroup);
+  return groups;
+}
+
 export const scanAbsensi = async (req: Request, res: Response) => {
   try {
     const { pegawaiId, code } = req.body;
@@ -171,11 +215,89 @@ export const scanAbsensi = async (req: Request, res: Response) => {
     const result = await prisma.$transaction(async (tx) => {
       const currentDate = NOW.toDate();
       const currentDay = NOW.day() === 0 ? 6 : NOW.day() - 1;
+      const todayStart = NOW.startOf("day").toDate();
+      const todayEnd = NOW.endOf("day").toDate();
 
-      // get all jadwal pegawai
-      const jadwalPegawaiList = await tx.jadwal.findMany({
+      // Step 1: Get ALL JadwalOverrides for today
+      const todayOverrides = await tx.jadwalOverride.findMany({
         where: {
           pegawaiId: pegawaiId,
+          date: {
+            gte: todayStart,
+            lte: todayEnd,
+          },
+          isActive: true,
+          isArchive: false,
+        },
+        include: {
+          shift: true,
+          originalShift: true,
+        },
+      });
+
+      // Categorize overrides by type
+      const addOverrides = todayOverrides.filter(
+        (o) => o.originalShiftId === null && o.shiftId !== null
+      ); // TAMBAH
+      const replaceOverrides = todayOverrides.filter(
+        (o) => o.originalShiftId !== null && o.shiftId !== null
+      ); // GANTI
+      const removeOverrides = todayOverrides.filter(
+        (o) => o.originalShiftId !== null && o.shiftId === null
+      ); // LIBUR
+
+      // Get set of original shift IDs that are being replaced or removed
+      const replacedOrRemovedShiftIds = new Set([
+        ...replaceOverrides.map((o) => o.originalShiftId!),
+        ...removeOverrides.map((o) => o.originalShiftId!),
+      ]);
+
+      // Step 2: Build jadwal list
+      let jadwalPegawaiList: Array<{
+        day: number;
+        shiftId: number;
+        shift: { jamMasuk: string; jamKeluar: string; name: string };
+        isOverride?: boolean;
+      }> = [];
+
+      // Add shifts from TAMBAH overrides (new shifts)
+      for (const override of addOverrides) {
+        if (override.shift) {
+          jadwalPegawaiList.push({
+            day: currentDay,
+            shiftId: override.shiftId!,
+            shift: {
+              jamMasuk: override.shift.jamMasuk,
+              jamKeluar: override.shift.jamKeluar,
+              name: override.shift.name,
+            },
+            isOverride: true,
+          });
+        }
+      }
+
+      // Add replacement shifts from GANTI overrides
+      for (const override of replaceOverrides) {
+        if (override.shift) {
+          jadwalPegawaiList.push({
+            day: currentDay,
+            shiftId: override.shiftId!,
+            shift: {
+              jamMasuk: override.shift.jamMasuk,
+              jamKeluar: override.shift.jamKeluar,
+              name: override.shift.name,
+            },
+            isOverride: true,
+          });
+        }
+      }
+
+      // Get regular jadwal (for current day and nearby days)
+      const regularJadwalList = await tx.jadwal.findMany({
+        where: {
+          pegawaiId: pegawaiId,
+          isActive: true,
+          isArchive: false,
           OR: [
             { day: currentDay },
             { day: currentDay === 6 ? 0 : currentDay + 1 },
@@ -190,162 +312,295 @@ export const scanAbsensi = async (req: Request, res: Response) => {
         orderBy: [{ day: "asc" }, { shift: { jamMasuk: "asc" } }],
       });
 
-      // check apakah masuk current date masuk ke salah satu jadwal
-      const jadwalOnCurrentDate = jadwalPegawaiList.find((jadwal) => {
-        const shiftDayDate = NOW.clone()
-          .day(convertDayDatabaseToDayjs(jadwal.day))
-          .toDate();
-        const jamShiftJadwalDate = calculateJamShiftDate(
-          jadwal.shift.jamMasuk,
-          jadwal.shift.jamKeluar,
-          shiftDayDate
+      // Add regular jadwals to list
+      for (const jadwal of regularJadwalList) {
+        // For today's shifts: skip if this shift is being replaced or removed
+        if (
+          jadwal.day === currentDay &&
+          replacedOrRemovedShiftIds.has(jadwal.shiftId)
+        ) {
+          continue;
+        }
+        jadwalPegawaiList.push({
+          day: jadwal.day,
+          shiftId: jadwal.shiftId,
+          shift: jadwal.shift,
+        });
+      }
+
+      // === CONSECUTIVE SHIFTS HANDLING ===
+      // Group today's shifts by consecutive jamMasuk/jamKeluar
+      const shiftGroups = groupConsecutiveShifts(jadwalPegawaiList, currentDay);
+
+      // Find which group the current time falls into
+      let activeGroup: typeof jadwalPegawaiList | null = null;
+      let groupFirstShift: (typeof jadwalPegawaiList)[0] | null = null;
+      let groupLastShift: (typeof jadwalPegawaiList)[0] | null = null;
+
+      for (const group of shiftGroups) {
+        if (group.length === 0) continue;
+
+        const firstShift = group[0];
+        const lastShift = group[group.length - 1];
+
+        // Calculate time window for the entire group
+        const firstShiftDate = calculateJamShiftDate(
+          firstShift.shift.jamMasuk,
+          firstShift.shift.jamKeluar
         );
-        const startJamMasukDate = dayjs(jamShiftJadwalDate.jamMasukDate)
+        const lastShiftDate = calculateJamShiftDate(
+          lastShift.shift.jamMasuk,
+          lastShift.shift.jamKeluar
+        );
+
+        const groupStartTime = dayjs(firstShiftDate.jamMasukDate)
           .subtract(CHECK_IN_MINUTE_OFFSET, "minutes")
           .toDate();
+        const groupEndTime = lastShiftDate.jamKeluarDate;
 
-        return (
-          startJamMasukDate <= currentDate &&
-          currentDate < jamShiftJadwalDate.jamKeluarDate
-        );
-      });
+        // Check if current time is within this group's window (for check-in/during shift)
+        // OR if current time is AFTER groupEndTime (for late checkout)
+        const isWithinWindow =
+          groupStartTime <= currentDate && currentDate < groupEndTime;
+        const isPastWindow = currentDate >= groupEndTime;
 
-      // kalau berada di dalam jadwal
-      if (jadwalOnCurrentDate) {
-        // check apakah ada log absensi dengan jadwal tersebut
-        const jamShiftDate = calculateJamShiftDate(
-          jadwalOnCurrentDate.shift.jamMasuk,
-          jadwalOnCurrentDate.shift.jamKeluar
+        if (isWithinWindow || isPastWindow) {
+          activeGroup = group;
+          groupFirstShift = firstShift;
+          groupLastShift = lastShift;
+          break;
+        }
+      }
+
+      // If we're in an active group of consecutive shifts
+      if (activeGroup && groupFirstShift && groupLastShift) {
+        // Calculate dates for first shift (for LogAbsensi lookup)
+        const firstShiftDate = calculateJamShiftDate(
+          groupFirstShift.shift.jamMasuk,
+          groupFirstShift.shift.jamKeluar
         );
-        const jamMasukDate = dayjs(jamShiftDate.jamMasukDate)
-          .day(convertDayDatabaseToDayjs(jadwalOnCurrentDate.day))
+        const firstJamMasukDate = dayjs(firstShiftDate.jamMasukDate)
+          .day(convertDayDatabaseToDayjs(groupFirstShift.day))
           .toDate();
-        const existingLogAbsensi = await tx.logAbsensi.findFirst({
+
+        // Check if LogAbsensi exists for the FIRST shift in the group
+        const existingFirstLogAbsensi = await tx.logAbsensi.findFirst({
           where: {
             pegawaiId,
-            shiftId: jadwalOnCurrentDate.shiftId,
-            jamMasukDate,
+            shiftId: groupFirstShift.shiftId,
+            jamMasukDate: firstJamMasukDate,
           },
         });
 
-        // kalau sudah ada log absensi
-        if (existingLogAbsensi) {
-          // kalau tidak ada checkin, maka checkin
-          if (!existingLogAbsensi.checkIn) {
-            const updateCheckIn = await tx.logAbsensi.update({
-              where: {
-                id: existingLogAbsensi.id,
-              },
+        // Case 1: No LogAbsensi yet - this is a CHECK-IN
+        // Only create LogAbsensi for the FIRST shift
+        // Let cron create subsequent shifts, or create them at checkout
+        if (!existingFirstLogAbsensi || !existingFirstLogAbsensi.checkIn) {
+          let firstLogAbsensi = existingFirstLogAbsensi;
+
+          if (!firstLogAbsensi) {
+            // Create LogAbsensi for first shift only
+            firstLogAbsensi = await tx.logAbsensi.create({
               data: {
+                pegawaiId,
+                shiftId: groupFirstShift.shiftId,
+                shiftName: groupFirstShift.shift.name,
+                jamMasuk: groupFirstShift.shift.jamMasuk,
+                jamMasukDate: firstJamMasukDate,
+                jamKeluar: groupFirstShift.shift.jamKeluar,
+                jamKeluarDate: firstShiftDate.jamKeluarDate,
+                day: groupFirstShift.day,
                 checkIn: currentDate,
               },
             });
-
-            await tx.logScan.create({
-              data: {
-                pegawaiId,
-                logAbsensiId: existingLogAbsensi.id,
-                scanTime: currentDate,
-                scanType: ScanType.IN,
-              },
+          } else {
+            // Update existing with checkIn
+            firstLogAbsensi = await tx.logAbsensi.update({
+              where: { id: firstLogAbsensi.id },
+              data: { checkIn: currentDate },
             });
-
-            return {
-              data: updateCheckIn,
-              status: "CHECK_IN",
-              code: 201,
-            };
           }
 
-          // kalau tidak ada checkout, maka checkout
-          if (!existingLogAbsensi.checkOut) {
-            // Cek apakah sudah waktu nya pulang
-            if (existingLogAbsensi.jamKeluarDate > currentDate) {
-              await tx.logScan.create({
-                data: {
-                  pegawaiId,
-                  logAbsensiId: existingLogAbsensi.id,
-                  scanTime: currentDate,
-                  scanType: ScanType.UNKNOWN,
-                },
-              });
-
-              return {
-                status: "CHECK_OUT_NOT_YET",
-                data: existingLogAbsensi,
-                code: 201,
-              };
-            }
-
-            const updateCheckOut = await tx.logAbsensi.update({
-              where: {
-                id: existingLogAbsensi.id,
-              },
-              data: {
-                checkOut: currentDate,
-              },
-            });
-
-            await tx.logScan.create({
-              data: {
-                pegawaiId,
-                logAbsensiId: existingLogAbsensi.id,
-                scanTime: currentDate,
-                scanType: ScanType.OUT,
-              },
-            });
-
-            return {
-              data: updateCheckOut,
-              status: "CHECK_OUT",
-              code: 201,
-            };
-          }
-
+          // Create LogScan for the check-in
           await tx.logScan.create({
             data: {
               pegawaiId,
-              logAbsensiId: existingLogAbsensi.id,
+              logAbsensiId: firstLogAbsensi.id,
+              scanTime: currentDate,
+              scanType: ScanType.IN,
+            },
+          });
+
+          const shiftNames = activeGroup.map((s) => s.shift.name).join(" + ");
+
+          return {
+            status:
+              activeGroup.length > 1 ? "CHECK_IN_CONSECUTIVE" : "CHECK_IN",
+            message:
+              activeGroup.length > 1
+                ? `Check-in untuk ${shiftNames} (shift berikutnya akan dibuat otomatis)`
+                : undefined,
+            data: firstLogAbsensi,
+            consecutiveShifts:
+              activeGroup.length > 1 ? activeGroup.length : undefined,
+            code: 201,
+          };
+        }
+
+        // Case 2: Already checked in - check if it's time for CHECK-OUT
+        // Check if ALL shifts have been checked in
+        const allLogsInGroup = [];
+        for (const shift of activeGroup) {
+          const shiftDate = calculateJamShiftDate(
+            shift.shift.jamMasuk,
+            shift.shift.jamKeluar
+          );
+          const shiftJamMasukDate = dayjs(shiftDate.jamMasukDate)
+            .day(convertDayDatabaseToDayjs(shift.day))
+            .toDate();
+
+          const logAbsensi = await tx.logAbsensi.findFirst({
+            where: {
+              pegawaiId,
+              shiftId: shift.shiftId,
+              jamMasukDate: shiftJamMasukDate,
+            },
+          });
+
+          if (logAbsensi) {
+            allLogsInGroup.push({
+              log: logAbsensi,
+              shift,
+              shiftDate,
+            });
+          }
+        }
+
+        // Check if FIRST shift is already checked out (means all are done)
+        if (existingFirstLogAbsensi.checkOut) {
+          await tx.logScan.create({
+            data: {
+              pegawaiId,
+              logAbsensiId: existingFirstLogAbsensi.id,
               scanTime: currentDate,
               scanType: ScanType.UNKNOWN,
             },
           });
 
           return {
-            data: existingLogAbsensi,
             status: "ALREADY_CHECK_OUT",
+            data: allLogsInGroup.map((l) => l.log),
             code: 201,
           };
         }
 
-        // kalau tidak ada, create log absensi baru dan check in
-        const newLogAbsensi = await tx.logAbsensi.create({
-          data: {
-            pegawaiId,
-            shiftId: jadwalOnCurrentDate.shiftId,
-            shiftName: jadwalOnCurrentDate.shift.name,
-            jamMasuk: jadwalOnCurrentDate.shift.jamMasuk,
-            jamMasukDate: jamMasukDate,
-            jamKeluar: jadwalOnCurrentDate.shift.jamKeluar,
-            jamKeluarDate: jamShiftDate.jamKeluarDate,
-            day: jadwalOnCurrentDate.day,
-            checkIn: currentDate,
-          },
-        });
+        // Check if it's time to check out (only check last shift's jamKeluar)
+        const lastShiftDate = calculateJamShiftDate(
+          groupLastShift.shift.jamMasuk,
+          groupLastShift.shift.jamKeluar
+        );
+        if (lastShiftDate.jamKeluarDate > currentDate) {
+          await tx.logScan.create({
+            data: {
+              pegawaiId,
+              logAbsensiId: existingFirstLogAbsensi.id,
+              scanTime: currentDate,
+              scanType: ScanType.UNKNOWN,
+            },
+          });
 
+          return {
+            status: "CHECK_OUT_NOT_YET",
+            message: `Belum waktunya pulang. Jam pulang: ${groupLastShift.shift.jamKeluar}`,
+            data:
+              allLogsInGroup.length > 0
+                ? allLogsInGroup.map((l) => l.log)
+                : [existingFirstLogAbsensi],
+            code: 201,
+          };
+        }
+
+        // It's checkout time - first ensure ALL shifts have LogAbsensi
+        // (some may not exist if cron didn't run yet)
+        const allLogsForCheckout = [];
+
+        for (let i = 0; i < activeGroup.length; i++) {
+          const shift = activeGroup[i];
+          const shiftDate = calculateJamShiftDate(
+            shift.shift.jamMasuk,
+            shift.shift.jamKeluar
+          );
+          const shiftJamMasukDate = dayjs(shiftDate.jamMasukDate)
+            .day(convertDayDatabaseToDayjs(shift.day))
+            .toDate();
+          const isFirstShift = i === 0;
+          const isLastShift = i === activeGroup.length - 1;
+
+          // Find or create LogAbsensi for this shift
+          let logAbsensi = await tx.logAbsensi.findFirst({
+            where: {
+              pegawaiId,
+              shiftId: shift.shiftId,
+              jamMasukDate: shiftJamMasukDate,
+            },
+          });
+
+          if (!logAbsensi) {
+            // Create LogAbsensi for missing shift
+            // checkIn = jamMasukDate of THIS shift (not first shift's checkIn)
+            logAbsensi = await tx.logAbsensi.create({
+              data: {
+                pegawaiId,
+                shiftId: shift.shiftId,
+                shiftName: shift.shift.name,
+                jamMasuk: shift.shift.jamMasuk,
+                jamMasukDate: shiftJamMasukDate,
+                jamKeluar: shift.shift.jamKeluar,
+                jamKeluarDate: shiftDate.jamKeluarDate,
+                day: shift.day,
+                checkIn: shiftJamMasukDate, // Use THIS shift's jamMasuk as checkIn
+                checkOut: isLastShift ? currentDate : shiftDate.jamKeluarDate,
+              },
+            });
+          } else if (!logAbsensi.checkOut) {
+            // Update existing with checkOut
+            // For first shift: checkOut = jamKeluarDate
+            // For last shift: checkOut = actual scan time
+            const checkOutTime = isLastShift
+              ? currentDate
+              : shiftDate.jamKeluarDate;
+            logAbsensi = await tx.logAbsensi.update({
+              where: { id: logAbsensi.id },
+              data: { checkOut: checkOutTime },
+            });
+          }
+
+          allLogsForCheckout.push(logAbsensi);
+        }
+
+        // Create single LogScan for the check-out
+        const lastLogForCheckout =
+          allLogsForCheckout[allLogsForCheckout.length - 1];
         await tx.logScan.create({
           data: {
             pegawaiId,
-            logAbsensiId: newLogAbsensi.id,
+            logAbsensiId: lastLogForCheckout.id,
             scanTime: currentDate,
-            scanType: ScanType.IN,
+            scanType: ScanType.OUT,
           },
         });
 
+        const shiftNames = activeGroup.map((s) => s.shift.name).join(" + ");
+
         return {
-          data: newLogAbsensi,
+          status:
+            activeGroup.length > 1 ? "CHECK_OUT_CONSECUTIVE" : "CHECK_OUT",
+          message:
+            activeGroup.length > 1
+              ? `Check-out untuk ${shiftNames}`
+              : undefined,
+          data: allLogsForCheckout,
           code: 201,
-          status: "CHECK_IN",
         };
       }
 
@@ -562,6 +817,18 @@ export const updateAbsensi = async (req: Request, res: Response) => {
         data.jamKeluar = shiftData.jamKeluar;
         data.jamMasukDate = shiftDate.jamMasukDate;
         data.jamKeluarDate = shiftDate.jamKeluarDate;
+
+        if (checkIn !== undefined) {
+          data.checkIn = checkIn ? dayjs(checkIn).toDate() : null;
+        }
+
+        if (checkOut !== undefined) {
+          data.checkOut = checkOut ? dayjs(checkOut).toDate() : null;
+        }
+
+        if (isLembur !== undefined) data.isLembur = isLembur;
+
+        if (isArchive !== undefined) data.isArchive = isArchive;
 
         data.day = convertDayDayjsToDatabase(
           dayjs(date ? date : logAbsensiData.jamMasukDate).day()

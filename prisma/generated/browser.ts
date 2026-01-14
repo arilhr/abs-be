@@ -48,6 +48,11 @@ export type Shift = Prisma.ShiftModel
  */
 export type Jadwal = Prisma.JadwalModel
 /**
+ * Model JadwalOverride
+ * 
+ */
+export type JadwalOverride = Prisma.JadwalOverrideModel
+/**
  * Model LogAbsensi
  * 
  */

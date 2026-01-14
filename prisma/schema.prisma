@@ -63,28 +63,31 @@ model Pegawai {
   createdAt DateTime     @default(now())
   updatedAt DateTime     @updatedAt
 
-  position                 Position        @relation(fields: [positionId], references: [id])
-  requestLemburs           RequestLembur[] @relation("PegawaiRequestLembur")
-  supervisedRequestLemburs RequestLembur[] @relation("SupervisorRequestLembur")
+  position                 Position         @relation(fields: [positionId], references: [id])
+  requestLemburs           RequestLembur[]  @relation("PegawaiRequestLembur")
+  supervisedRequestLemburs RequestLembur[]  @relation("SupervisorRequestLembur")
   users                    User[]
   pengajuanIzins           PengajuanIzin[]
   logScans                 LogScan[]
+  jadwalOverrides          JadwalOverride[]
 
   @@index([positionId])
 }
 
 model Shift {
-  id             Int             @id @default(autoincrement())
-  name           String
-  jamMasuk       String
-  jamKeluar      String
-  isActive       Boolean         @default(true)
-  isArchive      Boolean         @default(false)
-  jadwals        Jadwal[]
-  logs           LogAbsensi[]
-  createdAt      DateTime        @default(now())
-  updatedAt      DateTime        @updatedAt
-  requestLemburs RequestLembur[]
+  id                           Int              @id @default(autoincrement())
+  name                         String
+  jamMasuk                     String
+  jamKeluar                    String
+  isActive                     Boolean          @default(true)
+  isArchive                    Boolean          @default(false)
+  jadwals                      Jadwal[]
+  logs                         LogAbsensi[]
+  createdAt                    DateTime         @default(now())
+  updatedAt                    DateTime         @updatedAt
+  requestLemburs               RequestLembur[]
+  jadwalOverridesAsOriginal    JadwalOverride[] @relation("OriginalShift")
+  jadwalOverridesAsReplacement JadwalOverride[] @relation("ReplacementShift")
 }
 
 model Jadwal {
@@ -101,6 +104,31 @@ model Jadwal {
 
   @@index([pegawaiId])
   @@index([shiftId])
+}
+
+model JadwalOverride {
+  id              Int      @id @default(autoincrement())
+  pegawaiId       Int
+  date            DateTime // Tanggal spesifik pergantian
+  originalShiftId Int? // Shift asli yang diganti (null = menambah shift baru)
+  shiftId         Int? // Shift pengganti (null = libur/hapus shift)
+  reason          String? // Alasan pergantian
+  isActive        Boolean  @default(true)
+  isArchive       Boolean  @default(false)
+
+  pegawai       Pegawai @relation(fields: [pegawaiId], references: [id])
+  originalShift Shift?  @relation("OriginalShift", fields: [originalShiftId], references: [id])
+  shift         Shift?  @relation("ReplacementShift", fields: [shiftId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Unique: satu pegawai hanya bisa punya 1 override per tanggal per shift asli
+  @@unique([pegawaiId, date, originalShiftId])
+  @@index([pegawaiId])
+  @@index([date])
+  @@index([shiftId])
+  @@index([originalShiftId])
 }
 
 model LogAbsensi {

@@ -390,6 +390,7 @@ export const ModelName = {
   Pegawai: 'Pegawai',
   Shift: 'Shift',
   Jadwal: 'Jadwal',
+  JadwalOverride: 'JadwalOverride',
   LogAbsensi: 'LogAbsensi',
   RequestLembur: 'RequestLembur',
   PengajuanIzin: 'PengajuanIzin',
@@ -410,7 +411,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "position" | "department" | "pegawai" | "shift" | "jadwal" | "logAbsensi" | "requestLembur" | "pengajuanIzin" | "appConfig" | "logScan"
+    modelProps: "user" | "position" | "department" | "pegawai" | "shift" | "jadwal" | "jadwalOverride" | "logAbsensi" | "requestLembur" | "pengajuanIzin" | "appConfig" | "logScan"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -807,6 +808,72 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.JadwalCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.JadwalCountAggregateOutputType> | number
+        }
+      }
+    }
+    JadwalOverride: {
+      payload: Prisma.$JadwalOverridePayload<ExtArgs>
+      fields: Prisma.JadwalOverrideFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.JadwalOverrideFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$JadwalOverridePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.JadwalOverrideFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$JadwalOverridePayload>
+        }
+        findFirst: {
+          args: Prisma.JadwalOverrideFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$JadwalOverridePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.JadwalOverrideFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$JadwalOverridePayload>
+        }
+        findMany: {
+          args: Prisma.JadwalOverrideFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$JadwalOverridePayload>[]
+        }
+        create: {
+          args: Prisma.JadwalOverrideCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$JadwalOverridePayload>
+        }
+        createMany: {
+          args: Prisma.JadwalOverrideCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        delete: {
+          args: Prisma.JadwalOverrideDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$JadwalOverridePayload>
+        }
+        update: {
+          args: Prisma.JadwalOverrideUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$JadwalOverridePayload>
+        }
+        deleteMany: {
+          args: Prisma.JadwalOverrideDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.JadwalOverrideUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        upsert: {
+          args: Prisma.JadwalOverrideUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$JadwalOverridePayload>
+        }
+        aggregate: {
+          args: Prisma.JadwalOverrideAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateJadwalOverride>
+        }
+        groupBy: {
+          args: Prisma.JadwalOverrideGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.JadwalOverrideGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.JadwalOverrideCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.JadwalOverrideCountAggregateOutputType> | number
         }
       }
     }
@@ -1261,6 +1328,22 @@ export const JadwalScalarFieldEnum = {
 export type JadwalScalarFieldEnum = (typeof JadwalScalarFieldEnum)[keyof typeof JadwalScalarFieldEnum]
 
 
+export const JadwalOverrideScalarFieldEnum = {
+  id: 'id',
+  pegawaiId: 'pegawaiId',
+  date: 'date',
+  originalShiftId: 'originalShiftId',
+  shiftId: 'shiftId',
+  reason: 'reason',
+  isActive: 'isActive',
+  isArchive: 'isArchive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type JadwalOverrideScalarFieldEnum = (typeof JadwalOverrideScalarFieldEnum)[keyof typeof JadwalOverrideScalarFieldEnum]
+
+
 export const LogAbsensiScalarFieldEnum = {
   id: 'id',
   pegawaiId: 'pegawaiId',
@@ -1396,6 +1479,13 @@ export const ShiftOrderByRelevanceFieldEnum = {
 } as const
 
 export type ShiftOrderByRelevanceFieldEnum = (typeof ShiftOrderByRelevanceFieldEnum)[keyof typeof ShiftOrderByRelevanceFieldEnum]
+
+
+export const JadwalOverrideOrderByRelevanceFieldEnum = {
+  reason: 'reason'
+} as const
+
+export type JadwalOverrideOrderByRelevanceFieldEnum = (typeof JadwalOverrideOrderByRelevanceFieldEnum)[keyof typeof JadwalOverrideOrderByRelevanceFieldEnum]
 
 
 export const LogAbsensiOrderByRelevanceFieldEnum = {
@@ -1600,6 +1690,7 @@ export type GlobalOmitConfig = {
   pegawai?: Prisma.PegawaiOmit
   shift?: Prisma.ShiftOmit
   jadwal?: Prisma.JadwalOmit
+  jadwalOverride?: Prisma.JadwalOverrideOmit
   logAbsensi?: Prisma.LogAbsensiOmit
   requestLembur?: Prisma.RequestLemburOmit
   pengajuanIzin?: Prisma.PengajuanIzinOmit
