@@ -10,16 +10,16 @@ router.post("/", pegawaiController.createPegawai);
 router.post(
   "/import",
   excelUpload.single("file"),
-  pegawaiController.importPegawai
+  pegawaiController.importPegawai,
 );
 router.get("/", pegawaiController.getPegawai);
 router.get("/salary", pegawaiController.getGajiPegawai);
 router.post("/qrcode/bulk", pegawaiController.generateBulkPegawaiQRCodeZip);
 router.post("/qrcode/:id", pegawaiController.generatePegawaiQRCodeUrl);
+router.get("/jadwal-list/:id", pegawaiController.getJadwalList);
+router.get("/jadwal/:id", pegawaiController.getJadwalPegawai);
 router.get("/:id", pegawaiController.getPegawaiById);
 router.put("/:id", pegawaiController.updatePegawai);
 router.delete("/:id", pegawaiController.deletePegawai);
-
-router.get("/jadwal/:id", pegawaiController.getJadwalPegawai);
 
 export default router;

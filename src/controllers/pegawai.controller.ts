@@ -187,23 +187,252 @@ export const getJadwalPegawai = async (req: Request, res: Response) => {
     });
 
     // Group by day
-    const groupedByDay = result.reduce((acc, jadwal) => {
-      const day = jadwal.day;
+    const groupedByDay = result.reduce(
+      (acc, jadwal) => {
+        const day = jadwal.day;
 
-      if (!acc[day]) {
-        acc[day] = [];
-      }
+        if (!acc[day]) {
+          acc[day] = [];
+        }
 
-      acc[day].push(jadwal);
+        acc[day].push(jadwal);
 
-      return acc;
-    }, {} as Record<number, typeof result>);
+        return acc;
+      },
+      {} as Record<number, typeof result>,
+    );
 
     res.status(200).json({
       data: groupedByDay,
     });
   } catch (err) {
     res.status(500).json(err);
+  }
+};
+
+/**
+ * Get jadwal list for calendar view
+ * - Past dates: from LogAbsensi
+ * - Current/Future dates: from Jadwal + JadwalOverride
+ */
+export const getJadwalList = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const { month, year } = req.query;
+
+    const pegawaiId = Number(id);
+    if (Number.isNaN(pegawaiId)) {
+      res.status(400).json({ error: "Invalid pegawai ID" });
+      return;
+    }
+
+    // Default to current month/year if not provided
+    const targetMonth = month ? Number(month) - 1 : dayjs().month(); // 0-indexed
+    const targetYear = year ? Number(year) : dayjs().year();
+
+    const startOfMonth = dayjs()
+      .year(targetYear)
+      .month(targetMonth)
+      .startOf("month");
+    const endOfMonth = dayjs()
+      .year(targetYear)
+      .month(targetMonth)
+      .endOf("month");
+    const today = dayjs().startOf("day");
+
+    const daysInMonth = endOfMonth.date();
+    const scheduleData: Record<
+      string,
+      {
+        date: string;
+        day: number;
+        dayIndex: number;
+        shifts: Array<{
+          id: number;
+          name: string;
+          jamMasuk: string | null;
+          jamKeluar: string | null;
+          checkIn?: Date | null;
+          checkOut?: Date | null;
+          isFromLog?: boolean;
+        }>;
+      }
+    > = {};
+
+    // Get regular jadwal for this pegawai (grouped by day)
+    const regularJadwals = await prisma.jadwal.findMany({
+      where: {
+        pegawaiId,
+        isActive: true,
+        isArchive: false,
+      },
+      include: {
+        shift: true,
+      },
+    });
+
+    // Group regular jadwals by day
+    const jadwalByDay: Record<
+      number,
+      Array<{
+        id: number;
+        shift: {
+          id: number;
+          name: string;
+          jamMasuk: string;
+          jamKeluar: string;
+        };
+      }>
+    > = {};
+    for (const jadwal of regularJadwals) {
+      if (!jadwalByDay[jadwal.day]) {
+        jadwalByDay[jadwal.day] = [];
+      }
+      jadwalByDay[jadwal.day].push(jadwal);
+    }
+
+    // Get all overrides for this month
+    const overrides = await prisma.jadwalOverride.findMany({
+      where: {
+        pegawaiId,
+        date: {
+          gte: startOfMonth.toDate(),
+          lte: endOfMonth.toDate(),
+        },
+        isActive: true,
+        isArchive: false,
+      },
+      include: {
+        shift: true,
+        originalShift: true,
+      },
+    });
+
+    // Index overrides by date
+    const overridesByDate: Record<string, typeof overrides> = {};
+    for (const override of overrides) {
+      const dateKey = dayjs(override.date).format("YYYY-MM-DD");
+      if (!overridesByDate[dateKey]) {
+        overridesByDate[dateKey] = [];
+      }
+      overridesByDate[dateKey].push(override);
+    }
+
+    // Get all log absensi for past dates in this month
+    const logAbsensis = await prisma.logAbsensi.findMany({
+      where: {
+        pegawaiId,
+        jamMasukDate: {
+          gte: startOfMonth.toDate(),
+          lt: today.toDate(), // Only past dates
+        },
+        isArchive: false,
+      },
+      include: {
+        shift: true,
+      },
+    });
+
+    // Index logs by date
+    const logsByDate: Record<string, typeof logAbsensis> = {};
+    for (const log of logAbsensis) {
+      const dateKey = dayjs(log.jamMasukDate).format("YYYY-MM-DD");
+      if (!logsByDate[dateKey]) {
+        logsByDate[dateKey] = [];
+      }
+      logsByDate[dateKey].push(log);
+    }
+
+    // Process each day of the month
+    for (let day = 1; day <= daysInMonth; day++) {
+      const currentDate = startOfMonth.date(day);
+      const dateKey = currentDate.format("YYYY-MM-DD");
+      const dayOfWeek = currentDate.day(); // 0 = Sunday
+      // Convert to our day index (0 = Senin, 6 = Minggu)
+      const dayIndex = dayOfWeek === 0 ? 6 : dayOfWeek - 1;
+
+      const isPastDate = currentDate.isBefore(today);
+
+      scheduleData[dateKey] = {
+        date: dateKey,
+        day,
+        dayIndex,
+        shifts: [],
+      };
+
+      if (isPastDate) {
+        // For past dates, use LogAbsensi data
+        const logs = logsByDate[dateKey] || [];
+        for (const log of logs) {
+          scheduleData[dateKey].shifts.push({
+            id: log.shiftId || 0,
+            name: log.shiftName,
+            jamMasuk: log.jamMasuk,
+            jamKeluar: log.jamKeluar,
+            checkIn: log.checkIn,
+            checkOut: log.checkOut,
+            isFromLog: true,
+          });
+        }
+        // Past dates only use LogAbsensi data - if no logs, shifts stays empty
+      } else {
+        // For current/future dates, use Jadwal + JadwalOverride
+        const dateOverrides = overridesByDate[dateKey] || [];
+
+        if (dateOverrides.length > 0) {
+          // Apply overrides
+          const regularShifts = jadwalByDay[dayIndex] || [];
+          const appliedOverrideOriginalIds = new Set<number | null>();
+
+          for (const override of dateOverrides) {
+            appliedOverrideOriginalIds.add(override.originalShiftId);
+
+            // If shiftId is null, it means this shift is removed/libur
+            if (override.shift) {
+              scheduleData[dateKey].shifts.push({
+                id: override.shift.id,
+                name: override.shift.name,
+                jamMasuk: override.shift.jamMasuk,
+                jamKeluar: override.shift.jamKeluar,
+              });
+            }
+          }
+
+          // Add regular shifts that weren't overridden
+          for (const jadwal of regularShifts) {
+            if (!appliedOverrideOriginalIds.has(jadwal.shift.id)) {
+              scheduleData[dateKey].shifts.push({
+                id: jadwal.shift.id,
+                name: jadwal.shift.name,
+                jamMasuk: jadwal.shift.jamMasuk,
+                jamKeluar: jadwal.shift.jamKeluar,
+              });
+            }
+          }
+        } else {
+          // No overrides, use regular jadwal
+          const regularShifts = jadwalByDay[dayIndex] || [];
+          for (const jadwal of regularShifts) {
+            scheduleData[dateKey].shifts.push({
+              id: jadwal.shift.id,
+              name: jadwal.shift.name,
+              jamMasuk: jadwal.shift.jamMasuk,
+              jamKeluar: jadwal.shift.jamKeluar,
+            });
+          }
+        }
+      }
+    }
+
+    res.status(200).json({
+      pegawaiId,
+      month: targetMonth + 1,
+      year: targetYear,
+      data: scheduleData,
+    });
+  } catch (err) {
+    console.error("Error in getJadwalList:", err);
+    res.status(500).json({ error: "Internal server error", details: err });
   }
 };
 
@@ -340,7 +569,7 @@ export const getGajiPegawai = async (req: Request, res: Response) => {
       if (!curr.checkIn) return acc;
       const minutesDiff = calculateMinutesDifferent(
         curr.checkIn,
-        curr.jamKeluarDate
+        curr.jamKeluarDate,
       );
       return acc + minutesDiff;
     }, 0);
@@ -348,7 +577,7 @@ export const getGajiPegawai = async (req: Request, res: Response) => {
     const totalGaji = Math.round((pegawaiData.salary * totalMinutes) / 24);
 
     const totalLembur = logAbsensiDatas.filter(
-      (log) => log.isLembur && !!log.checkOut
+      (log) => log.isLembur && !!log.checkOut,
     );
 
     const totalLemburMinutes = totalLembur.reduce((acc, curr) => {
@@ -357,7 +586,7 @@ export const getGajiPegawai = async (req: Request, res: Response) => {
     }, 0);
 
     const totalGajiLembur = Math.round(
-      (overtimeRate * totalLemburMinutes) / 60
+      (overtimeRate * totalLemburMinutes) / 60,
     );
 
     res.status(200).json({
@@ -464,7 +693,7 @@ export const importPegawai = async (req: Request, res: Response) => {
 
           if (existingPegawai) {
             throw new Error(
-              `Pegawai dengan ID ${pegawaiData.pegawaiId} sudah ada`
+              `Pegawai dengan ID ${pegawaiData.pegawaiId} sudah ada`,
             );
           }
 
@@ -560,7 +789,7 @@ export const generatePegawaiQRCodeUrl = async (req: Request, res: Response) => {
     const dirPath = path.join(process.cwd(), "tmp", "qrcodes");
     fs.mkdirSync(dirPath, { recursive: true });
 
-    const filename = `qr-${pegawai.id}-${pegawai.pegawaiId}-${pegawai.name}.png`;
+    const filename = `qr-${pegawai.pegawaiId}-${pegawai.name}.png`;
     const filePath = path.join(dirPath, filename);
 
     const BASE_URL = process.env.BASE_URL || "http://localhost:3300";
@@ -579,7 +808,6 @@ export const generatePegawaiQRCodeUrl = async (req: Request, res: Response) => {
     }
 
     const qrData = {
-      id: pegawai.id,
       pegawaiId: pegawai.pegawaiId,
       name: pegawai.name,
     };
@@ -610,7 +838,7 @@ export const generatePegawaiQRCodeUrl = async (req: Request, res: Response) => {
 
 export const generateBulkPegawaiQRCodeZip = async (
   req: Request,
-  res: Response
+  res: Response,
 ) => {
   try {
     const { ids } = req.body;
@@ -644,7 +872,6 @@ export const generateBulkPegawaiQRCodeZip = async (
 
     for (const pegawai of pegawais) {
       const qrData = {
-        id: pegawai.id,
         pegawaiId: pegawai.pegawaiId,
         name: pegawai.name,
       };
@@ -657,7 +884,7 @@ export const generateBulkPegawaiQRCodeZip = async (
       });
 
       archive.append(buffer, {
-        name: `qr-${pegawai.id}-${pegawai.pegawaiId}-${pegawai.name}.png`,
+        name: `qr-${pegawai.pegawaiId}-${pegawai.name}.png`,
       });
     }
 

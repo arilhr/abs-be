@@ -177,7 +177,7 @@ function groupConsecutiveShifts(
 
 export const scanAbsensi = async (req: Request, res: Response) => {
   try {
-    const { pegawaiId, code } = req.body;
+    const { pegawaiId: id, code } = req.body;
 
     if (!code) {
       res.status(400).json({ message: "Scan secret code is required." });
@@ -200,7 +200,7 @@ export const scanAbsensi = async (req: Request, res: Response) => {
     // check pegawai data
     const pegawaiData = await prisma.pegawai.findFirst({
       where: {
-        id: pegawaiId,
+        pegawaiId: id,
       },
       include: {
         position: true,
@@ -211,6 +211,8 @@ export const scanAbsensi = async (req: Request, res: Response) => {
       res.status(400).json({ message: "Data pegawai tidak ditemukan." });
       return;
     }
+
+    const pegawaiId = pegawaiData.id;
 
     const result = await prisma.$transaction(async (tx) => {
       const currentDate = NOW.toDate();
