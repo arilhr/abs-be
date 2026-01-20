@@ -5,6 +5,9 @@ import { authenticate } from "../middlewares/auth.middleware";
 const router = Router();
 router.use(authenticate);
 
+router.get("/multi", jadwalController.getJadwalMulti);
+router.put("/multi/:pegawaiId", jadwalController.updateJadwalMulti);
+
 router.post("/", jadwalController.createJadwal);
 router.get("/", jadwalController.getJadwals);
 router.get("/:id", jadwalController.getJadwalById);
