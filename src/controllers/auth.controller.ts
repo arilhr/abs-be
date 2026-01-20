@@ -41,3 +41,44 @@ export const login = async (req: Request, res: Response) => {
     },
   });
 };
+
+export const loginWithQR = async (req: Request, res: Response) => {
+  const { qrCode } = req.body;
+  if (!qrCode) return res.status(400).json({ message: "QR code required" });
+
+  const pegawai = await prisma.pegawai.findUnique({
+    where: { pegawaiId: qrCode },
+  });
+
+  if (!pegawai)
+    return res.status(401).json({ message: "Data pegawai tidak ditemukan" });
+
+  if (pegawai.status !== "active")
+    return res.status(401).json({ message: "Pegawai tidak aktif" });
+
+  const user = await prisma.user.findFirst({
+    where: { pegawaiId: pegawai.id, isActive: true },
+  });
+
+  if (!user)
+    return res
+      .status(401)
+      .json({ message: "User untuk pegawai ini tidak ditemukan" });
+
+  await prisma.user.update({
+    where: { id: user.id },
+    data: { lastLogin: new Date() },
+  });
+
+  const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET!, {
+    expiresIn: "8h",
+  });
+
+  res.json({
+    token,
+    user: {
+      id: user.id,
+      username: user.username,
+    },
+  });
+};
