@@ -12,10 +12,17 @@ import QRCode from "qrcode";
 import archiver from "archiver";
 import fs from "fs";
 import path from "path";
+import { encryptQRData } from "../utils/crypto";
 
 async function createPegawai(req: Request, res: Response): Promise<void> {
   try {
-    const { name, positionId, status = "active", salary = 0, pegawaiId } = req.body;
+    const {
+      name,
+      positionId,
+      status = "active",
+      salary = 0,
+      pegawaiId,
+    } = req.body;
     if (!name || positionId === undefined || pegawaiId === undefined) {
       res
         .status(400)
@@ -809,10 +816,11 @@ export const generatePegawaiQRCodeUrl = async (req: Request, res: Response) => {
 
     const qrData = {
       pegawaiId: pegawai.pegawaiId,
-      name: pegawai.name,
     };
 
-    const buffer = await QRCode.toBuffer(JSON.stringify(qrData), {
+    const encryptedData = encryptQRData(JSON.stringify(qrData));
+
+    const buffer = await QRCode.toBuffer(encryptedData, {
       errorCorrectionLevel: "H",
       type: "png",
       width: 300,
@@ -873,10 +881,11 @@ export const generateBulkPegawaiQRCodeZip = async (
     for (const pegawai of pegawais) {
       const qrData = {
         pegawaiId: pegawai.pegawaiId,
-        name: pegawai.name,
       };
 
-      const buffer = await QRCode.toBuffer(JSON.stringify(qrData), {
+      const encryptedData = encryptQRData(JSON.stringify(qrData));
+
+      const buffer = await QRCode.toBuffer(encryptedData, {
         errorCorrectionLevel: "H",
         type: "png",
         width: 300,

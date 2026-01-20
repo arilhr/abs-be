@@ -8,6 +8,7 @@ import {
   convertDayDayjsToDatabase,
 } from "../utils/get-day-from-date";
 import { ScanType } from "../../prisma/generated/enums";
+import { decryptQRData } from "../utils/crypto";
 
 export const getAllAbsensi = async (req: Request, res: Response) => {
   try {
@@ -142,7 +143,7 @@ function groupConsecutiveShifts(
     shift: { jamMasuk: string; jamKeluar: string; name: string };
     isOverride?: boolean;
   }>,
-  currentDay: number
+  currentDay: number,
 ): Array<typeof shifts> {
   // Filter only today's shifts
   const todayShifts = shifts.filter((s) => s.day === currentDay);
@@ -177,22 +178,25 @@ function groupConsecutiveShifts(
 
 export const scanAbsensi = async (req: Request, res: Response) => {
   try {
-    const { pegawaiId: id, code } = req.body;
+    const { code } = req.body;
 
     if (!code) {
-      res.status(400).json({ message: "Scan secret code is required." });
+      res.status(400).json({ message: "Scan code is required." });
       return;
     }
 
-    // check scan secret code
-    const scanSecretCodeConfig = process.env.SCAN_CODE;
-
-    if (scanSecretCodeConfig) {
-      const scanSecretCode = scanSecretCodeConfig;
-      if (code !== scanSecretCode) {
-        res.status(401).json({ message: "Invalid scan secret code." });
+    let pegawaiIdFromQR: string;
+    try {
+      const decryptedData = decryptQRData(code);
+      const parsedData = JSON.parse(decryptedData);
+      pegawaiIdFromQR = parsedData.pegawaiId;
+      if (!pegawaiIdFromQR) {
+        res.status(400).json({ message: "Invalid QR code data." });
         return;
       }
+    } catch {
+      res.status(401).json({ message: "Invalid or corrupted QR code." });
+      return;
     }
 
     const NOW = dayjs();
@@ -200,7 +204,7 @@ export const scanAbsensi = async (req: Request, res: Response) => {
     // check pegawai data
     const pegawaiData = await prisma.pegawai.findFirst({
       where: {
-        pegawaiId: id,
+        pegawaiId: pegawaiIdFromQR,
       },
       include: {
         position: true,
@@ -239,13 +243,13 @@ export const scanAbsensi = async (req: Request, res: Response) => {
 
       // Categorize overrides by type
       const addOverrides = todayOverrides.filter(
-        (o) => o.originalShiftId === null && o.shiftId !== null
+        (o) => o.originalShiftId === null && o.shiftId !== null,
       ); // TAMBAH
       const replaceOverrides = todayOverrides.filter(
-        (o) => o.originalShiftId !== null && o.shiftId !== null
+        (o) => o.originalShiftId !== null && o.shiftId !== null,
       ); // GANTI
       const removeOverrides = todayOverrides.filter(
-        (o) => o.originalShiftId !== null && o.shiftId === null
+        (o) => o.originalShiftId !== null && o.shiftId === null,
       ); // LIBUR
 
       // Get set of original shift IDs that are being replaced or removed
@@ -348,11 +352,11 @@ export const scanAbsensi = async (req: Request, res: Response) => {
         // Calculate time window for the entire group
         const firstShiftDate = calculateJamShiftDate(
           firstShift.shift.jamMasuk,
-          firstShift.shift.jamKeluar
+          firstShift.shift.jamKeluar,
         );
         const lastShiftDate = calculateJamShiftDate(
           lastShift.shift.jamMasuk,
-          lastShift.shift.jamKeluar
+          lastShift.shift.jamKeluar,
         );
 
         const groupStartTime = dayjs(firstShiftDate.jamMasukDate)
@@ -379,7 +383,7 @@ export const scanAbsensi = async (req: Request, res: Response) => {
         // Calculate dates for first shift (for LogAbsensi lookup)
         const firstShiftDate = calculateJamShiftDate(
           groupFirstShift.shift.jamMasuk,
-          groupFirstShift.shift.jamKeluar
+          groupFirstShift.shift.jamKeluar,
         );
         const firstJamMasukDate = dayjs(firstShiftDate.jamMasukDate)
           .day(convertDayDatabaseToDayjs(groupFirstShift.day))
@@ -455,7 +459,7 @@ export const scanAbsensi = async (req: Request, res: Response) => {
         for (const shift of activeGroup) {
           const shiftDate = calculateJamShiftDate(
             shift.shift.jamMasuk,
-            shift.shift.jamKeluar
+            shift.shift.jamKeluar,
           );
           const shiftJamMasukDate = dayjs(shiftDate.jamMasukDate)
             .day(convertDayDatabaseToDayjs(shift.day))
@@ -499,7 +503,7 @@ export const scanAbsensi = async (req: Request, res: Response) => {
         // Check if it's time to check out (only check last shift's jamKeluar)
         const lastShiftDate = calculateJamShiftDate(
           groupLastShift.shift.jamMasuk,
-          groupLastShift.shift.jamKeluar
+          groupLastShift.shift.jamKeluar,
         );
         if (lastShiftDate.jamKeluarDate > currentDate) {
           await tx.logScan.create({
@@ -530,7 +534,7 @@ export const scanAbsensi = async (req: Request, res: Response) => {
           const shift = activeGroup[i];
           const shiftDate = calculateJamShiftDate(
             shift.shift.jamMasuk,
-            shift.shift.jamKeluar
+            shift.shift.jamKeluar,
           );
           const shiftJamMasukDate = dayjs(shiftDate.jamMasukDate)
             .day(convertDayDatabaseToDayjs(shift.day))
@@ -720,7 +724,7 @@ export const createLogAbsensi = async (req: Request, res: Response) => {
     const shiftDate = calculateJamShiftDate(
       shiftData.jamMasuk,
       shiftData.jamKeluar,
-      dayjs(date).toDate()
+      dayjs(date).toDate(),
     );
 
     const day = convertDayDayjsToDatabase(dayjs(date).day());
@@ -810,7 +814,7 @@ export const updateAbsensi = async (req: Request, res: Response) => {
         const shiftDate = calculateJamShiftDate(
           shiftData.jamMasuk,
           shiftData.jamKeluar,
-          date ? dayjs(date).toDate() : logAbsensiData.jamMasukDate
+          date ? dayjs(date).toDate() : logAbsensiData.jamMasukDate,
         );
 
         data.shiftId = shiftData.id;
@@ -833,7 +837,7 @@ export const updateAbsensi = async (req: Request, res: Response) => {
         if (isArchive !== undefined) data.isArchive = isArchive;
 
         data.day = convertDayDayjsToDatabase(
-          dayjs(date ? date : logAbsensiData.jamMasukDate).day()
+          dayjs(date ? date : logAbsensiData.jamMasukDate).day(),
         );
 
         const existingLogAbsensi = await tx.logAbsensi.findFirst({
@@ -912,7 +916,7 @@ export const updateAbsensi = async (req: Request, res: Response) => {
 
 export const generateLogAbsensi = async (
   req: Request,
-  res: Response
+  res: Response,
 ): Promise<void> => {
   try {
     const { shiftId } = req.query;

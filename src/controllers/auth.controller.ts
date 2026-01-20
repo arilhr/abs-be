@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import prisma from "../prisma";
 import { comparePassword } from "../utils/hash";
 import jwt from "jsonwebtoken";
+import { decryptQRData } from "../utils/crypto";
 
 export const login = async (req: Request, res: Response) => {
   const { username, password } = req.body;
@@ -46,8 +47,16 @@ export const loginWithQR = async (req: Request, res: Response) => {
   const { qrCode } = req.body;
   if (!qrCode) return res.status(400).json({ message: "QR code required" });
 
+  // decrypt qr code
+  const decryptedData = decryptQRData(qrCode);
+  const parsedData = JSON.parse(decryptedData);
+
+  if (!parsedData.pegawaiId) {
+    return res.status(400).json({ message: "Invalid QR code" });
+  }
+
   const pegawai = await prisma.pegawai.findUnique({
-    where: { pegawaiId: qrCode },
+    where: { pegawaiId: parsedData.pegawaiId },
   });
 
   if (!pegawai)
