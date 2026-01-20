@@ -86,6 +86,27 @@ CREATE TABLE `Jadwal` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
+CREATE TABLE `JadwalOverride` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `pegawaiId` INTEGER NOT NULL,
+    `date` DATETIME(3) NOT NULL,
+    `originalShiftId` INTEGER NULL,
+    `shiftId` INTEGER NULL,
+    `reason` VARCHAR(191) NULL,
+    `isActive` BOOLEAN NOT NULL DEFAULT true,
+    `isArchive` BOOLEAN NOT NULL DEFAULT false,
+    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `updatedAt` DATETIME(3) NOT NULL,
+
+    INDEX `JadwalOverride_pegawaiId_idx`(`pegawaiId`),
+    INDEX `JadwalOverride_date_idx`(`date`),
+    INDEX `JadwalOverride_shiftId_idx`(`shiftId`),
+    INDEX `JadwalOverride_originalShiftId_idx`(`originalShiftId`),
+    UNIQUE INDEX `JadwalOverride_pegawaiId_date_originalShiftId_key`(`pegawaiId`, `date`, `originalShiftId`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
 CREATE TABLE `LogAbsensi` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `pegawaiId` INTEGER NOT NULL,
@@ -183,6 +204,15 @@ ALTER TABLE `Jadwal` ADD CONSTRAINT `Jadwal_pegawaiId_fkey` FOREIGN KEY (`pegawa
 
 -- AddForeignKey
 ALTER TABLE `Jadwal` ADD CONSTRAINT `Jadwal_shiftId_fkey` FOREIGN KEY (`shiftId`) REFERENCES `Shift`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `JadwalOverride` ADD CONSTRAINT `JadwalOverride_pegawaiId_fkey` FOREIGN KEY (`pegawaiId`) REFERENCES `Pegawai`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `JadwalOverride` ADD CONSTRAINT `JadwalOverride_originalShiftId_fkey` FOREIGN KEY (`originalShiftId`) REFERENCES `Shift`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `JadwalOverride` ADD CONSTRAINT `JadwalOverride_shiftId_fkey` FOREIGN KEY (`shiftId`) REFERENCES `Shift`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `LogAbsensi` ADD CONSTRAINT `LogAbsensi_pegawaiId_fkey` FOREIGN KEY (`pegawaiId`) REFERENCES `Pegawai`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
