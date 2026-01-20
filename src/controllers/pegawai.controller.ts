@@ -15,7 +15,7 @@ import path from "path";
 
 async function createPegawai(req: Request, res: Response): Promise<void> {
   try {
-    const { name, positionId, status = "active", salary, pegawaiId } = req.body;
+    const { name, positionId, status = "active", salary = 0, pegawaiId } = req.body;
     if (!name || positionId === undefined || pegawaiId === undefined) {
       res
         .status(400)
@@ -465,7 +465,7 @@ async function deletePegawai(req: Request, res: Response): Promise<void> {
     // archive data
     await prisma.pegawai.update({
       where: { id },
-      data: { status: "archive" },
+      data: { isArchive: true, status: "inactive" },
     });
     res.status(204).send();
   } catch (err) {
