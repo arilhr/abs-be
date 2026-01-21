@@ -165,7 +165,11 @@ async function getPegawaiById(req: Request, res: Response): Promise<void> {
     const pegawai = await prisma.pegawai.findUnique({
       where: { id },
       include: {
-        position: true,
+        position: {
+          include: {
+            department: true,
+          },
+        },
       },
     });
     if (!pegawai) {

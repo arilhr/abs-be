@@ -4,10 +4,21 @@ import dayjs from "dayjs";
 
 export const getLogScan = async (req: Request, res: Response) => {
   try {
-    const { pegawaiName, scanTimeStart, scanTimeEnd, scanType, page, limit } =
-      req.query;
+    const {
+      pegawaiId,
+      pegawaiName,
+      scanTimeStart,
+      scanTimeEnd,
+      scanType,
+      page,
+      limit,
+    } = req.query;
 
     const where: any = {};
+
+    if (pegawaiId) {
+      where.pegawaiId = Number(pegawaiId);
+    }
 
     if (pegawaiName) {
       where.pegawai = {
