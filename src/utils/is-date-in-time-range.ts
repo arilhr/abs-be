@@ -3,12 +3,20 @@ import dayjs from "dayjs";
 export const isDateInTimeRange = (
   startTime: string,
   endTime: string,
-  now: dayjs.Dayjs = dayjs()
+  now: dayjs.Dayjs = dayjs(),
+  startOffset = 0, // offset in minutes
+  endOffset = 0, // offset in minutes
 ): boolean => {
   const today = now.startOf("day");
 
-  const startToday = dayjs(`${today.format("YYYY-MM-DD")} ${startTime}`);
-  const endToday = dayjs(`${today.format("YYYY-MM-DD")} ${endTime}`);
+  const startToday = dayjs(`${today.format("YYYY-MM-DD")} ${startTime}`).add(
+    startOffset,
+    "minute",
+  );
+  const endToday = dayjs(`${today.format("YYYY-MM-DD")} ${endTime}`).add(
+    endOffset,
+    "minute",
+  );
 
   // Case 1: range normal (tidak lewat tengah malam)
   if (endToday.isAfter(startToday)) {
@@ -35,7 +43,7 @@ export const isDateInTimeRange = (
 export const checkIfStartTimeIsYesterday = (
   startTime: string,
   endTime: string,
-  now: dayjs.Dayjs = dayjs()
+  now: dayjs.Dayjs = dayjs(),
 ): boolean => {
   const toSeconds = (t: string) => {
     const [h, m, s] = t.split(":").map(Number);

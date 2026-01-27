@@ -4,22 +4,22 @@ export const calculateJamShiftDate = (
   jamMasuk: string,
   jamKeluar: string,
   date: Date | null = null,
-  isTommorow = false
+  isTommorow = false,
 ) => {
   let baseDay = isTommorow ? dayjs().add(1, "day") : dayjs();
 
   if (date) {
-    baseDay = dayjs.tz(date);
+    baseDay = dayjs(date);
   }
 
   const baseDayFormatted = baseDay.format("YYYY-MM-DD");
   const jamMasukShiftDate = dayjs(
-    `${baseDayFormatted} ${jamMasuk}`
+    `${baseDayFormatted} ${jamMasuk}`,
   ).millisecond(0);
 
   // Jam Keluar
   let jamKeluarShiftDate = dayjs(
-    `${baseDayFormatted} ${jamKeluar}`
+    `${baseDayFormatted} ${jamKeluar}`,
   ).millisecond(0);
 
   if (
