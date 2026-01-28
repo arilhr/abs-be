@@ -4,16 +4,19 @@ export const isDateInTimeRange = (
   startTime: string,
   endTime: string,
   now: dayjs.Dayjs = dayjs(),
+  startDate: Date,
   startOffset = 0, // offset in minutes
   endOffset = 0, // offset in minutes
 ): boolean => {
-  const today = now.startOf("day");
+  const start = startDate
+    ? dayjs(startDate).startOf("day")
+    : now.startOf("day");
 
-  const startToday = dayjs(`${today.format("YYYY-MM-DD")} ${startTime}`).add(
+  const startToday = dayjs(`${start.format("YYYY-MM-DD")} ${startTime}`).add(
     startOffset,
     "minute",
   );
-  const endToday = dayjs(`${today.format("YYYY-MM-DD")} ${endTime}`).add(
+  const endToday = dayjs(`${start.format("YYYY-MM-DD")} ${endTime}`).add(
     endOffset,
     "minute",
   );

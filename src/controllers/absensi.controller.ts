@@ -134,50 +134,6 @@ export const getAllAbsensi = async (req: Request, res: Response) => {
   }
 };
 
-/**
- * Helper: Find consecutive shifts (where jamKeluar of one = jamMasuk of next)
- * Returns array of shift groups, each group is an array of consecutive shifts sorted by jamMasuk
- */
-function groupConsecutiveShifts(
-  shifts: Array<{
-    day: number;
-    shiftId: number;
-    shift: { jamMasuk: string; jamKeluar: string; name: string };
-    isOverride?: boolean;
-  }>,
-  currentDay: number,
-): Array<typeof shifts> {
-  // Filter only today's shifts
-  const todayShifts = shifts.filter((s) => s.day === currentDay);
-
-  if (todayShifts.length <= 1) {
-    return todayShifts.map((s) => [s]);
-  }
-
-  // Sort by jamMasuk
-  todayShifts.sort((a, b) => a.shift.jamMasuk.localeCompare(b.shift.jamMasuk));
-
-  const groups: Array<typeof shifts> = [];
-  let currentGroup: typeof shifts = [todayShifts[0]];
-
-  for (let i = 1; i < todayShifts.length; i++) {
-    const prevShift = currentGroup[currentGroup.length - 1];
-    const currShift = todayShifts[i];
-
-    // Check if consecutive (prevShift.jamKeluar === currShift.jamMasuk)
-    if (prevShift.shift.jamKeluar === currShift.shift.jamMasuk) {
-      currentGroup.push(currShift);
-    } else {
-      // Start new group
-      groups.push(currentGroup);
-      currentGroup = [currShift];
-    }
-  }
-
-  groups.push(currentGroup);
-  return groups;
-}
-
 export const scanAbsensi = async (req: Request, res: Response) => {
   try {
     const { code } = req.body;
@@ -457,10 +413,14 @@ export const scanAbsensi = async (req: Request, res: Response) => {
 
       // cek jadwal mana yang sekarang aktif
       const jadwalNow = listJadwalMerge.find((jadwal) => {
+        if (jadwal.day > currentDay) return false;
         return isDateInTimeRange(
           jadwal.shift.jamMasuk,
           jadwal.shift.jamKeluar,
           NOW,
+          jadwal.day < currentDay
+            ? NOW.subtract(1, "day").toDate()
+            : currentDate,
           -60,
         );
       });
@@ -504,6 +464,7 @@ export const scanAbsensi = async (req: Request, res: Response) => {
           code: 200,
           status: "CHECK_IN",
           data: checkInLogAbsensi,
+          listJadwalMerge,
         };
       }
 
@@ -853,10 +814,14 @@ export const scanAbsensiBulk = async (req: Request, res: Response) => {
 
           // cek jadwal mana yang sekarang aktif
           const jadwalNow = listJadwalMerge.find((jadwal) => {
+            if (jadwal.day > currentDay) return false;
             return isDateInTimeRange(
               jadwal.shift.jamMasuk,
               jadwal.shift.jamKeluar,
               NOW,
+              jadwal.day < currentDay
+                ? NOW.subtract(1, "day").toDate()
+                : currentDate,
               -60,
             );
           });
