@@ -412,7 +412,7 @@ export const scanAbsensi = async (req: Request, res: Response) => {
             continue;
           }
 
-          // kalau tidak ada terusan, maka checkout
+          // [CHECKOUT] kalau tidak ada terusan, maka checkout
           const checkOutLogAbsensi = await tx.logAbsensi.update({
             where: {
               id: latestLogAbsensi.id,
@@ -422,12 +422,31 @@ export const scanAbsensi = async (req: Request, res: Response) => {
             },
           });
 
+          // buat data log scan
+          await tx.logScan.create({
+            data: {
+              pegawaiId,
+              logAbsensiId: checkOutLogAbsensi.id,
+              scanTime: currentDate,
+              scanType: "OUT",
+            },
+          });
+
           return {
             code: 200,
             status: "CHECK_OUT",
             data: checkOutLogAbsensi,
           };
         }
+
+        // buat data log scan
+        await tx.logScan.create({
+          data: {
+            pegawaiId,
+            scanTime: currentDate,
+            scanType: "UNKNOWN",
+          },
+        });
 
         return {
           code: 200,
@@ -471,12 +490,31 @@ export const scanAbsensi = async (req: Request, res: Response) => {
           },
         });
 
+        // buat data log scan
+        await tx.logScan.create({
+          data: {
+            pegawaiId,
+            logAbsensiId: checkInLogAbsensi.id,
+            scanTime: currentDate,
+            scanType: "IN",
+          },
+        });
+
         return {
           code: 200,
           status: "CHECK_IN",
           data: checkInLogAbsensi,
         };
       }
+
+      // buat data log scan
+      await tx.logScan.create({
+        data: {
+          pegawaiId,
+          scanTime: currentDate,
+          scanType: "UNKNOWN",
+        },
+      });
 
       return {
         code: 200,
@@ -780,12 +818,31 @@ export const scanAbsensiBulk = async (req: Request, res: Response) => {
                 },
               });
 
+              // buat data log scan
+              await tx.logScan.create({
+                data: {
+                  pegawaiId,
+                  logAbsensiId: checkOutLogAbsensi.id,
+                  scanTime: currentDate,
+                  scanType: "OUT",
+                },
+              });
+
               return {
                 code: 200,
                 status: "CHECK_OUT",
                 data: checkOutLogAbsensi,
               };
             }
+
+            // buat data log scan
+            await tx.logScan.create({
+              data: {
+                pegawaiId,
+                scanTime: currentDate,
+                scanType: "UNKNOWN",
+              },
+            });
 
             return {
               code: 200,
@@ -829,12 +886,31 @@ export const scanAbsensiBulk = async (req: Request, res: Response) => {
               },
             });
 
+            // buat data log scan
+            await tx.logScan.create({
+              data: {
+                pegawaiId,
+                logAbsensiId: checkInLogAbsensi.id,
+                scanTime: currentDate,
+                scanType: "IN",
+              },
+            });
+
             return {
               code: 200,
               status: "CHECK_IN",
               data: checkInLogAbsensi,
             };
           }
+
+          // buat data log scan
+          await tx.logScan.create({
+            data: {
+              pegawaiId,
+              scanTime: currentDate,
+              scanType: "UNKNOWN",
+            },
+          });
 
           return {
             code: 200,
