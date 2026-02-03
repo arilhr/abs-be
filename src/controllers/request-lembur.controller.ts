@@ -59,10 +59,72 @@ export const createRequestLembur = async (req: Request, res: Response) => {
   }
 };
 
+export const updateRequestLembur = async (req: Request, res: Response) => {
+  try {
+    const id = Number(req.params.id);
+    const { supervisorId, pegawaiId, shiftId, date, reason } = req.body;
+
+    const existing = await prisma.requestLembur.findUnique({
+      where: { id },
+    });
+
+    if (!existing) {
+      res.status(404).json({ message: "Request not found." });
+      return;
+    }
+
+    // Only allow editing if not yet accepted/rejected
+    if (existing.isAccepted !== null) {
+      res.status(400).json({ message: "Cannot edit processed request." });
+      return;
+    }
+
+    const data: any = {};
+    if (supervisorId !== undefined) data.supervisorId = supervisorId;
+    if (pegawaiId !== undefined) data.pegawaiId = pegawaiId;
+    if (shiftId !== undefined) data.shiftId = shiftId;
+    if (date !== undefined) data.date = date;
+    if (reason !== undefined) data.reason = reason;
+
+    const updated = await prisma.requestLembur.update({
+      where: { id },
+      data,
+    });
+
+    res.json(updated);
+  } catch (err) {
+    res.status(500).json({ error: "internal error", err });
+  }
+};
+
+export const deleteRequestLembur = async (req: Request, res: Response) => {
+  try {
+    const id = Number(req.params.id);
+
+    const existing = await prisma.requestLembur.findUnique({
+      where: { id },
+    });
+
+    if (!existing) {
+      res.status(404).json({ message: "Request not found." });
+      return;
+    }
+
+    await prisma.requestLembur.delete({
+      where: { id },
+    });
+
+    res.json({ message: "Request deleted successfully." });
+  } catch (err) {
+    res.status(500).json({ error: "internal error", err });
+  }
+};
+
 export const getRequestLembur = async (req: Request, res: Response) => {
   try {
     const {
       pegawaiId,
+      supervisorId,
       page,
       limit,
       sortBy = "createdAt",
@@ -74,6 +136,11 @@ export const getRequestLembur = async (req: Request, res: Response) => {
     if (pegawaiId !== undefined && String(pegawaiId).trim() !== "") {
       const pid = Number(pegawaiId);
       if (!Number.isNaN(pid)) where.pegawaiId = pid;
+    }
+
+    if (supervisorId !== undefined && String(supervisorId).trim() !== "") {
+      const sid = Number(supervisorId);
+      if (!Number.isNaN(sid)) where.supervisorId = sid;
     }
 
     let orderBy: any = {};
@@ -117,10 +184,10 @@ export const getRequestLembur = async (req: Request, res: Response) => {
         where,
         include: {
           pegawai: {
-            select: { name: true },
+            select: { id: true, name: true },
           },
           supervisor: {
-            select: { name: true },
+            select: { id: true, name: true },
           },
           shift: true,
           user: {
@@ -174,7 +241,7 @@ export const acceptRequestLembur = async (req: Request, res: Response) => {
     const shiftDate = calculateJamShiftDate(
       existing.shift.jamMasuk,
       existing.shift.jamKeluar,
-      existing.date
+      existing.date,
     );
 
     // create transaction to accept request and update isLembur in logAbsensi

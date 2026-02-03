@@ -39,6 +39,7 @@ export const getRequestIzins = async (req: Request, res: Response) => {
   try {
     const {
       pegawaiName,
+      supervisorId,
       date,
       isAccepted,
       page,
@@ -53,6 +54,11 @@ export const getRequestIzins = async (req: Request, res: Response) => {
       where.pegawai = {
         name: { contains: pegawaiName.trim() },
       };
+    }
+
+    if (supervisorId !== undefined && String(supervisorId).trim() !== "") {
+      const sid = Number(supervisorId);
+      if (!Number.isNaN(sid)) where.supervisorId = sid;
     }
 
     if (typeof isAccepted === "string" && isAccepted.trim() !== "") {
