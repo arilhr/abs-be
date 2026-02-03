@@ -266,6 +266,7 @@ export const getJadwalList = async (req: Request, res: Response) => {
           checkIn?: Date | null;
           checkOut?: Date | null;
           isFromLog?: boolean;
+          shiftType?: "original" | "additional" | "replacement";
         }>;
       }
     > = {};
@@ -400,11 +401,17 @@ export const getJadwalList = async (req: Request, res: Response) => {
 
             // If shiftId is null, it means this shift is removed/libur
             if (override.shift) {
+              // Determine shift type: additional (no originalShiftId) or replacement (has originalShiftId)
+              const shiftType =
+                override.originalShiftId === null
+                  ? "additional"
+                  : "replacement";
               scheduleData[dateKey].shifts.push({
                 id: override.shift.id,
                 name: override.shift.name,
                 jamMasuk: override.shift.jamMasuk,
                 jamKeluar: override.shift.jamKeluar,
+                shiftType,
               });
             }
           }
@@ -417,6 +424,7 @@ export const getJadwalList = async (req: Request, res: Response) => {
                 name: jadwal.shift.name,
                 jamMasuk: jadwal.shift.jamMasuk,
                 jamKeluar: jadwal.shift.jamKeluar,
+                shiftType: "original",
               });
             }
           }
@@ -429,10 +437,20 @@ export const getJadwalList = async (req: Request, res: Response) => {
               name: jadwal.shift.name,
               jamMasuk: jadwal.shift.jamMasuk,
               jamKeluar: jadwal.shift.jamKeluar,
+              shiftType: "original",
             });
           }
         }
       }
+    }
+
+    // Sort shifts by jamMasuk (earliest first) for each day
+    for (const dateKey of Object.keys(scheduleData)) {
+      scheduleData[dateKey].shifts.sort((a, b) => {
+        const timeA = a.jamMasuk || "";
+        const timeB = b.jamMasuk || "";
+        return timeA.localeCompare(timeB);
+      });
     }
 
     res.status(200).json({
