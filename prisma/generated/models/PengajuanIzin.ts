@@ -29,16 +29,19 @@ export type AggregatePengajuanIzin = {
 export type PengajuanIzinAvgAggregateOutputType = {
   id: number | null
   pegawaiId: number | null
+  supervisorId: number | null
 }
 
 export type PengajuanIzinSumAggregateOutputType = {
   id: number | null
   pegawaiId: number | null
+  supervisorId: number | null
 }
 
 export type PengajuanIzinMinAggregateOutputType = {
   id: number | null
   pegawaiId: number | null
+  supervisorId: number | null
   date: Date | null
   reason: string | null
   isAccepted: boolean | null
@@ -49,6 +52,7 @@ export type PengajuanIzinMinAggregateOutputType = {
 export type PengajuanIzinMaxAggregateOutputType = {
   id: number | null
   pegawaiId: number | null
+  supervisorId: number | null
   date: Date | null
   reason: string | null
   isAccepted: boolean | null
@@ -59,6 +63,7 @@ export type PengajuanIzinMaxAggregateOutputType = {
 export type PengajuanIzinCountAggregateOutputType = {
   id: number
   pegawaiId: number
+  supervisorId: number
   date: number
   reason: number
   isAccepted: number
@@ -71,16 +76,19 @@ export type PengajuanIzinCountAggregateOutputType = {
 export type PengajuanIzinAvgAggregateInputType = {
   id?: true
   pegawaiId?: true
+  supervisorId?: true
 }
 
 export type PengajuanIzinSumAggregateInputType = {
   id?: true
   pegawaiId?: true
+  supervisorId?: true
 }
 
 export type PengajuanIzinMinAggregateInputType = {
   id?: true
   pegawaiId?: true
+  supervisorId?: true
   date?: true
   reason?: true
   isAccepted?: true
@@ -91,6 +99,7 @@ export type PengajuanIzinMinAggregateInputType = {
 export type PengajuanIzinMaxAggregateInputType = {
   id?: true
   pegawaiId?: true
+  supervisorId?: true
   date?: true
   reason?: true
   isAccepted?: true
@@ -101,6 +110,7 @@ export type PengajuanIzinMaxAggregateInputType = {
 export type PengajuanIzinCountAggregateInputType = {
   id?: true
   pegawaiId?: true
+  supervisorId?: true
   date?: true
   reason?: true
   isAccepted?: true
@@ -198,6 +208,7 @@ export type PengajuanIzinGroupByArgs<ExtArgs extends runtime.Types.Extensions.In
 export type PengajuanIzinGroupByOutputType = {
   id: number
   pegawaiId: number
+  supervisorId: number | null
   date: Date
   reason: string | null
   isAccepted: boolean | null
@@ -231,23 +242,27 @@ export type PengajuanIzinWhereInput = {
   NOT?: Prisma.PengajuanIzinWhereInput | Prisma.PengajuanIzinWhereInput[]
   id?: Prisma.IntFilter<"PengajuanIzin"> | number
   pegawaiId?: Prisma.IntFilter<"PengajuanIzin"> | number
+  supervisorId?: Prisma.IntNullableFilter<"PengajuanIzin"> | number | null
   date?: Prisma.DateTimeFilter<"PengajuanIzin"> | Date | string
   reason?: Prisma.StringNullableFilter<"PengajuanIzin"> | string | null
   isAccepted?: Prisma.BoolNullableFilter<"PengajuanIzin"> | boolean | null
   createdAt?: Prisma.DateTimeFilter<"PengajuanIzin"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"PengajuanIzin"> | Date | string
   pegawai?: Prisma.XOR<Prisma.PegawaiScalarRelationFilter, Prisma.PegawaiWhereInput>
+  supervisor?: Prisma.XOR<Prisma.PegawaiNullableScalarRelationFilter, Prisma.PegawaiWhereInput> | null
 }
 
 export type PengajuanIzinOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   pegawaiId?: Prisma.SortOrder
+  supervisorId?: Prisma.SortOrderInput | Prisma.SortOrder
   date?: Prisma.SortOrder
   reason?: Prisma.SortOrderInput | Prisma.SortOrder
   isAccepted?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   pegawai?: Prisma.PegawaiOrderByWithRelationInput
+  supervisor?: Prisma.PegawaiOrderByWithRelationInput
   _relevance?: Prisma.PengajuanIzinOrderByRelevanceInput
 }
 
@@ -257,17 +272,20 @@ export type PengajuanIzinWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.PengajuanIzinWhereInput[]
   NOT?: Prisma.PengajuanIzinWhereInput | Prisma.PengajuanIzinWhereInput[]
   pegawaiId?: Prisma.IntFilter<"PengajuanIzin"> | number
+  supervisorId?: Prisma.IntNullableFilter<"PengajuanIzin"> | number | null
   date?: Prisma.DateTimeFilter<"PengajuanIzin"> | Date | string
   reason?: Prisma.StringNullableFilter<"PengajuanIzin"> | string | null
   isAccepted?: Prisma.BoolNullableFilter<"PengajuanIzin"> | boolean | null
   createdAt?: Prisma.DateTimeFilter<"PengajuanIzin"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"PengajuanIzin"> | Date | string
   pegawai?: Prisma.XOR<Prisma.PegawaiScalarRelationFilter, Prisma.PegawaiWhereInput>
+  supervisor?: Prisma.XOR<Prisma.PegawaiNullableScalarRelationFilter, Prisma.PegawaiWhereInput> | null
 }, "id">
 
 export type PengajuanIzinOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   pegawaiId?: Prisma.SortOrder
+  supervisorId?: Prisma.SortOrderInput | Prisma.SortOrder
   date?: Prisma.SortOrder
   reason?: Prisma.SortOrderInput | Prisma.SortOrder
   isAccepted?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -286,6 +304,7 @@ export type PengajuanIzinScalarWhereWithAggregatesInput = {
   NOT?: Prisma.PengajuanIzinScalarWhereWithAggregatesInput | Prisma.PengajuanIzinScalarWhereWithAggregatesInput[]
   id?: Prisma.IntWithAggregatesFilter<"PengajuanIzin"> | number
   pegawaiId?: Prisma.IntWithAggregatesFilter<"PengajuanIzin"> | number
+  supervisorId?: Prisma.IntNullableWithAggregatesFilter<"PengajuanIzin"> | number | null
   date?: Prisma.DateTimeWithAggregatesFilter<"PengajuanIzin"> | Date | string
   reason?: Prisma.StringNullableWithAggregatesFilter<"PengajuanIzin"> | string | null
   isAccepted?: Prisma.BoolNullableWithAggregatesFilter<"PengajuanIzin"> | boolean | null
@@ -300,11 +319,13 @@ export type PengajuanIzinCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   pegawai: Prisma.PegawaiCreateNestedOneWithoutPengajuanIzinsInput
+  supervisor?: Prisma.PegawaiCreateNestedOneWithoutSupervisedPengajuanIzinsInput
 }
 
 export type PengajuanIzinUncheckedCreateInput = {
   id?: number
   pegawaiId: number
+  supervisorId?: number | null
   date: Date | string
   reason?: string | null
   isAccepted?: boolean | null
@@ -319,11 +340,13 @@ export type PengajuanIzinUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   pegawai?: Prisma.PegawaiUpdateOneRequiredWithoutPengajuanIzinsNestedInput
+  supervisor?: Prisma.PegawaiUpdateOneWithoutSupervisedPengajuanIzinsNestedInput
 }
 
 export type PengajuanIzinUncheckedUpdateInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   pegawaiId?: Prisma.IntFieldUpdateOperationsInput | number
+  supervisorId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isAccepted?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -334,6 +357,7 @@ export type PengajuanIzinUncheckedUpdateInput = {
 export type PengajuanIzinCreateManyInput = {
   id?: number
   pegawaiId: number
+  supervisorId?: number | null
   date: Date | string
   reason?: string | null
   isAccepted?: boolean | null
@@ -352,6 +376,7 @@ export type PengajuanIzinUpdateManyMutationInput = {
 export type PengajuanIzinUncheckedUpdateManyInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   pegawaiId?: Prisma.IntFieldUpdateOperationsInput | number
+  supervisorId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isAccepted?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -378,6 +403,7 @@ export type PengajuanIzinOrderByRelevanceInput = {
 export type PengajuanIzinCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   pegawaiId?: Prisma.SortOrder
+  supervisorId?: Prisma.SortOrder
   date?: Prisma.SortOrder
   reason?: Prisma.SortOrder
   isAccepted?: Prisma.SortOrder
@@ -388,11 +414,13 @@ export type PengajuanIzinCountOrderByAggregateInput = {
 export type PengajuanIzinAvgOrderByAggregateInput = {
   id?: Prisma.SortOrder
   pegawaiId?: Prisma.SortOrder
+  supervisorId?: Prisma.SortOrder
 }
 
 export type PengajuanIzinMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   pegawaiId?: Prisma.SortOrder
+  supervisorId?: Prisma.SortOrder
   date?: Prisma.SortOrder
   reason?: Prisma.SortOrder
   isAccepted?: Prisma.SortOrder
@@ -403,6 +431,7 @@ export type PengajuanIzinMaxOrderByAggregateInput = {
 export type PengajuanIzinMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   pegawaiId?: Prisma.SortOrder
+  supervisorId?: Prisma.SortOrder
   date?: Prisma.SortOrder
   reason?: Prisma.SortOrder
   isAccepted?: Prisma.SortOrder
@@ -413,6 +442,7 @@ export type PengajuanIzinMinOrderByAggregateInput = {
 export type PengajuanIzinSumOrderByAggregateInput = {
   id?: Prisma.SortOrder
   pegawaiId?: Prisma.SortOrder
+  supervisorId?: Prisma.SortOrder
 }
 
 export type PengajuanIzinCreateNestedManyWithoutPegawaiInput = {
@@ -422,10 +452,24 @@ export type PengajuanIzinCreateNestedManyWithoutPegawaiInput = {
   connect?: Prisma.PengajuanIzinWhereUniqueInput | Prisma.PengajuanIzinWhereUniqueInput[]
 }
 
+export type PengajuanIzinCreateNestedManyWithoutSupervisorInput = {
+  create?: Prisma.XOR<Prisma.PengajuanIzinCreateWithoutSupervisorInput, Prisma.PengajuanIzinUncheckedCreateWithoutSupervisorInput> | Prisma.PengajuanIzinCreateWithoutSupervisorInput[] | Prisma.PengajuanIzinUncheckedCreateWithoutSupervisorInput[]
+  connectOrCreate?: Prisma.PengajuanIzinCreateOrConnectWithoutSupervisorInput | Prisma.PengajuanIzinCreateOrConnectWithoutSupervisorInput[]
+  createMany?: Prisma.PengajuanIzinCreateManySupervisorInputEnvelope
+  connect?: Prisma.PengajuanIzinWhereUniqueInput | Prisma.PengajuanIzinWhereUniqueInput[]
+}
+
 export type PengajuanIzinUncheckedCreateNestedManyWithoutPegawaiInput = {
   create?: Prisma.XOR<Prisma.PengajuanIzinCreateWithoutPegawaiInput, Prisma.PengajuanIzinUncheckedCreateWithoutPegawaiInput> | Prisma.PengajuanIzinCreateWithoutPegawaiInput[] | Prisma.PengajuanIzinUncheckedCreateWithoutPegawaiInput[]
   connectOrCreate?: Prisma.PengajuanIzinCreateOrConnectWithoutPegawaiInput | Prisma.PengajuanIzinCreateOrConnectWithoutPegawaiInput[]
   createMany?: Prisma.PengajuanIzinCreateManyPegawaiInputEnvelope
+  connect?: Prisma.PengajuanIzinWhereUniqueInput | Prisma.PengajuanIzinWhereUniqueInput[]
+}
+
+export type PengajuanIzinUncheckedCreateNestedManyWithoutSupervisorInput = {
+  create?: Prisma.XOR<Prisma.PengajuanIzinCreateWithoutSupervisorInput, Prisma.PengajuanIzinUncheckedCreateWithoutSupervisorInput> | Prisma.PengajuanIzinCreateWithoutSupervisorInput[] | Prisma.PengajuanIzinUncheckedCreateWithoutSupervisorInput[]
+  connectOrCreate?: Prisma.PengajuanIzinCreateOrConnectWithoutSupervisorInput | Prisma.PengajuanIzinCreateOrConnectWithoutSupervisorInput[]
+  createMany?: Prisma.PengajuanIzinCreateManySupervisorInputEnvelope
   connect?: Prisma.PengajuanIzinWhereUniqueInput | Prisma.PengajuanIzinWhereUniqueInput[]
 }
 
@@ -443,6 +487,20 @@ export type PengajuanIzinUpdateManyWithoutPegawaiNestedInput = {
   deleteMany?: Prisma.PengajuanIzinScalarWhereInput | Prisma.PengajuanIzinScalarWhereInput[]
 }
 
+export type PengajuanIzinUpdateManyWithoutSupervisorNestedInput = {
+  create?: Prisma.XOR<Prisma.PengajuanIzinCreateWithoutSupervisorInput, Prisma.PengajuanIzinUncheckedCreateWithoutSupervisorInput> | Prisma.PengajuanIzinCreateWithoutSupervisorInput[] | Prisma.PengajuanIzinUncheckedCreateWithoutSupervisorInput[]
+  connectOrCreate?: Prisma.PengajuanIzinCreateOrConnectWithoutSupervisorInput | Prisma.PengajuanIzinCreateOrConnectWithoutSupervisorInput[]
+  upsert?: Prisma.PengajuanIzinUpsertWithWhereUniqueWithoutSupervisorInput | Prisma.PengajuanIzinUpsertWithWhereUniqueWithoutSupervisorInput[]
+  createMany?: Prisma.PengajuanIzinCreateManySupervisorInputEnvelope
+  set?: Prisma.PengajuanIzinWhereUniqueInput | Prisma.PengajuanIzinWhereUniqueInput[]
+  disconnect?: Prisma.PengajuanIzinWhereUniqueInput | Prisma.PengajuanIzinWhereUniqueInput[]
+  delete?: Prisma.PengajuanIzinWhereUniqueInput | Prisma.PengajuanIzinWhereUniqueInput[]
+  connect?: Prisma.PengajuanIzinWhereUniqueInput | Prisma.PengajuanIzinWhereUniqueInput[]
+  update?: Prisma.PengajuanIzinUpdateWithWhereUniqueWithoutSupervisorInput | Prisma.PengajuanIzinUpdateWithWhereUniqueWithoutSupervisorInput[]
+  updateMany?: Prisma.PengajuanIzinUpdateManyWithWhereWithoutSupervisorInput | Prisma.PengajuanIzinUpdateManyWithWhereWithoutSupervisorInput[]
+  deleteMany?: Prisma.PengajuanIzinScalarWhereInput | Prisma.PengajuanIzinScalarWhereInput[]
+}
+
 export type PengajuanIzinUncheckedUpdateManyWithoutPegawaiNestedInput = {
   create?: Prisma.XOR<Prisma.PengajuanIzinCreateWithoutPegawaiInput, Prisma.PengajuanIzinUncheckedCreateWithoutPegawaiInput> | Prisma.PengajuanIzinCreateWithoutPegawaiInput[] | Prisma.PengajuanIzinUncheckedCreateWithoutPegawaiInput[]
   connectOrCreate?: Prisma.PengajuanIzinCreateOrConnectWithoutPegawaiInput | Prisma.PengajuanIzinCreateOrConnectWithoutPegawaiInput[]
@@ -457,16 +515,32 @@ export type PengajuanIzinUncheckedUpdateManyWithoutPegawaiNestedInput = {
   deleteMany?: Prisma.PengajuanIzinScalarWhereInput | Prisma.PengajuanIzinScalarWhereInput[]
 }
 
+export type PengajuanIzinUncheckedUpdateManyWithoutSupervisorNestedInput = {
+  create?: Prisma.XOR<Prisma.PengajuanIzinCreateWithoutSupervisorInput, Prisma.PengajuanIzinUncheckedCreateWithoutSupervisorInput> | Prisma.PengajuanIzinCreateWithoutSupervisorInput[] | Prisma.PengajuanIzinUncheckedCreateWithoutSupervisorInput[]
+  connectOrCreate?: Prisma.PengajuanIzinCreateOrConnectWithoutSupervisorInput | Prisma.PengajuanIzinCreateOrConnectWithoutSupervisorInput[]
+  upsert?: Prisma.PengajuanIzinUpsertWithWhereUniqueWithoutSupervisorInput | Prisma.PengajuanIzinUpsertWithWhereUniqueWithoutSupervisorInput[]
+  createMany?: Prisma.PengajuanIzinCreateManySupervisorInputEnvelope
+  set?: Prisma.PengajuanIzinWhereUniqueInput | Prisma.PengajuanIzinWhereUniqueInput[]
+  disconnect?: Prisma.PengajuanIzinWhereUniqueInput | Prisma.PengajuanIzinWhereUniqueInput[]
+  delete?: Prisma.PengajuanIzinWhereUniqueInput | Prisma.PengajuanIzinWhereUniqueInput[]
+  connect?: Prisma.PengajuanIzinWhereUniqueInput | Prisma.PengajuanIzinWhereUniqueInput[]
+  update?: Prisma.PengajuanIzinUpdateWithWhereUniqueWithoutSupervisorInput | Prisma.PengajuanIzinUpdateWithWhereUniqueWithoutSupervisorInput[]
+  updateMany?: Prisma.PengajuanIzinUpdateManyWithWhereWithoutSupervisorInput | Prisma.PengajuanIzinUpdateManyWithWhereWithoutSupervisorInput[]
+  deleteMany?: Prisma.PengajuanIzinScalarWhereInput | Prisma.PengajuanIzinScalarWhereInput[]
+}
+
 export type PengajuanIzinCreateWithoutPegawaiInput = {
   date: Date | string
   reason?: string | null
   isAccepted?: boolean | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  supervisor?: Prisma.PegawaiCreateNestedOneWithoutSupervisedPengajuanIzinsInput
 }
 
 export type PengajuanIzinUncheckedCreateWithoutPegawaiInput = {
   id?: number
+  supervisorId?: number | null
   date: Date | string
   reason?: string | null
   isAccepted?: boolean | null
@@ -481,6 +555,35 @@ export type PengajuanIzinCreateOrConnectWithoutPegawaiInput = {
 
 export type PengajuanIzinCreateManyPegawaiInputEnvelope = {
   data: Prisma.PengajuanIzinCreateManyPegawaiInput | Prisma.PengajuanIzinCreateManyPegawaiInput[]
+  skipDuplicates?: boolean
+}
+
+export type PengajuanIzinCreateWithoutSupervisorInput = {
+  date: Date | string
+  reason?: string | null
+  isAccepted?: boolean | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  pegawai: Prisma.PegawaiCreateNestedOneWithoutPengajuanIzinsInput
+}
+
+export type PengajuanIzinUncheckedCreateWithoutSupervisorInput = {
+  id?: number
+  pegawaiId: number
+  date: Date | string
+  reason?: string | null
+  isAccepted?: boolean | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type PengajuanIzinCreateOrConnectWithoutSupervisorInput = {
+  where: Prisma.PengajuanIzinWhereUniqueInput
+  create: Prisma.XOR<Prisma.PengajuanIzinCreateWithoutSupervisorInput, Prisma.PengajuanIzinUncheckedCreateWithoutSupervisorInput>
+}
+
+export type PengajuanIzinCreateManySupervisorInputEnvelope = {
+  data: Prisma.PengajuanIzinCreateManySupervisorInput | Prisma.PengajuanIzinCreateManySupervisorInput[]
   skipDuplicates?: boolean
 }
 
@@ -506,6 +609,7 @@ export type PengajuanIzinScalarWhereInput = {
   NOT?: Prisma.PengajuanIzinScalarWhereInput | Prisma.PengajuanIzinScalarWhereInput[]
   id?: Prisma.IntFilter<"PengajuanIzin"> | number
   pegawaiId?: Prisma.IntFilter<"PengajuanIzin"> | number
+  supervisorId?: Prisma.IntNullableFilter<"PengajuanIzin"> | number | null
   date?: Prisma.DateTimeFilter<"PengajuanIzin"> | Date | string
   reason?: Prisma.StringNullableFilter<"PengajuanIzin"> | string | null
   isAccepted?: Prisma.BoolNullableFilter<"PengajuanIzin"> | boolean | null
@@ -513,8 +617,35 @@ export type PengajuanIzinScalarWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"PengajuanIzin"> | Date | string
 }
 
+export type PengajuanIzinUpsertWithWhereUniqueWithoutSupervisorInput = {
+  where: Prisma.PengajuanIzinWhereUniqueInput
+  update: Prisma.XOR<Prisma.PengajuanIzinUpdateWithoutSupervisorInput, Prisma.PengajuanIzinUncheckedUpdateWithoutSupervisorInput>
+  create: Prisma.XOR<Prisma.PengajuanIzinCreateWithoutSupervisorInput, Prisma.PengajuanIzinUncheckedCreateWithoutSupervisorInput>
+}
+
+export type PengajuanIzinUpdateWithWhereUniqueWithoutSupervisorInput = {
+  where: Prisma.PengajuanIzinWhereUniqueInput
+  data: Prisma.XOR<Prisma.PengajuanIzinUpdateWithoutSupervisorInput, Prisma.PengajuanIzinUncheckedUpdateWithoutSupervisorInput>
+}
+
+export type PengajuanIzinUpdateManyWithWhereWithoutSupervisorInput = {
+  where: Prisma.PengajuanIzinScalarWhereInput
+  data: Prisma.XOR<Prisma.PengajuanIzinUpdateManyMutationInput, Prisma.PengajuanIzinUncheckedUpdateManyWithoutSupervisorInput>
+}
+
 export type PengajuanIzinCreateManyPegawaiInput = {
   id?: number
+  supervisorId?: number | null
+  date: Date | string
+  reason?: string | null
+  isAccepted?: boolean | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type PengajuanIzinCreateManySupervisorInput = {
+  id?: number
+  pegawaiId: number
   date: Date | string
   reason?: string | null
   isAccepted?: boolean | null
@@ -528,10 +659,12 @@ export type PengajuanIzinUpdateWithoutPegawaiInput = {
   isAccepted?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  supervisor?: Prisma.PegawaiUpdateOneWithoutSupervisedPengajuanIzinsNestedInput
 }
 
 export type PengajuanIzinUncheckedUpdateWithoutPegawaiInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
+  supervisorId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isAccepted?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -541,6 +674,36 @@ export type PengajuanIzinUncheckedUpdateWithoutPegawaiInput = {
 
 export type PengajuanIzinUncheckedUpdateManyWithoutPegawaiInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
+  supervisorId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isAccepted?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type PengajuanIzinUpdateWithoutSupervisorInput = {
+  date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isAccepted?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  pegawai?: Prisma.PegawaiUpdateOneRequiredWithoutPengajuanIzinsNestedInput
+}
+
+export type PengajuanIzinUncheckedUpdateWithoutSupervisorInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  pegawaiId?: Prisma.IntFieldUpdateOperationsInput | number
+  date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isAccepted?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type PengajuanIzinUncheckedUpdateManyWithoutSupervisorInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  pegawaiId?: Prisma.IntFieldUpdateOperationsInput | number
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isAccepted?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
@@ -553,12 +716,14 @@ export type PengajuanIzinUncheckedUpdateManyWithoutPegawaiInput = {
 export type PengajuanIzinSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   pegawaiId?: boolean
+  supervisorId?: boolean
   date?: boolean
   reason?: boolean
   isAccepted?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   pegawai?: boolean | Prisma.PegawaiDefaultArgs<ExtArgs>
+  supervisor?: boolean | Prisma.PengajuanIzin$supervisorArgs<ExtArgs>
 }, ExtArgs["result"]["pengajuanIzin"]>
 
 
@@ -566,6 +731,7 @@ export type PengajuanIzinSelect<ExtArgs extends runtime.Types.Extensions.Interna
 export type PengajuanIzinSelectScalar = {
   id?: boolean
   pegawaiId?: boolean
+  supervisorId?: boolean
   date?: boolean
   reason?: boolean
   isAccepted?: boolean
@@ -573,19 +739,22 @@ export type PengajuanIzinSelectScalar = {
   updatedAt?: boolean
 }
 
-export type PengajuanIzinOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "pegawaiId" | "date" | "reason" | "isAccepted" | "createdAt" | "updatedAt", ExtArgs["result"]["pengajuanIzin"]>
+export type PengajuanIzinOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "pegawaiId" | "supervisorId" | "date" | "reason" | "isAccepted" | "createdAt" | "updatedAt", ExtArgs["result"]["pengajuanIzin"]>
 export type PengajuanIzinInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   pegawai?: boolean | Prisma.PegawaiDefaultArgs<ExtArgs>
+  supervisor?: boolean | Prisma.PengajuanIzin$supervisorArgs<ExtArgs>
 }
 
 export type $PengajuanIzinPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "PengajuanIzin"
   objects: {
     pegawai: Prisma.$PegawaiPayload<ExtArgs>
+    supervisor: Prisma.$PegawaiPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
     pegawaiId: number
+    supervisorId: number | null
     date: Date
     reason: string | null
     isAccepted: boolean | null
@@ -932,6 +1101,7 @@ readonly fields: PengajuanIzinFieldRefs;
 export interface Prisma__PengajuanIzinClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   pegawai<T extends Prisma.PegawaiDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.PegawaiDefaultArgs<ExtArgs>>): Prisma.Prisma__PegawaiClient<runtime.Types.Result.GetResult<Prisma.$PegawaiPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  supervisor<T extends Prisma.PengajuanIzin$supervisorArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.PengajuanIzin$supervisorArgs<ExtArgs>>): Prisma.Prisma__PegawaiClient<runtime.Types.Result.GetResult<Prisma.$PegawaiPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -963,6 +1133,7 @@ export interface Prisma__PengajuanIzinClient<T, Null = never, ExtArgs extends ru
 export interface PengajuanIzinFieldRefs {
   readonly id: Prisma.FieldRef<"PengajuanIzin", 'Int'>
   readonly pegawaiId: Prisma.FieldRef<"PengajuanIzin", 'Int'>
+  readonly supervisorId: Prisma.FieldRef<"PengajuanIzin", 'Int'>
   readonly date: Prisma.FieldRef<"PengajuanIzin", 'DateTime'>
   readonly reason: Prisma.FieldRef<"PengajuanIzin", 'String'>
   readonly isAccepted: Prisma.FieldRef<"PengajuanIzin", 'Boolean'>
@@ -1308,6 +1479,25 @@ export type PengajuanIzinDeleteManyArgs<ExtArgs extends runtime.Types.Extensions
    * Limit how many PengajuanIzins to delete.
    */
   limit?: number
+}
+
+/**
+ * PengajuanIzin.supervisor
+ */
+export type PengajuanIzin$supervisorArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Pegawai
+   */
+  select?: Prisma.PegawaiSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Pegawai
+   */
+  omit?: Prisma.PegawaiOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PegawaiInclude<ExtArgs> | null
+  where?: Prisma.PegawaiWhereInput
 }
 
 /**

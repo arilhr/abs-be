@@ -5,7 +5,7 @@ import { PrismaClientKnownRequestError } from "../../prisma/generated/internal/p
 // Create a request izin (PengajuanIzin)
 export const createRequestIzin = async (req: Request, res: Response) => {
   try {
-    const { pegawaiId, date, reason, isAccepted } = req.body;
+    const { pegawaiId, supervisorId, date, reason, isAccepted } = req.body;
 
     if (!date || !pegawaiId) {
       res.status(400).json({ error: "Pegawai ID and date is required" });
@@ -21,6 +21,7 @@ export const createRequestIzin = async (req: Request, res: Response) => {
     const newReq = await prisma.pengajuanIzin.create({
       data: {
         pegawaiId: pegawaiId,
+        supervisorId: supervisorId || null,
         date: d,
         reason,
         isAccepted,
@@ -97,6 +98,7 @@ export const getRequestIzins = async (req: Request, res: Response) => {
           createdAt: true,
           updatedAt: true,
           pegawai: true,
+          supervisor: true,
         },
       }),
     ]);
@@ -127,6 +129,7 @@ export const getRequestIzinById = async (req: Request, res: Response) => {
         reason: true,
         isAccepted: true,
         pegawai: true,
+        supervisor: true,
         createdAt: true,
         updatedAt: true,
       },
@@ -145,7 +148,7 @@ export const getRequestIzinById = async (req: Request, res: Response) => {
 export const updateRequestIzin = async (req: Request, res: Response) => {
   try {
     const id = Number(req.params.id);
-    const { pegawaiId, date, reason, isAccepted } = req.body;
+    const { pegawaiId, supervisorId, date, reason, isAccepted } = req.body;
     const data: any = {};
 
     if (date !== undefined) {
@@ -159,6 +162,7 @@ export const updateRequestIzin = async (req: Request, res: Response) => {
     if (reason !== undefined) data.reason = reason;
     if (isAccepted !== undefined) data.isAccepted = isAccepted;
     if (pegawaiId !== undefined) data.pegawaiId = pegawaiId;
+    if (supervisorId !== undefined) data.supervisorId = supervisorId;
 
     const updated = await prisma.pengajuanIzin.update({
       where: { id },

@@ -10,6 +10,7 @@ datasource db {
 enum UserRole {
   SUPERADMIN
   ADMIN
+  SUPERVISOR
   STAFF
 }
 
@@ -67,7 +68,8 @@ model Pegawai {
   requestLemburs           RequestLembur[]  @relation("PegawaiRequestLembur")
   supervisedRequestLemburs RequestLembur[]  @relation("SupervisorRequestLembur")
   users                    User[]
-  pengajuanIzins           PengajuanIzin[]
+  pengajuanIzins           PengajuanIzin[]  @relation("PegawaiPengajuanIzin")
+  supervisedPengajuanIzins PengajuanIzin[]  @relation("SupervisorPengajuanIzin")
   logScans                 LogScan[]
   jadwalOverrides          JadwalOverride[]
 
@@ -187,15 +189,19 @@ model RequestLembur {
 model PengajuanIzin {
   id Int @id @default(autoincrement())
 
-  pegawaiId  Int
-  date       DateTime
-  reason     String?
-  isAccepted Boolean?
+  pegawaiId    Int
+  supervisorId Int?
+  date         DateTime
+  reason       String?
+  isAccepted   Boolean?
 
-  pegawai Pegawai @relation(fields: [pegawaiId], references: [id])
+  pegawai    Pegawai  @relation("PegawaiPengajuanIzin", fields: [pegawaiId], references: [id])
+  supervisor Pegawai? @relation("SupervisorPengajuanIzin", fields: [supervisorId], references: [id])
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@index([supervisorId])
 }
 
 model AppConfig {

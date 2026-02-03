@@ -1384,6 +1384,7 @@ export type RequestLemburScalarFieldEnum = (typeof RequestLemburScalarFieldEnum)
 export const PengajuanIzinScalarFieldEnum = {
   id: 'id',
   pegawaiId: 'pegawaiId',
+  supervisorId: 'supervisorId',
   date: 'date',
   reason: 'reason',
   isAccepted: 'isAccepted',
