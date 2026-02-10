@@ -62,7 +62,8 @@ export const createRequestLembur = async (req: Request, res: Response) => {
 export const updateRequestLembur = async (req: Request, res: Response) => {
   try {
     const id = Number(req.params.id);
-    const { supervisorId, pegawaiId, shiftId, date, reason } = req.body;
+    const { supervisorId, pegawaiId, shiftId, date, reason, isAccepted } =
+      req.body;
 
     const existing = await prisma.requestLembur.findUnique({
       where: { id },
@@ -73,8 +74,9 @@ export const updateRequestLembur = async (req: Request, res: Response) => {
       return;
     }
 
-    // Only allow editing if not yet accepted/rejected
-    if (existing.isAccepted !== null) {
+    // Only allow editing basic fields if not yet accepted/rejected
+    // But allow status changes even if already processed
+    if (existing.isAccepted !== null && isAccepted === undefined) {
       res.status(400).json({ message: "Cannot edit processed request." });
       return;
     }
@@ -85,6 +87,7 @@ export const updateRequestLembur = async (req: Request, res: Response) => {
     if (shiftId !== undefined) data.shiftId = shiftId;
     if (date !== undefined) data.date = date;
     if (reason !== undefined) data.reason = reason;
+    if (isAccepted !== undefined) data.isAccepted = isAccepted;
 
     const updated = await prisma.requestLembur.update({
       where: { id },
