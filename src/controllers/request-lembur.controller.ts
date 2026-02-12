@@ -224,7 +224,7 @@ export const getRequestLembur = async (req: Request, res: Response) => {
 export const acceptRequestLembur = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
-    const { isAccepted } = req.body;
+    const { isAccepted, force = false } = req.body;
 
     const existing = await prisma.requestLembur.findUnique({
       where: { id: Number(id), isAccepted: null },
@@ -266,6 +266,17 @@ export const acceptRequestLembur = async (req: Request, res: Response) => {
       }
 
       if (isAccepted) {
+        console.log(force);
+
+        if (force) {
+          const acceptedRequest = await prisma.requestLembur.update({
+            where: { id: Number(id) },
+            data: { isAccepted: isAccepted },
+          });
+
+          return { status: 200, data: acceptedRequest };
+        }
+
         if (!logAbsensi) {
           return {
             status: 400,
