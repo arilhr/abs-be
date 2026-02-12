@@ -4,7 +4,7 @@ export const isDateInTimeRange = (
   startTime: string,
   endTime: string,
   now: dayjs.Dayjs = dayjs(),
-  startDate: Date,
+  startDate?: Date,
   startOffset = 0, // offset in minutes
   endOffset = 0, // offset in minutes
 ): boolean => {
